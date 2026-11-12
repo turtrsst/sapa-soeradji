@@ -64,6 +64,29 @@ Jika Anda **bisa RDP ke komputer server**, mesin itu bisa jadi host LLM (dan sek
 
 **Catatan jujur B:** RDP ≠ high availability — bila mesin mati/RDP putus, LLM (atau aplikasi) ikut mati. Gunakan service + UPS + backup terjadwal. Kalau RS mengizinkan, tetap idealnya aplikasi dan LLM di mesin server yang sama (B1) agar tidak ada trafik LLM lewat jaringan sama sekali.
 
+## 2C. Komputer server Windows RS sudah ada Ollama (jalur tercepat)
+
+Jika di mesin RDP Anda sudah terinstall **Ollama**, tidak perlu install llama.cpp/PrivateLM — Ollama sudah menyajikan endpoint OpenAI-compatible `http://localhost:11434/v1`. Urutan kerja (PowerShell di dalam sesi RDP):
+
+1. **Cek Ollama jalan** (ikon di system tray / Task Manager: `ollama.exe`). Bila belum: Start Menu → **Ollama**.
+2. **Lihat model yang sudah ada**: `ollama list`
+3. **Unduh model** (sekali saja):
+   - RAM 4–8 GB / tanpa GPU: `ollama pull qwen2.5:1.5b` atau `ollama pull qwen2.5:3b` (±2 GB)
+   - RAM ≥16 GB atau NVIDIA GPU (cek `nvidia-smi`): `ollama pull qwen2.5:7b` atau `ollama pull llama3.1:8b`
+4. **Uji endpoint**:
+   ```powershell
+   curl http://localhost:11434/api/tags
+   curl http://localhost:11434/v1/chat/completions -H "Content-Type: application/json" -d '{"model":"qwen2.5:3b","messages":[{"role":"user","content":"halo"}]}'
+   ```
+   (Ollama tidak menuntut API key — kosongkan atau isi bebas.)
+5. **Auto-start**: Ollama (tray) biasanya start saat login. Untuk server kantor, pastikan **auto-login** atau pakai **Task Scheduler** *At startup → run whether user is logged on or not*: program `ollama.exe`, argumen `serve` (path umumnya `%LOCALAPPDATA%\Programs\Ollama\ollama.exe`). Jangan jalankan dua instance — port 11434 hanya bisa dipakai satu proses.
+6. **SAPA PASIEN di mesin yang sama** (B1): /admin → Pengaturan AI → preset **Ollama (lokal)** → Base URL `http://localhost:11434/v1`, Model = persis dari `ollama list` (mis. `qwen2.5:3b`) → **Uji Koneksi Sekarang** → **Simpan** → aktifkan. Selesai — tidak ada port yang dibuka ke LAN/internet.
+7. **Bila aplikasi di mesin lain** (B2): jalankan Ollama dengan env `OLLAMA_HOST=0.0.0.0:11434`, lalu **Windows Defender Firewall → inbound rule port 11434 HANYA dari IP server aplikasi**. Ollama tanpa auth — jangan pernah buka 11434 ke internet atau ke tunnel Cloudflare. Dari SAPA PASIEN: Base URL `http://<IP-server-RS>:11434/v1`.
+8. **Model tetap hangat (opsional)**: env `OLLAMA_KEEP_ALIVE=-1` agar model tidak di-unload (mengurangi latensi jawaban pertama), dengan konsekuensi RAM terpakai terus.
+9. Bila endpoint mati → SAPA PASIEN otomatis fallback ke mode Offline KB (chat tetap menjawab + hotline).
+
+**Catatan dari screenshot server (C:\):** ada `Cloudflared` (kemungkinan sias.rsupsoeradji.id diproxy lewat Cloudflare Tunnel) — bila SAPA PASIEN dipublikasikan lewat cara yang sama, **jangan** tambahkan 11434 (Ollama) maupun 3000 (Next) ke ingress tunnel; cukup hostname → `localhost:3000`. **"Activate Windows"** sebaiknya diselesaikan sebelum dipakai layanan pasien (aktivasi + Windows Update + patch XAMPP/Apache yang ikut terekspos).
+
 ## 3. Langkah praktis (Ubuntu/Debian)
 
 ### 3.1 Aplikasi

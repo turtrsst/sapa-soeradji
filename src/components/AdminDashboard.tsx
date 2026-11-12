@@ -10,7 +10,7 @@ type Tab = 'ringkasan' | 'keluhan' | 'homecare' | 'kampanye' | 'ai';
 const PROVIDER_PRESETS: { name: string; baseUrl: string; model: string; note: string }[] = [
   { name: 'PrivateLM API Server (Offline — perangkat ini/LAN)', baseUrl: 'http://localhost:8080/v1', model: 'model-lokal-privatelm', note: 'Jalankan PrivateLM (cross-platform-llm-client) di HP/PC, muat model GGUF, aktifkan API Server + Allow network + API key. SAPA PASIEN server menghubungi endpoint ini — tanpa internet.' },
   { name: 'PrivateLM di perangkat lain (LAN/WiFi)', baseUrl: 'http://192.168.1.10:8080/v1', model: 'model-lokal-privatelm', note: 'Ganti 192.168.1.10 dengan IP perangkat menjalankan PrivateLM (terlihat di layar server PrivateLM). Wajib Allow network + API key.' },
-  { name: 'Ollama (lokal)', baseUrl: 'http://localhost:11434/v1', model: 'llama3.2', note: 'ollama serve — endpoint OpenAI-compatible bawaan Ollama.' },
+  { name: 'Ollama (lokal)', baseUrl: 'http://localhost:11434/v1', model: 'qwen2.5:3b', note: 'Endpoint OpenAI-compatible bawaan Ollama (localhost:11434). Pastikan model sudah di-pull: ollama pull qwen2.5:3b. Tidak butuh API key (kosongkan / isi bebas).' },
   { name: 'llama.cpp llama-server (lokal)', baseUrl: 'http://localhost:8080/v1', model: 'gguf-model', note: 'llama-server -m model.gguf --port 8080 --api-key <key>' },
   { name: 'LM Studio (lokal)', baseUrl: 'http://localhost:1234/v1', model: 'local-model', note: 'Aktifkan "Local Server" di LM Studio.' },
   { name: 'OpenAI (cloud)', baseUrl: 'https://api.openai.com/v1', model: 'gpt-4o-mini', note: 'Butuh API key OpenAI & koneksi internet.' },
