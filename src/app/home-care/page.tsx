@@ -37,6 +37,32 @@ export default function HomeCarePage() {
       <h1 className="text-3xl font-black text-rst-900 tracking-tight">Home Care — Pelayanan di Rumah</h1>
       <p className="mt-1 text-sm text-rst-600 max-w-3xl">Tim dokter, perawat, dan fisioterapis RSUP Dr. Soeradji Tirtonegoro datang langsung ke rumah Anda — untuk pasien pasca rawat inap, lansia, disabilitas, atau yang sulit bepergian.</p>
 
+      {/* Soeradji GOCARE — pemesanan homecare resmi online */}
+      <div className="mt-5 relative overflow-hidden rounded-2xl border border-gold-400/40 bg-gradient-to-br from-rst-900 via-rst-800 to-rst-950 p-5 sm:p-6 text-white shadow-lg">
+        <div className="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-gold-400/10 blur-3xl" />
+        <div className="relative flex flex-col lg:flex-row lg:items-center gap-5">
+          <div className="flex-1">
+            <span className="chip bg-gold-400 text-rst-950 !font-black mb-2">RESMI · SIAS RST</span>
+            <h2 className="text-xl sm:text-2xl font-black tracking-tight">Soeradji <span className="text-gold-400">GOCARE</span> — Pesan Homecare Online</h2>
+            <p className="mt-1.5 text-xs sm:text-sm text-rst-100/90 leading-relaxed">Sistem pemesanan homecare resmi RSUP Dr. Soeradji Tirtonegoro. Ketik atau ucapkan kebutuhan Anda sekali — misalnya <em>“perawatan luka untuk ibu, besok pagi di Klaten”</em> — asisten <strong>Sora</strong> menyusun &amp; mengirim pesanan otomatis: layanan, pasien, tanggal, dan alamat.</p>
+            <ul className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px] sm:text-[11px] font-semibold text-gold-200/90">
+              <li>• 80+ layanan</li>
+              <li>• Tarif SK Direktur</li>
+              <li>• Pemesanan minimal H-1</li>
+              <li>• Notifikasi tiap tahap</li>
+            </ul>
+          </div>
+          <div className="shrink-0 w-full lg:w-72 flex flex-col gap-2">
+            <a href="https://sias.rsupsoeradji.id/homecare/" target="_blank" rel="noreferrer" className="btn bg-gold-400 text-rst-950 font-extrabold justify-center transition hover:brightness-110">Pesan via Soeradji GOCARE <Icon name="external" size={15} /></a>
+            <div className="grid grid-cols-2 gap-2">
+              <a href="https://sias.rsupsoeradji.id/homecare/asisten" target="_blank" rel="noreferrer" className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-center text-[11px] font-bold hover:bg-white/10 transition">Asisten Sora</a>
+              <a href="https://sias.rsupsoeradji.id/homecare/layanan" target="_blank" rel="noreferrer" className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-center text-[11px] font-bold hover:bg-white/10 transition">Katalog Layanan</a>
+            </div>
+            <p className="text-[10px] leading-snug text-rst-200/80">Homecare bukan layanan gawat darurat. Sesak berat, nyeri dada, atau pingsan — hubungi <a href="tel:119" className="underline font-bold text-white">119</a> atau IGD <a href="tel:0272321020" className="underline font-bold text-white">(0272) 321020 ext 200</a>.</p>
+          </div>
+        </div>
+      </div>
+
       {/* SK Card */}
       <div className="mt-5 card p-4 sm:p-5 flex flex-col md:flex-row md:items-center gap-4">
         <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gold-400/20 text-gold-600"><Icon name="doc" size={24} /></span>
@@ -126,7 +152,7 @@ export default function HomeCarePage() {
         <div className="mt-6 grid lg:grid-cols-12 gap-6">
           <form onSubmit={submit} className="card p-5 sm:p-6 lg:col-span-7 space-y-4">
             <h2 className="font-extrabold text-rst-900 text-lg">Ajukan Kunjungan Home Care</h2>
-            <p className="text-xs text-rst-500 -mt-2">Isi formulir — petugas RST akan menghubungi Anda untuk verifikasi &amp; penjadwalan. Untuk kondisi darurat, jangan gunakan formulir ini; hubungi IGD <a href="tel:0272321020" className="underline font-bold">(0272) 321020 ext 200</a>.</p>
+            <p className="text-xs text-rst-500 -mt-2">Formulir ini hanya mencatat permintaan untuk ditindaklanjuti petugas lewat SAPA PASIEN. Untuk pemesanan resmi dengan verifikasi &amp; notifikasi otomatis, gunakan <a href="https://sias.rsupsoeradji.id/homecare/" target="_blank" rel="noreferrer" className="underline font-bold text-rst-800">Soeradji GOCARE</a>. Untuk kondisi darurat, jangan gunakan formulir ini; hubungi IGD <a href="tel:0272321020" className="underline font-bold">(0272) 321020 ext 200</a>.</p>
             <div className="grid sm:grid-cols-2 gap-4">
               <div><label className="label" htmlFor="hc-nama">Nama lengkap pasien *</label><input id="hc-nama" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="input" placeholder="Nama pasien" /></div>
               <div><label className="label" htmlFor="hc-hp">No. HP/WA keluarga *</label><input id="hc-hp" required value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="input" placeholder="08xxxxxxxxxx" inputMode="tel" /></div>
@@ -159,7 +185,7 @@ export default function HomeCarePage() {
             <div className="card p-5">
               <p className="font-extrabold text-rst-900 flex items-center gap-2"><Icon name="info" size={16} className="text-rst-500" /> Cara Kerja Home Care</p>
               <ol className="mt-3 space-y-2.5 text-xs text-rst-700 leading-relaxed">
-                <li className="flex gap-2"><span className="font-black text-rst-400">1.</span>Permintaan via formulir ini / telepon (0272) 321020 / WA 0816-9170-00.</li>
+                <li className="flex gap-2"><span className="font-black text-rst-400">1.</span>Permintaan via <a href="https://sias.rsupsoeradji.id/homecare/" target="_blank" rel="noreferrer" className="underline font-semibold text-rst-900">Soeradji GOCARE</a> (online resmi) / formulir di atas / telepon (0272) 321020 / WA 0816-9170-00.</li>
                 <li className="flex gap-2"><span className="font-black text-rst-400">2.</span>Verifikasi: petugas menghubungi Anda (identitas, diagnosis, alamat, skema pembayaran).</li>
                 <li className="flex gap-2"><span className="font-black text-rst-400">3.</span>Penjadwalan kunjungan tim medis (dokter/perawat/fisioterapis sesuai kebutuhan).</li>
                 <li className="flex gap-2"><span className="font-black text-rst-400">4.</span>Pelaksanaan tindakan di rumah + edukasi keluarga.</li>

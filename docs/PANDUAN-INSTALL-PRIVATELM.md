@@ -110,3 +110,7 @@ Web (`flutter build web`) hanya bisa cloud API — **tidak** mendukung inferensi
 | Layar HP mati → server lamban | Aktifkan keep-screen-on di aplikasi / colok charger / jalankan di tablet khusus "AI server" |
 
 **Keamanan:** jangan pernah mem-port-forward port 8080 ke internet; jangan taruh API key di tempat publik; ganti key berkala; perangkat khusus AI (tablet terpasang permanen + charger) paling andal untuk operasional 24/7.
+
+---
+
+> **Akan dipublikasikan di IP publik untuk pasien?** Baca [`DEPLOYMENT-PUBLIK.md`](DEPLOYMENT-PUBLIK.md) — di server web yang benar adalah llama-server (engine yang sama dengan PrivateLM), bukan APK mobile; ada juga checklist HTTPS, firewall, rate limit, dan kepatuhan UU PDP.

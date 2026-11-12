@@ -44,14 +44,14 @@ export function composeOfflineAnswer(message: string): OfflineAnswer {
     const wantsPriceList = /daftar|list|semua|tabel/i.test(message);
     if (isHomeCare && !tariffRows.length) {
       const doc = KB_DOCS.find((d) => d.id === 'home-care')!;
-      return { intent, sources: [`${doc.title} — ${doc.source}`], text: `${doc.body}\n\nLihat tabel tarif lengkap di halaman **Home Care**.${FOOTER}` };
+      return { intent, sources: [`${doc.title} — ${doc.source}`], text: `${doc.body}\n\nLihat tabel tarif lengkap di halaman **Home Care**. Pemesanan online resmi: **Soeradji GOCARE** — https://sias.rsupsoeradji.id/homecare/ (asisten Sora · 80+ layanan · minimal H-1).${FOOTER}` };
     }
     if (tariffRows.length) {
       const sampleNote = TARIF_META.catatan;
       return {
         intent: 'tarif',
         sources: [`${TARIF_META.nomor} (${TARIF_META.tanggal})`],
-        text: `Berikut tarif ${isHomeCare ? 'Home Care' : ''} RST yang paling sesuai:\n\n${formatTarifLines(tariffRows)}\n\n*${sampleNote}*\nSumber: SK Direktur Utama RST No. **${TARIF_META.nomor}** (${TARIF_META.tanggal}). Dokumen SK asli (PDF) dapat diunduh di halaman **Home Care**.${FOOTER}`,
+        text: `Berikut tarif ${isHomeCare ? 'Home Care' : ''} RST yang paling sesuai:\n\n${formatTarifLines(tariffRows)}\n\n*${sampleNote}*\nSumber: SK Direktur Utama RST No. **${TARIF_META.nomor}** (${TARIF_META.tanggal}). Dokumen SK asli (PDF) dapat diunduh di halaman **Home Care**.${isHomeCare ? '\n\nPemesanan online resmi: **Soeradji GOCARE** — https://sias.rsupsoeradji.id/homecare/ (asisten Sora · 80+ layanan · minimal H-1).' : ''}${FOOTER}`,
       };
     }
     if (wantsPriceList || intent === 'tarif') {
@@ -63,7 +63,7 @@ export function composeOfflineAnswer(message: string): OfflineAnswer {
           { no: 11, nama: 'Perawatan luka kecil', sarana: 20000, pelayanan: 100000, jumlah: 120000, section: 'Tindakan Medik Non Operatif' },
           { no: 1, nama: 'Visite dokter Umum', sarana: 25000, pelayanan: 125000, jumlah: 150000, section: 'Kunjungan Dokter/Psikolog' },
           { no: 2, nama: 'Dokter Spesialis', sarana: 25000, pelayanan: 200000, jumlah: 225000, section: 'Kunjungan Dokter/Psikolog' },
-        ])}\n\nLihat daftar lengkap (±80 tindakan, termasuk laboratorium, fisioterapi, sewa alat) di halaman **Home Care**. ${TARIF_META.catatan}${FOOTER}`,
+        ])}\n\nLihat daftar lengkap (±80 tindakan, termasuk laboratorium, fisioterapi, sewa alat) di halaman **Home Care**. Pesan online resmi: **Soeradji GOCARE** — https://sias.rsupsoeradji.id/homecare/${FOOTER}`,
       };
     }
   }

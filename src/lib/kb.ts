@@ -134,12 +134,14 @@ Informasi paket & biaya MCU: hubungi Contact Center (0272) 321020 atau WhatsApp 
     title: 'Home Care Go-Trah (Pelayanan di Rumah)',
     tags: ['home care', 'homecare', 'go-trah', 'kunjung rumah', 'perawatan rumah', 'visite', 'dokter visit', 'layanan rumah'],
     updated: '2026-11',
-    source: 'rsupsoeradji.id / media RST',
+    source: 'sias.rsupsoeradji.id (Soeradji GOCARE) / rsupsoeradji.id',
     body: `Home Care Go-Trah adalah layanan kesehatan RSUP Dr. Soeradji Tirtonegoro yang mengantarkan pelayanan medis dan keperawatan langsung ke rumah pasien (rawat jalan di rumah), antara lain untuk pasien pasca rawat inap, lansia, disabilitas, atau yang sulit bepergian ke rumah sakit.
 
 Layanan mencakup (sesuai SK Direktur Utama HK.02.03/D.XXVI/5441/2024): tindakan medik non operatif (pemasangan NGT/cateter, infus, injeksi, nebuliser, perawatan luka, pengambilan darah), pemeriksaan laboratorium sederhana (GDS, asam urat, kolesterol, darah rutin), rehabilitasi medik/fisioterapi di rumah, kunjungan dokter umum/spesialis/subspesialis, konsultasi psikologi, serta sewa alat medik (tempat tidur & oksigen konsentrator).
 
-Cara mengajukan: hubungi Contact Center (0272) 321020 atau WhatsApp 0816-9170-00 / datang ke bagian pelayanan (IRM) dengan membawa rekam medis/ringkasan pulang. Petugas akan menjadwalkan kunjungan. Tarif tindakan Home Care sesuai SK terbaru (berlaku sejak 18 Maret 2024); bila lebih dari satu tindakan dilakukan, jasa pelaksana hanya dihitung satu kali.
+Pemesanan online resmi tersedia di Soeradji GOCARE: https://sias.rsupsoeradji.id/homecare/ — ketik/ucapkan kebutuhan ke asisten "Sora" (mis. "perawatan luka untuk ibu, besok pagi di Klaten"), lalu pesanan langsung masuk antrean verifikasi dengan kode pesanan & notifikasi tiap tahap (verifikasi, kunjungan, selesai). Katalog 80+ layanan: Tindakan Medik & Perawatan, Pemeriksaan Laboratorium, Rehabilitasi & Fisioterapi, Kunjungan Dokter & Psikolog, Sewa Alat Medik. Tarif sesuai SK Direktur ditampilkan sebelum memesan; pemesanan minimal H-1; perlu akun (pendaftaran gratis).
+
+Cara lain mengajukan: hubungi Contact Center (0272) 321020 atau WhatsApp 0816-9170-00 / datang ke bagian pelayanan (IRM) dengan membawa rekam medis/ringkasan pulang. Petugas akan menjadwalkan kunjungan. Tarif tindakan Home Care sesuai SK terbaru (berlaku sejak 18 Maret 2024); bila lebih dari satu tindakan dilakukan, jasa pelaksana hanya dihitung satu kali.
 
 Rincian tarif lengkap dapat ditanyakan ke SAPA PASIEN (misal: "berapa tarif pasang infus home care?") atau lihat tabel di halaman Home Care aplikasi ini.`,
   },

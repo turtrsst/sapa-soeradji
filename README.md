@@ -15,7 +15,7 @@ SAPA PASIEN menjawab pertanyaan dan keluhan masyarakat secara cepat — **keluha
 |---|---|
 | **Tanya SAPA PASIEN** (`/chat`) | Chatbot gaya ChatGPT: streaming token, riwayat percakapan tersimpan (SQLite), rename/pin/hapus, mode indikator (AI Lokal/Online vs Offline KB), salin jawaban, rating 👍👎, sumber jawaban ditampilkan. Termasuk **edukasi kesehatan umum** (batuk, demam, hipertensi, diabetes, maag, nyeri dada, diare, pusing) dengan tanda bahaya & kapan ke IGD. Pertanyaan di luar basis pengetahuan dijawab jujur dengan arahan kontak — **tidak pernah** menampilkan dokumen yang tidak relevan. Bila AI (PrivateLM/cloud) diaktifkan, model selalu diutamakan untuk pertanyaan di luar template. |
 | **Jadwal Dokter** (`/jadwal`) | ±55 baris jadwal poliklinik regular, cari per dokter/poli/spesialisasi, filter hari, cetak (print-friendly). Update 12 Mei 2026 — dapat berubah, konfirmasi (0272) 321020. |
-| **Home Care Go-Trah** (`/home-care`) | Semua ±80 item **Tarif Tindakan Pelayanan Home Care** hasil digitalisasi SK Dirut No. HK.02.03/D.XXVI/5441/2024 (dokumen SK dipindai, tarif terverifikasi per halaman), bisa dicari & dicetak, tersedia **unduhan PDF SK asli**, dan **formulir pengajuan kunjungan home care** ke petugas. |
+| **Home Care Go-Trah** (`/home-care`) | Semua ±80 item **Tarif Tindakan Pelayanan Home Care** hasil digitalisasi SK Dirut No. HK.02.03/D.XXVI/5441/2024 (dokumen SK dipindai, tarif terverifikasi per halaman), bisa dicari & dicetak, tersedia **unduhan PDF SK asli**, **formulir pengajuan kunjungan home care** ke petugas, dan tautan langsung ke pemesanan resmi online **Soeradji GOCARE** ([sias.rsupsoeradji.id/homecare](https://sias.rsupsoeradji.id/homecare/) — asisten Sora, 80+ layanan, minimal H-1). |
 | **Keluhan / Pengaduan** (`/keluhan`) | Buat tiket → nomor tiket `SKT-YYYYMMDD-XXXXXX`, lacak status (baru → diproses → selesai) + tanggapan petugas, kategori & prioritas. |
 | **Kampanye Kesehatan** (`/kampanye`) | Kampanye daring RST (SPELING, Bakti Sosial, CERDIK, Stop Gratifikasi, dll) + berbagi ke WhatsApp. Dikelola admin. |
 | **Panel Admin** (`/admin`) | Login ber-cookie HMAC: statistik (grafik volume chat 14 hari, topik terbanyak), manajemen tiket keluhan (tanggapi + WA balasan), manajemen permintaan Home Care, kelola kampanye, **Pengaturan AI** (preset PrivateLM/Ollama/llama.cpp/LM Studio/OpenAI/Kimi/OpenRouter, uji koneksi, mode offline). |
@@ -116,7 +116,7 @@ src/
     settings.ts auth.ts llm settings, autentikasi cookie admin
 public/documents/      # SK Tarif Home Care (PDF asli, dapat diunduh dari aplikasi)
 public/images/         # Logo SAPA PASIEN
-test/rag-test.mjs      # 29 pengujian basis pengetahuan & retrieval
+test/rag-test.mjs      # 32 pengujian basis pengetahuan & retrieval
 ```
 
 ## Sumber Data & Akurasi
@@ -125,6 +125,11 @@ test/rag-test.mjs      # 29 pengujian basis pengetahuan & retrieval
 - **Tarif Home Care**: Keputusan Direktur Utama RST No. **HK.02.03/D.XXVI/5441/2024** (18 Maret 2024), melampirkan 5 kelompok tarif — digitalisasi dilakukan dari pindaian SK (scan) dan diverifikasi halaman demi halaman; salinan PDF tersedia di aplikasi (`/home-care` → Unduh SK).
 - **Jadwal dokter**: diolah dari situs resmi & direktori jadwal publik (update **12 Mei 2026**); **jadwal dapat berubah sewaktu-waktu** — selalu konfirmasi ke (0272) 321020.
 - Kampanye: berita/kegiatan resmi RST (bakti sosial & khitanan massal Nov 2026, SPELING Gantiwarno) serta program Kemenkes (CERDIK, GERMAS, DOTS).
+
+## Dokumentasi
+
+- [`docs/PANDUAN-INSTALL-PRIVATELM.md`](docs/PANDUAN-INSTALL-PRIVATELM.md) — panduan langkah demi langkah memasang PrivateLM (aplikasi AI lokal/offline OpenAI-compatible) di Android/iOS dan menyambungkannya ke SAPA PASIEN.
+- [`docs/DEPLOYMENT-PUBLIK.md`](docs/DEPLOYMENT-PUBLIK.md) — arsitektur & checklist publikasi SAPA PASIEN di IP publik (HTTPS, firewall, reverse proxy, LLM lokal di server, keamanan & UU PDP).
 
 ## Catatan Penting
 

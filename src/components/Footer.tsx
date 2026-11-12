@@ -38,6 +38,7 @@ export default function Footer() {
             <li><Link href="/chat" className="hover:text-white">Tanya SAPA PASIEN (Chatbot)</Link></li>
             <li><Link href="/jadwal" className="hover:text-white">Jadwal Dokter Poliklinik</Link></li>
             <li><Link href="/home-care" className="hover:text-white">Home Care Go-Trah &amp; Tarif</Link></li>
+            <li><a href="https://sias.rsupsoeradji.id/homecare/" target="_blank" rel="noreferrer" className="hover:text-white">Soeradji GOCARE — Homecare Online ↗</a></li>
             <li><Link href="/kampanye" className="hover:text-white">Kampanye Kesehatan</Link></li>
             <li><Link href="/keluhan" className="hover:text-white">Pengaduan &amp; Keluhan</Link></li>
             <li><a href="https://rsupsoeradji.id" target="_blank" rel="noreferrer" className="hover:text-white">Situs Resmi rsupsoeradji.id</a></li>
