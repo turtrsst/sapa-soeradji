@@ -32,6 +32,38 @@ Browser pasien ──HTTPS(443)──> Reverse proxy (Caddy/Nginx)
 
 Opsi cloud (OpenAI/dll.) tetap tersedia di **/admin → Pengaturan AI** bila RS mengizinkan — dengan catatan privasi di §5.
 
+## 2A. Kalau pakai FreeLLMAPI (`github.com/tashfeenahmed/freellmapi`)?
+
+FreeLLMAPI = agregator **free tier** 34 provider (~635 endpoint model, ~7,4 miliar token/bulan) di balik satu endpoint OpenAI-compatible `/v1` (localhost:3001). Kunci provider milik Anda (BYOK) disimpan AES-256-GCM terenkripsi; router memilih model sehat di bawah kuota, failover otomatis saat 429/5xx; keys/analytics/dashboard; MIT; self-host (Docker/desktop/Node 20+). Secara teknis **SAPA PASIEN bisa langsung memakainya** tanpa ubah kode: /admin → Pengaturan AI → pilih preset terdekat (mis. **llama.cpp llama-server (lokal)**) lalu ganti Base URL menjadi `http://127.0.0.1:3001/v1`, API Key = unified key `freellmapi-…`. (Preset hanyalah pengisi formulir — semua endpoint OpenAI-compatible bisa dipakai.)
+
+**Tapi layak untuk pasien publik? Tidak direkomendasikan.** Evaluasi jujur:
+
+- Repo sendiri menulis scope-nya: **"Personal experimentation only"**; README Limitations: no frontier models, latency variabel, **no SLA**, kapasitas efektif turun sore hari saat kuota harian provider habis (reset UTC midnight).
+- Pertanyaan pasien (keluhan, gejala, kondisi pribadi) akan dikirim ke **pihak ketiga** (Groq, Gemini free, dll.) — free tier umumnya tunduk pada ToS personal/non-komersial dan bisa memproses data sesuai kebijakan masing-masing provider. Untuk layanan rumah sakit (data kesehatan = data pribadi spesifik, **UU PDP No. 27/2022**), ini berisiko hukum & etika tanpa tata kelola, DPA, dan persetujuan pasien yang eksplisit.
+- Kuota/limit **bisa hilang atau berubah sepihak** kapan pun — bukan fondasi untuk layanan publik 24/7 milik RS.
+- Pemakaian yang dapat dipertimbangkan: **uji coba/demo internal** dengan pertanyaan sintetis (bukan data pasien), untuk membandingkan kualitas jawaban. Untuk publik: tetap opsi A/B (LLM lokal, data tidak keluar RS) atau cloud berbayar dengan DPA.
+
+## 2B. Opsi B di Windows lewat RDP (komputer server Anda)
+
+Jika Anda **bisa RDP ke komputer server**, mesin itu bisa jadi host LLM (dan sekalian host aplikasi). Prinsip: RDP hanya kanal **admin** — jangan dibuka ke internet.
+
+**Skenario B1 — SAPA PASIEN ikut di mesin Windows yang sama** (paling sederhana; setara Opsi A di Windows):
+1. RDP masuk → install **Node.js 20 LTS** (jika belum) & driver GPU NVIDIA + CUDA (jika ada GPU; jika tidak, llama-server build CPU tetap jalan).
+2. Unduh **llama.cpp Windows release** dari rilis resminya (`llama-server.exe`, pilih build `cuda-*` atau `cpu-*`/`avx2`).
+3. Unduh model GGUF dari Hugging Face, mis. `Qwen2.5-3B-Instruct-Q4_K_M.gguf` (~2 GB; RAM 8 GB+) atau 1.5B (RAM 4–6 GB) → simpan di `C:\llm\models\`.
+4. Uji manual: `llama-server.exe -m C:\llm\models\qwen2.5-3b-instruct-q4_k_m.gguf --host 127.0.0.1 --port 8080 --api-key "KEY-RANDOM" -c 4096` → buka `http://127.0.0.1:8080/health`.
+5. Jadikan **service Windows** (auto-start & auto-restart): `nssm install llama-server "C:\llm\llama-server.exe" "-m ... --host 127.0.0.1 --port 8080 --api-key KEY"` lalu `nssm start llama-server`. Jangan jalankan di jendela RDP — ia mati saat sesi putus.
+6. **Firewall**: hanya port 443 (+80) publik; 3000 & 8080 tetap loopback/LAN. RDP (3389) **hanya** dari IP admin/VPN — aktifkan NLA, ganti port bila perlu, matikan sleep, jadwalkan Windows Update di luar jam layanan.
+7. /admin → Pengaturan AI → Base URL `http://127.0.0.1:8080/v1` → Uji Koneksi → Simpan. Selesai.
+
+**Skenario B2 — SAPA PASIEN di server Linux/VPS publik, LLM di mesin Windows RST** (LAN):
+1. Di mesin Windows: `llama-server.exe --host 0.0.0.0 --port 8080 --api-key "KEY-PANJANG"` sebagai service (langkah 5 B1).
+2. Windows Defender Firewall → inbound rule port 8080 **hanya** dari IP server aplikasi; jangan pernah port-forward 8080 ke internet.
+3. Jika server aplikasi **di luar LAN RS** (VPS): jangan buka 8080 telanjang — pakai **Tailscale/WireGuard** (kedua mesin join tailnet; Base URL `http://100.x.y.z:8080/v1`) atau reverse SSH tunnel dari mesin Windows ke VPS. Ini satu-satunya cara aman menembus NAT RS.
+4. RDP hanya lewat VPN kantor (bukan internet); audit akun RDP secara berkala.
+
+**Catatan jujur B:** RDP ≠ high availability — bila mesin mati/RDP putus, LLM (atau aplikasi) ikut mati. Gunakan service + UPS + backup terjadwal. Kalau RS mengizinkan, tetap idealnya aplikasi dan LLM di mesin server yang sama (B1) agar tidak ada trafik LLM lewat jaringan sama sekali.
+
 ## 3. Langkah praktis (Ubuntu/Debian)
 
 ### 3.1 Aplikasi
