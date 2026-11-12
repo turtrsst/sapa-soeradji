@@ -104,8 +104,10 @@ export function composeOfflineAnswer(message: string): OfflineAnswer {
     };
   }
 
-  // Default: jawaban dari dokumen terbaik
-  if (top) {
+  // Jawaban dari dokumen terbaik — hanya bila relevan (confidence gate)
+  const MIN_SCORE = 9;
+  const topScore = hits[0]?.score ?? 0;
+  if (top && topScore >= MIN_SCORE) {
     const body = top.body.length > 900 ? top.body.slice(0, 897) + '…' : top.body;
     return {
       intent,
@@ -114,9 +116,13 @@ export function composeOfflineAnswer(message: string): OfflineAnswer {
     };
   }
 
+  // Di luar basis pengetahuan: JANGAN menebak / jangan tampilkan dokumen yang salah.
+  const related = hits.filter((h) => h.score >= 3).slice(0, 3).map((h) => h.doc.title);
+  const relatedLine = related.length ? `\n\nTopik terkait yang mungkin membantu:\n${related.map((t) => `- ${t}`).join('\n')}` : '';
+  const excerpt = message.trim().length > 80 ? message.trim().slice(0, 77) + '…' : message.trim();
   return {
     intent: 'vitally_unknown',
     sources: [],
-    text: `Mohon maaf, saya belum menemukan jawaban yang tepat di basis pengetahuan RST. Silakan:\n\n1. Hubungi **Contact Center (0272) 321020**\n2. WhatsApp pendaftaran/informasi: **0816-9170-00**\n3. Kunjungi **rsupsoeradji.id**\n\nAtau ketik pertanyaan dengan kata kunci lain (mis. "jadwal dokter poli jantung", "cara daftar online", "tarif home care").${FOOTER}`,
+    text: `Mohon maaf, pertanyaan Anda ("${excerpt}") belum dapat saya jawab dari basis pengetahuan resmi RST — mencakup profil & kontak RS, pendaftaran, jadwal dokter, tarif, Home Care, kampanye, layanan unggulan, dan edukasi kesehatan umum. Saya tidak ingin memberi jawaban yang salah.\n\n**Yang bisa Anda lakukan:**\n1. Hubungi **Contact Center (0272) 321020** atau WhatsApp **0816-9170-00**\n2. Kunjungi **rsupsoeradji.id**\n3. Kondisi gawat darurat: **IGD 24 jam (0272) 321020 ext 200** atau **119**${relatedLine}\n\n💡 Jika **SAPA PASIEN-AI** (model offline PrivateLM / API cloud) diaktifkan petugas melalui Panel Admin → *Pengaturan AI*, pertanyaan umum seperti ini akan dijawab otomatis oleh AI — bukan template.${FOOTER.replace('\n\n_Mode jawaban offline', '\n\n_Anda juga bisa mencoba kata kunci lain, mis. "jadwal poli jantung", "cara daftar online", "tarif home care"._\n\n_Mode jawaban offline')}`,
   };
 }

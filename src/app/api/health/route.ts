@@ -1,4 +1,5 @@
 import { getDb } from '@/lib/db';
+import { KB_DOCS } from '@/lib/kb';
 import { probeEndpoint } from '@/lib/llm';
 import { getLlmConfig } from '@/lib/settings';
 
@@ -15,7 +16,7 @@ export async function GET() {
     service: 'RSUP Dr. Soeradji Tirtonegoro Klaten',
     time: new Date().toISOString(),
     db: dbOk ? 'ok' : 'error',
-    offline: { knowledgeBase: 'ok', documents: 19 },
+    offline: { knowledgeBase: 'ok', documents: KB_DOCS.length },
     llm: {
       enabled: cfg.enabled,
       provider: cfg.provider,

@@ -296,6 +296,119 @@ T: Apakah RST melayani hari Sabtu? J: Poliklinik tutup Sabtu–Ahad/libur; IGD &
     body: `RST memiliki aplikasi mobile resmi "E-Yang Soeradji" untuk mempermudah akses layanan (informasi & pendaftaran) bagi pengguna Android/iOS. Cari "E-Yang Soeradji" di Play Store/App Store, atau tanyakan tautan unduhan ke Contact Center (0272) 321020. Aplikasi SAPA PASIEN ini melengkapi E-Yang Soeradji sebagai kanal tanya-jawab cerdas (chatbot), keluhan, dan kampanye kesehatan.`,
   },
   {
+    id: 'edukasi-batuk',
+    title: 'Batuk Berdahak — Edukasi Umum (Bukan Diagnosis)',
+    tags: ['batuk', 'berdahak', 'pilek', 'flu', 'ispa', 'tenggorokan', 'dahak', 'batuk kronis', 'tb'],
+    updated: '2026-11',
+    source: 'Edukasi kesehatan Kemenkes RI / RST (bukan pengganti konsultasi dokter)',
+    body: `Batuk berdahak adalah refleks alami tubuh untuk membersihkan saluran napas dari mukus/dahak. Pada umumnya tidak berbahaya dan sering menyertai ISPA (infeksi saluran napas akut, mis. pilek/flu) dan sembuh 1–3 minggu.
+
+Waspada & SEGERA periksa ke dokter bila: batuk lebih dari 2 minggu; dahak bercampur darah; batuk disertai sesak napas berat, nyeri dada, atau napas berbunyi; demam tinggi lebih dari 3 hari; berat badan turun tanpa sebab; keringat malam; pembengkakan kelenjar leher. Batuk > 2 minggu + keringat malam + BB turun wajib disaring TB — poli TB DOTS RST (dr. Zakiah Novianti, Sp.P — Selasa & Jumat 09.00–13.00). Dahak hijau/kuning pekat disertai sesak → curiga infeksi bakteri (pneumonia/bronkitis) → perlu pemeriksaan dokter & kemungkinan rontgen.
+
+Pertolongan awal di rumah: perbanyak minum air hangat, istirahat, hindari asap rokok & polusi, jangan sembarangan minum antibiotik tanpa resep (antibiotik hanya untuk infeksi bakteri atas anjuran dokter). Anak di bawah 5 tahun, lansia, dan penderita penyakit jantung/paru kronik sebaiknya langsung diperiksa.
+
+Ini edukasi umum, BUKAN diagnosis. Untuk kepastian dan penanganan yang tepat, konsultasikan ke dokter RST: poli Paru/TB DOTS, poli Penyakit Dalam, atau IGD bila sesak. SAPA PASIEN tidak dapat mendiagnosis penyakit.`,
+  },
+  {
+    id: 'edukasi-demam',
+    title: 'Demam — Edukasi Umum (Bukan Diagnosis)',
+    tags: ['demam', 'panas', 'meriang', 'suhu', 'demam tinggi', 'penurun panas'],
+    updated: '2026-11',
+    source: 'Edukasi kesehatan Kemenkes RI / RST (bukan pengganti konsultasi dokter)',
+    body: `Demam adalah respons tubuh melawan infeksi — umumnya tidak berbahaya bila di bawah 38,5°C dan singkat. Pertolongan awal: istirahat cukup, minum air putih/air hangat yang banyak, kompres hangat, pakaian tipis, ukur suhu berkala.
+
+SEGERA ke IGD bila: demam disertai sesak napas, kaku kuduk, kejang, penurunan kesadaran/bingung, ruam ungu yang tidak hilang saat ditekan, atau nyeri dada hebat. Periksa ke dokter bila: demam > 38,5°C lebih dari 3 hari, demam naik-turun > 7 hari, disertai ruam, muntah terus-menerus, atau diare berat; anak dengan demam disertai rewel berat/tidak mau minum/mata cekung. Demam berdarah perlu diwaspadai saat musim hujan: demam tinggi mendadak + bintik merah + nyeri ulu hati + mimisan → periksa darah segera (poli Anak/Penyakit Dalam).
+
+Obat penurun panas (parasetamol) hanya pereda gejala — bukan penyembuh. Jangan berikan aspirin pada anak tanpa anjuran dokter.
+
+Ini edukasi umum, BUKAN diagnosis. Konsultasikan ke dokter RST untuk penanganan tepat (poli Penyakit Dalam/Anak, atau IGD 24 jam: (0272) 321020 ext 200).`,
+  },
+  {
+    id: 'edukasi-hipertensi',
+    title: 'Hipertensi (Tekanan Darah Tinggi) — Edukasi Umum',
+    tags: ['hipertensi', 'darah tinggi', 'tensi', 'tekanan darah', 'sistole', 'diastole', 'amlodipin'],
+    updated: '2026-11',
+    source: 'Edukasi kesehatan Kemenkes RI / RST (bukan pengganti konsultasi dokter)',
+    body: `Hipertensi = tekanan darah ≥ 140/90 mmHg pada pengukuran berulang. Sering TANPA gejala ("pembunuh diam-diam") dan dapat menimbulkan stroke, serangan jantung, dan gagal ginjal. Faktor risiko: garam berlebih, obesitas, kurang olahraga, merokok, stres, riwayat keluarga.
+
+Pencegahan & pengendalian: kurangi garam (< 5 g/hari), diet DASH (banyak sayur-buah-serat, kurangi lemak jenuh), olahraga 30 menit/hari, berat badan ideal, berhenti merokok, kelola stres, patuh minum obat dari dokter (jangan berhenti sendiri meski merasa baik-baik saja), cek tensi rutin (minimal 1×/bulan bila berisiko).
+
+SEGERA ke IGD bila: tensi sangat tinggi (≥ 180/120) disertai nyeri dada, sesak, sakit kepala hebat, gangguan penglihatan, lemas sebelah/wajah mencong (gejala stroke), atau penurunan kesadaran.
+
+Skrining gratis tekanan darah tersedia di MCU RST & kegiatan SPELING/bakti sosial. Ini edukasi umum, BUKAN diagnosis — konsultasikan ke dokter (poli Penyakit Dalam, dr. Tri Widodo, Sp.PD-KGH / poli Jantung).`,
+  },
+  {
+    id: 'edukasi-diabetes',
+    title: 'Diabetes / Kencing Manis — Edukasi Umum',
+    tags: ['diabetes', 'gula darah', 'kencing manis', 'dm', 'gula', 'insulin', 'metformin'],
+    updated: '2026-11',
+    source: 'Edukasi kesehatan Kemenkes RI / RST (bukan pengganti konsultasi dokter)',
+    body: `Diabetes melitus ditandai gula darah puasa ≥ 126 mg/dL atau sewaktu ≥ 200 mg/dL (pemeriksaan laboratorium). Gejala khas: sering haus & sering berkemih (terutama malam), lapar terus, berat badan turun, luka sulit sembuh, kesemutan.
+
+Pengendalian: diet rendah gula & karbohidrat sederhana (hindari minuman manis, gorengan, nasi berlebih), makan teratur dengan porsi kecil & sering, olahraga rutin (jalan kaki 30 menit), jaga berat badan, cek gula darah & HbA1c berkala, patuh obat/insulin sesuai anjuran dokter, periksa kaki & mata rutin.
+
+SEGERA ke IGD bila: gula darah sangat tinggi disertai muntah hebat, nyeri perut, napas cepat/dalam (curiga ketoasidosis), atau gula darah sangat rendah (gemetar, keringat dingin, bingung, kejang) — segera minum manis & hubungi IGD (0272) 321020 ext 200.
+
+Ini edukasi umum, BUKAN diagnosis. Konsultasi ke dokter (poli Penyakit Dalam) & cek GDS/GDP di laboratorium RST atau Home Care RST (GDS stik Rp120.000).`,
+  },
+  {
+    id: 'edukasi-maag',
+    title: 'Maag / Nyeri Ulu Hati / GERD — Edukasi Umum',
+    tags: ['maag', 'asam lambung', 'gerd', 'ulu hati', 'perut perih', 'mual', 'muntah', 'kembung'],
+    updated: '2026-11',
+    source: 'Edukasi kesehatan Kemenkes RI / RST (bukan pengganti konsultasi dokter)',
+    body: `Nyeri ulu hati & perih lambung umumnya akibat gastritis/dispepsia fungsional atau GERD (asam lambung naik). Pemicu: makan tidak teratur, pedas/asam/kopi/alkohol/soda, stres, obat anti-nyeri (NSAID) tanpa pelindung lambung.
+
+Pertolongan awal: makan kecil tapi sering (jangan kosong > 3–4 jam), hindari pemicu (pedas, asam, kopi, soda, alkohol), jangan langsung berbaring setelah makan (tunggu 2 jam), tidur dengan kepala lebih tinggi, kurangi stres, berhenti merokok. Antasida bisa membantu gejala ringan sesekali — bukan solusi jangka panjang.
+
+SEGERA ke IGD/dokter bila: nyeri ulu hati disertai muntah darah/BAB hitam (curiga perdarahan lambung), nyeri dada (bedakan dengan jantung — bila ragu, anggap gawat darurat), sulit menelan, berat badan turun, atau muntah terus-menerus.
+
+Ini edukasi umum, BUKAN diagnosis. Konsultasikan ke dokter (poli Penyakit Dalam) — nyeri dada harus dipastikan bukan dari jantung terlebih dahulu.`,
+  },
+  {
+    id: 'edukasi-nyeri-dada',
+    title: 'Nyeri Dada — Edukasi Umum & Tanda BAHAYA',
+    tags: ['nyeri dada', 'dada sakit', 'dada terasa', 'dada sesak', 'jantung', 'serangan jantung'],
+    updated: '2026-11',
+    source: 'Edukasi kesehatan Kemenkes RI / RST (bukan pengganti konsultasi dokter)',
+    body: `Nyeri dada bisa dari otot/tulang, lambung (GERD), cemas, atau JANTUNG (angina/serangan jantung). Nyeri dada akibat jantung biasanya: terasa berat/tertindih/terbakar di tengah dada, menjalar ke lengan kiri, rahang, leher, atau punggung, disertai keringat dingin, sesak, mual — muncul saat aktivitas/stres dan membaik saat istirahat (angina), atau menetap > 15 menit (curiga serangan jantung).
+
+Bila ragu antara lambung vs jantung: ANGGAP GAWAT DARURAT. Segera ke IGD RST — (0272) 321020 ext 200 — atau hubungi 119. Jangan menyetir sendiri. Duduk tegak & istirahat sambil menunggu pertolongan; bila ada aspirin dan tidak alergi serta sadar penuh, kunyah 1 tablet atas petunjuk petugas 119 — jangan memberi makan/minum pada orang yang menurun kesadarannya.
+
+Nyeri dada berulang saat aktivitas adalah TANDA PERINGATAN penyakit jantung koroner → periksa ke poli Jantung (dr. Muhammad Yulianto SA, Sp.JP / dr. Donna Paramita, Sp.JP) atau poli Penyakit Dalam; RST memiliki fasilitas kateterisasi jantung (PCI) bila diperlukan.
+
+Ini edukasi umum, BUKAN diagnosis. Nyeri dada hebat = kondisi gawat darurat, bukan untuk tanya-jawab chatbot.`,
+  },
+  {
+    id: 'edukasi-diare',
+    title: 'Diare — Edukasi Umum (Bukan Diagnosis)',
+    tags: ['diare', 'mencret', 'perut mules', 'muntaber', 'bab encer', 'dehidrasi'],
+    updated: '2026-11',
+    source: 'Edukasi kesehatan Kemenkes RI / RST (bukan pengganti konsultasi dokter)',
+    body: `Diare = BAB encer ≥ 3× sehari. Penyebab tersering: infeksi virus/bakteri (makanan/minuman tercemar), intoleransi laktosa, efek obat. Bahaya utama adalah DEHIDRASI, terutama pada anak & lansia.
+
+Pertolongan utama: minum oralit (larutan gula-garam) sering sedikit-sedikit — jangan hanya air putih; makan lunak (bubur, pisang, nasi); jaga kebersihan makanan & cuci tangan; hindari susu & santan sementara.
+
+SEGERA ke dokter/IGD bila: BAB berdarah, diare disertai demam tinggi, muntah hebat & tidak bisa minum, tanda dehidrasi (mulut kering, mata cekung, lemas, jarang BAK, sangat haus), atau diare > 3 hari. Anak < 5 tahun dengan diare harus segera diperiksa.
+
+Ini edukasi umum, BUKAN diagnosis. Konsultasikan ke dokter (poli Anak/Penyakit Dalam); kasus berat ditangani IGD 24 jam (0272) 321020 ext 200.`,
+  },
+  {
+    id: 'edukasi-pusing',
+    title: 'Pusing / Sakit Kepala — Edukasi Umum (Bukan Diagnosis)',
+    tags: ['pusing', 'sakit kepala', 'migrain', 'vertigo', 'pening', 'kepala nyeri', 'berputar'],
+    updated: '2026-11',
+    source: 'Edukasi kesehatan Kemenkes RI / RST (bukan pengganti konsultasi dokter)',
+    body: `Pusing/sakit kepala paling sering: tegang (otot leher & kepala), migrain (berdenyut sebelah, mual, sensitif cahaya), kurang tidur, dehidrasi, telat makan, mata lelah, atau tekanan darah tidak terkontrol. Vertigo = rasa berputar, sering karena gangguan keseimbangan telinga dalam.
+
+Pertolongan awal: istirahat di ruangan gelap & tenang, minum air, makan teratur, kompres dingin (migrain) atau hangat (tegang), kurangi layar & stres, tidur cukup.
+
+SEGERA ke IGD bila sakit kepala: muncul mendadak & sangat hebat ("terburuk seumur hidup"), disertai kaku kuduk & demam, gangguan bicara/penglihatan/kelumpuhan sebelah, penurunan kesadaran, atau setelah benturan kepala. Ini bisa tanda perdarahan otak/stroke — DARURAT, bukan untuk dipantau di rumah.
+
+Ini edukasi umum, BUKAN diagnosis. Konsultasi ke dokter (poli Saraf/Bedah Saraf, poli THT bila berputar, atau poli Penyakit Dalam bila terkait tensi).`,
+  },
+
+  {
     id: 'titik-lokasi',
     title: 'Lokasi dan Rute Menuju RST',
     tags: ['rute', 'lokasi', 'peta', 'google maps', 'jalan', 'tegalyoso', 'klaten selatan', 'transportasi', 'angkot', 'kereta', 'stasiun', 'terminal'],

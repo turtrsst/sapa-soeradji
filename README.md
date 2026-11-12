@@ -13,7 +13,7 @@ SAPA PASIEN menjawab pertanyaan dan keluhan masyarakat secara cepat — **keluha
 
 | Modul | Keterangan |
 |---|---|
-| **Tanya SAPA PASIEN** (`/chat`) | Chatbot gaya ChatGPT: streaming token, riwayat percakapan tersimpan (SQLite), rename/pin/hapus, mode indikator (AI Lokal/Online vs Offline KB), salin jawaban, rating 👍👎, sumber jawaban ditampilkan. |
+| **Tanya SAPA PASIEN** (`/chat`) | Chatbot gaya ChatGPT: streaming token, riwayat percakapan tersimpan (SQLite), rename/pin/hapus, mode indikator (AI Lokal/Online vs Offline KB), salin jawaban, rating 👍👎, sumber jawaban ditampilkan. Termasuk **edukasi kesehatan umum** (batuk, demam, hipertensi, diabetes, maag, nyeri dada, diare, pusing) dengan tanda bahaya & kapan ke IGD. Pertanyaan di luar basis pengetahuan dijawab jujur dengan arahan kontak — **tidak pernah** menampilkan dokumen yang tidak relevan. Bila AI (PrivateLM/cloud) diaktifkan, model selalu diutamakan untuk pertanyaan di luar template. |
 | **Jadwal Dokter** (`/jadwal`) | ±55 baris jadwal poliklinik regular, cari per dokter/poli/spesialisasi, filter hari, cetak (print-friendly). Update 12 Mei 2026 — dapat berubah, konfirmasi (0272) 321020. |
 | **Home Care Go-Trah** (`/home-care`) | Semua ±80 item **Tarif Tindakan Pelayanan Home Care** hasil digitalisasi SK Dirut No. HK.02.03/D.XXVI/5441/2024 (dokumen SK dipindai, tarif terverifikasi per halaman), bisa dicari & dicetak, tersedia **unduhan PDF SK asli**, dan **formulir pengajuan kunjungan home care** ke petugas. |
 | **Keluhan / Pengaduan** (`/keluhan`) | Buat tiket → nomor tiket `SKT-YYYYMMDD-XXXXXX`, lacak status (baru → diproses → selesai) + tanggapan petugas, kategori & prioritas. |

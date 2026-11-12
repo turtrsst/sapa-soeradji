@@ -57,4 +57,12 @@ ok('keluhan → hotline/menu keluhan', /0851-7957-7302|tiket/i.test(keluhan.text
 const daftar = composeOfflineAnswer('bagaimana cara daftar online');
 ok('daftar → WA 0816-9170-00', daftar.text.includes('0816-9170-00'));
 
+console.log('\nBatuk & pertanyaan di luar KB (regresi template keliru):');
+const batuk = composeOfflineAnswer('apakah batuk berdahak itu bahaya?');
+ok('batuk berdahak → edukasi batuk (bukan FAQ sembarangan)', !batuk.text.includes('Bawa apa saat berobat') && /batuk/i.test(batuk.text) && /(2 minggu|TB|Paru)/i.test(batuk.text));
+const topBatuk = retrieve('apakah batuk berdahak itu bahaya?', 1)[0];
+ok('retrieval batuk → dokumen edukasi-batuk', topBatuk?.doc.id === 'edukasi-batuk');
+const outside = composeOfflineAnswer('siapa presiden pertama Indonesia?');
+ok('di luar KB → jawaban jujur + hotline, bukan dokumen acak', outside.text.includes('321020') && outside.text.includes('basis pengetahuan') && !outside.text.includes('T: Bawa apa'));
+
 console.log(`\n${passed} pengujian lulus ✓`);
