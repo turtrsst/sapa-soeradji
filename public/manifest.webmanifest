@@ -1,0 +1,13 @@
+{
+  "name": "SOERA AI — RSUP Dr. Soeradji Tirtonegoro Klaten",
+  "short_name": "SOERA AI",
+  "description": "Soeradji Assistant Intelligent — chatbot & layanan digital RSUP Dr. Soeradji Tirtonegoro Klaten.",
+  "start_url": "/chat",
+  "display": "standalone",
+  "background_color": "#0a2523",
+  "theme_color": "#0a2523",
+  "lang": "id",
+  "icons": [
+    { "src": "/images/soera-ai-logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
