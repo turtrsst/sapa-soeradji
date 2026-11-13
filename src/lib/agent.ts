@@ -20,7 +20,8 @@ ATURAN KERJA:
 3. JANGAN memberi diagnosis medis, resep obat, atau interpretasi hasil pemeriksaan. Untuk keluhan klinis sarankan konsultasi dokter. Untuk DARURAT (nyeri dada hebat, sesak berat, stroke, kecelakaan, perdarahan hebat, penurunan kesadaran) arahkan SEGERA ke IGD (0272) 321020 ext 200 atau 119.
 4. Pertanyaan umum di luar RS: jawab singkat dan jujur. Bila tidak tahu, katakan tidak tahu — jangan mengarang.
 5. Jangan pernah meminta kata sandi, PIN, atau data kartu. Jaga privasi data kesehatan.
-6. Jadwal & tarif dapat berubah — anjurkan konfirmasi ke (0272) 321020. Bukan pengganti konsultasi medis.`;
+6. Jadwal & tarif dapat berubah — anjurkan konfirmasi ke (0272) 321020. Bukan pengganti konsultasi medis.
+7. Saat menyebut halaman aplikasi, WAJIB gunakan link markdown: [Jadwal Dokter](/jadwal), [Home Care](/home-care), [Keluhan](/keluhan), [Kampanye](/kampanye), [Tanya SOERA AI](/chat). Link eksternal: [nama](https://…). Contoh: buka [halaman Jadwal Dokter](/jadwal).`;
 
 export interface AgentStreamOptions {
   message: string;
@@ -47,8 +48,8 @@ export async function streamAgent({ message, history, cfg, onToken }: AgentStrea
       execute: async ({ kata_kunci }) => {
         const rows = matchJadwal(kata_kunci, 8);
         return rows.length
-          ? `Jadwal (update ${JADWAL_UPDATE}, dapat berubah — konfirmasi (0272) 321020):\n${formatJadwalLines(rows)}\nPendaftaran online: WA 0816-9170-00 (H-7 s/d H-1).`
-          : 'Tidak ada jadwal yang cocok untuk kata kunci itu. Sarankan konfirmasi (0272) 321020 atau lihat halaman Jadwal Dokter.';
+          ? `Jadwal (update ${JADWAL_UPDATE}, dapat berubah — konfirmasi (0272) 321020):\n${formatJadwalLines(rows)}\nPendaftaran online: WA 0816-9170-00 (H-7 s/d H-1).\nDetail & cetak: [halaman Jadwal Dokter](/jadwal).`
+          : 'Tidak ada jadwal yang cocok untuk kata kunci itu. Sarankan konfirmasi (0272) 321020 atau lihat [halaman Jadwal Dokter](/jadwal).';
       },
     }),
     cari_tarif_layanan: tool({
@@ -57,8 +58,8 @@ export async function streamAgent({ message, history, cfg, onToken }: AgentStrea
       execute: async ({ kata_kunci }) => {
         const rows = matchTarif(kata_kunci, 10);
         return rows.length
-          ? `Tarif (SK ${TARIF_META.nomor}, ${TARIF_META.tanggal}):\n${formatTarifLines(rows)}\n${TARIF_META.catatan}`
-          : 'Tidak ada tarif cocok. Sarankan lihat halaman Home Care atau hubungi (0272) 321020.';
+          ? `Tarif (SK ${TARIF_META.nomor}, ${TARIF_META.tanggal}):\n${formatTarifLines(rows)}\n${TARIF_META.catatan}\nTabel lengkap (±80 item) & unduh SK: [halaman Home Care](/home-care). Pesan online: [Soeradji GOCARE](https://sias.rsupsoeradji.id/homecare/).`
+          : 'Tidak ada tarif cocok. Sarankan lihat [halaman Home Care](/home-care) atau hubungi (0272) 321020.';
       },
     }),
     cari_info_rst: tool({
@@ -78,8 +79,8 @@ export async function streamAgent({ message, history, cfg, onToken }: AgentStrea
           const rows = getDb().prepare(
             'SELECT title, summary, location, start_date, end_date FROM campaigns WHERE active = 1 ORDER BY created_at DESC LIMIT 6'
           ).all() as { title: string; summary: string; location: string | null; start_date: string | null; end_date: string | null }[];
-          if (!rows.length) return 'Belum ada kampanye aktif.';
-          return rows.map((r) => `- ${r.title}: ${r.summary}${r.location ? ` (Tempat: ${r.location})` : ''}${r.start_date ? ` (Mulai: ${r.start_date}${r.end_date ? ` s/d ${r.end_date}` : ''})` : ''}`).join('\n');
+          if (!rows.length) return 'Belum ada kampanye aktif. Lihat [menu Kampanye](/kampanye) untuk arsip.';
+          return rows.map((r) => `- ${r.title}: ${r.summary}${r.location ? ` (Tempat: ${r.location})` : ''}${r.start_date ? ` (Mulai: ${r.start_date}${r.end_date ? ` s/d ${r.end_date}` : ''})` : ''}`).join('\n') + '\nSemua kampanye: [menu Kampanye](/kampanye).';
         } catch {
           return 'Data kampanye tidak tersedia saat ini.';
         }

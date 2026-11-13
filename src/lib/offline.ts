@@ -33,7 +33,7 @@ export function composeOfflineAnswer(message: string): OfflineAnswer {
       return {
         intent,
         sources: ['Jadwal Praktik Dokter RST (update 12 Mei 2026) — dapat berubah; konfirmasi (0272) 321020'],
-        text: `Berikut jadwal dokter yang cocok dengan pertanyaan Anda:\n\n${formatJadwalLines(rows)}\n\nJadwal dapat berubah sewaktu-waktu (libur nasional/dinas). Konfirmasi sebelum berkunjung ke **(0272) 321020** atau lihat halaman **Jadwal Dokter** di aplikasi ini. Pendaftaran online: WhatsApp **0816-9170-00** (H-7 s/d H-1).${FOOTER}`,
+        text: `Berikut jadwal dokter yang cocok dengan pertanyaan Anda:\n\n${formatJadwalLines(rows)}\n\nJadwal dapat berubah sewaktu-waktu (libur nasional/dinas). Konfirmasi sebelum berkunjung ke **(0272) 321020** — [lihat halaman Jadwal Dokter](/jadwal). Pendaftaran online: WhatsApp **0816-9170-00** (H-7 s/d H-1).${FOOTER}`,
       };
     }
   }
@@ -44,14 +44,14 @@ export function composeOfflineAnswer(message: string): OfflineAnswer {
     const wantsPriceList = /daftar|list|semua|tabel/i.test(message);
     if (isHomeCare && !tariffRows.length) {
       const doc = KB_DOCS.find((d) => d.id === 'home-care')!;
-      return { intent, sources: [`${doc.title} — ${doc.source}`], text: `${doc.body}\n\nLihat tabel tarif lengkap di halaman **Home Care**. Pemesanan online resmi: **Soeradji GOCARE** — https://sias.rsupsoeradji.id/homecare/ (asisten Sora · 80+ layanan · minimal H-1).${FOOTER}` };
+      return { intent, sources: [`${doc.title} — ${doc.source}`], text: `${doc.body}\n\n[Lihat tabel tarif lengkap di halaman Home Care](/home-care). Pemesanan online resmi: [**Soeradji GOCARE**](https://sias.rsupsoeradji.id/homecare/) (asisten Sora · 80+ layanan · minimal H-1).${FOOTER}` };
     }
     if (tariffRows.length) {
       const sampleNote = TARIF_META.catatan;
       return {
         intent: 'tarif',
         sources: [`${TARIF_META.nomor} (${TARIF_META.tanggal})`],
-        text: `Berikut tarif ${isHomeCare ? 'Home Care' : ''} RST yang paling sesuai:\n\n${formatTarifLines(tariffRows)}\n\n*${sampleNote}*\nSumber: SK Direktur Utama RST No. **${TARIF_META.nomor}** (${TARIF_META.tanggal}). Dokumen SK asli (PDF) dapat diunduh di halaman **Home Care**.${isHomeCare ? '\n\nPemesanan online resmi: **Soeradji GOCARE** — https://sias.rsupsoeradji.id/homecare/ (asisten Sora · 80+ layanan · minimal H-1).' : ''}${FOOTER}`,
+        text: `Berikut tarif ${isHomeCare ? 'Home Care' : ''} RST yang paling sesuai:\n\n${formatTarifLines(tariffRows)}\n\n*${sampleNote}*\nSumber: SK Direktur Utama RST No. **${TARIF_META.nomor}** (${TARIF_META.tanggal}). Dokumen SK asli (PDF) dapat diunduh di [halaman Home Care](/home-care).${isHomeCare ? '\n\nPemesanan online resmi: [**Soeradji GOCARE**](https://sias.rsupsoeradji.id/homecare/) (asisten Sora · 80+ layanan · minimal H-1).' : ''}${FOOTER}`,
       };
     }
     if (wantsPriceList || intent === 'tarif') {
@@ -63,7 +63,7 @@ export function composeOfflineAnswer(message: string): OfflineAnswer {
           { no: 11, nama: 'Perawatan luka kecil', sarana: 20000, pelayanan: 100000, jumlah: 120000, section: 'Tindakan Medik Non Operatif' },
           { no: 1, nama: 'Visite dokter Umum', sarana: 25000, pelayanan: 125000, jumlah: 150000, section: 'Kunjungan Dokter/Psikolog' },
           { no: 2, nama: 'Dokter Spesialis', sarana: 25000, pelayanan: 200000, jumlah: 225000, section: 'Kunjungan Dokter/Psikolog' },
-        ])}\n\nLihat daftar lengkap (±80 tindakan, termasuk laboratorium, fisioterapi, sewa alat) di halaman **Home Care**. Pesan online resmi: **Soeradji GOCARE** — https://sias.rsupsoeradji.id/homecare/${FOOTER}`,
+        ])}\n\n[Lihat daftar lengkap (±80 tindakan) di halaman Home Care](/home-care). Pesan online resmi: [**Soeradji GOCARE**](https://sias.rsupsoeradji.id/homecare/).${FOOTER}`,
       };
     }
   }
@@ -73,7 +73,7 @@ export function composeOfflineAnswer(message: string): OfflineAnswer {
     return {
       intent,
       sources: [`${doc.title} — ${doc.source}`],
-      text: `Terima kasih telah menyampaikan masukan Anda — kritik & keluhan Anda penting bagi perbaikan layanan RST.\n\n**Cara menyampaikan keluhan:**\n1. **Menu "Keluhan" di aplikasi SOERA AI** — buat tiket, dapatkan nomor tiket, dan lacak status penindakannya.\n2. Hotline pengaduan: **0851-7957-7302** (telepon/WhatsApp)\n3. Contact Center: **(0272) 321020**\n4. Email: rsupsoeradji_klaten@yahoo.com\n\nMohon sertakan nama, No. rekam medis/HP, unit pelayanan, dan kronologi agar cepat ditindaklanjuti.${FOOTER}`,
+      text: `Terima kasih telah menyampaikan masukan Anda — kritik & keluhan Anda penting bagi perbaikan layanan RST.\n\n**Cara menyampaikan keluhan:**\n1. **Menu [Keluhan](/keluhan) di aplikasi SOERA AI** — buat tiket, dapatkan nomor tiket, dan lacak status penindakannya.\n2. Hotline pengaduan: **0851-7957-7302** (telepon/WhatsApp)\n3. Contact Center: **(0272) 321020**\n4. Email: rsupsoeradji_klaten@yahoo.com\n\nMohon sertakan nama, No. rekam medis/HP, unit pelayanan, dan kronologi agar cepat ditindaklanjuti.${FOOTER}`,
     };
   }
 
@@ -82,7 +82,7 @@ export function composeOfflineAnswer(message: string): OfflineAnswer {
     return {
       intent,
       sources: [`${doc.title} — ${doc.source}`],
-      text: `${doc.body.split('\n\n')[1]}\n\nInfo kampanye terbaru & cara ikut serta: lihat menu **Kampanye** di aplikasi ini, Instagram **@rssoeradjitirtonegoro**, atau rsupsoeradji.id.${FOOTER}`,
+      text: `${doc.body.split('\n\n')[1]}\n\nInfo kampanye terbaru & cara ikut serta: lihat [menu Kampanye](/kampanye) di aplikasi ini, [Instagram @rssoeradjitirtonegoro](https://www.instagram.com/rssoeradjitirtonegoro), atau rsupsoeradji.id.${FOOTER}`,
     };
   }
 
@@ -123,6 +123,6 @@ export function composeOfflineAnswer(message: string): OfflineAnswer {
   return {
     intent: 'vitally_unknown',
     sources: [],
-    text: `Mohon maaf, pertanyaan Anda ("${excerpt}") belum dapat saya jawab dari basis pengetahuan resmi RST — mencakup profil & kontak RS, pendaftaran, jadwal dokter, tarif, Home Care, kampanye, layanan unggulan, dan edukasi kesehatan umum. Saya tidak ingin memberi jawaban yang salah.\n\n**Yang bisa Anda lakukan:**\n1. Hubungi **Contact Center (0272) 321020** atau WhatsApp **0816-9170-00**\n2. Kunjungi **rsupsoeradji.id**\n3. Kondisi gawat darurat: **IGD 24 jam (0272) 321020 ext 200** atau **119**${relatedLine}\n\n💡 Jika **SOERA AI** (model offline PrivateLM / API cloud) diaktifkan petugas melalui Panel Admin → *Pengaturan AI*, pertanyaan umum seperti ini akan dijawab otomatis oleh AI — bukan template.${FOOTER.replace('\n\n_Mode jawaban offline', '\n\n_Anda juga bisa mencoba kata kunci lain, mis. "jadwal poli jantung", "cara daftar online", "tarif home care"._\n\n_Mode jawaban offline')}`,
+    text: `Mohon maaf, pertanyaan Anda ("${excerpt}") belum dapat saya jawab dari basis pengetahuan resmi RST — mencakup profil & kontak RS, pendaftaran, jadwal dokter, tarif, Home Care, kampanye, layanan unggulan, dan edukasi kesehatan umum. Saya tidak ingin memberi jawaban yang salah.\n\n**Yang bisa Anda lakukan:**\n1. Hubungi **Contact Center (0272) 321020** atau WhatsApp **0816-9170-00**\n2. Kunjungi [**rsupsoeradji.id**](https://rsupsoeradji.id)\n3. Kondisi gawat darurat: **IGD 24 jam (0272) 321020 ext 200** atau **119**${relatedLine}\n\n💡 Jika **SOERA AI** (model offline PrivateLM / API cloud) diaktifkan petugas melalui Panel Admin → *Pengaturan AI*, pertanyaan umum seperti ini akan dijawab otomatis oleh AI — bukan template.${FOOTER.replace('\n\n_Mode jawaban offline', '\n\n_Anda juga bisa mencoba kata kunci lain, mis. "jadwal poli jantung", "cara daftar online", "tarif home care"._\n\n_Mode jawaban offline')}`,
   };
 }

@@ -139,11 +139,11 @@ Informasi paket & biaya MCU: hubungi Contact Center (0272) 321020 atau WhatsApp 
 
 Layanan mencakup (sesuai SK Direktur Utama HK.02.03/D.XXVI/5441/2024): tindakan medik non operatif (pemasangan NGT/cateter, infus, injeksi, nebuliser, perawatan luka, pengambilan darah), pemeriksaan laboratorium sederhana (GDS, asam urat, kolesterol, darah rutin), rehabilitasi medik/fisioterapi di rumah, kunjungan dokter umum/spesialis/subspesialis, konsultasi psikologi, serta sewa alat medik (tempat tidur & oksigen konsentrator).
 
-Pemesanan online resmi tersedia di Soeradji GOCARE: https://sias.rsupsoeradji.id/homecare/ — ketik/ucapkan kebutuhan ke asisten "Sora" (mis. "perawatan luka untuk ibu, besok pagi di Klaten"), lalu pesanan langsung masuk antrean verifikasi dengan kode pesanan & notifikasi tiap tahap (verifikasi, kunjungan, selesai). Katalog 80+ layanan: Tindakan Medik & Perawatan, Pemeriksaan Laboratorium, Rehabilitasi & Fisioterapi, Kunjungan Dokter & Psikolog, Sewa Alat Medik. Tarif sesuai SK Direktur ditampilkan sebelum memesan; pemesanan minimal H-1; perlu akun (pendaftaran gratis).
+Pemesanan online resmi tersedia di [Soeradji GOCARE](https://sias.rsupsoeradji.id/homecare/): — ketik/ucapkan kebutuhan ke asisten "Sora" (mis. "perawatan luka untuk ibu, besok pagi di Klaten"), lalu pesanan langsung masuk antrean verifikasi dengan kode pesanan & notifikasi tiap tahap (verifikasi, kunjungan, selesai). Katalog 80+ layanan: Tindakan Medik & Perawatan, Pemeriksaan Laboratorium, Rehabilitasi & Fisioterapi, Kunjungan Dokter & Psikolog, Sewa Alat Medik. Tarif sesuai SK Direktur ditampilkan sebelum memesan; pemesanan minimal H-1; perlu akun (pendaftaran gratis).
 
 Cara lain mengajukan: hubungi Contact Center (0272) 321020 atau WhatsApp 0816-9170-00 / datang ke bagian pelayanan (IRM) dengan membawa rekam medis/ringkasan pulang. Petugas akan menjadwalkan kunjungan. Tarif tindakan Home Care sesuai SK terbaru (berlaku sejak 18 Maret 2024); bila lebih dari satu tindakan dilakukan, jasa pelaksana hanya dihitung satu kali.
 
-Rincian tarif lengkap dapat ditanyakan ke SOERA AI (misal: "berapa tarif pasang infus home care?") atau lihat tabel di halaman Home Care aplikasi ini.`,
+Rincian tarif lengkap dapat ditanyakan ke SOERA AI (misal: "berapa tarif pasang infus home care?") atau lihat tabel di [halaman Home Care](/home-care) aplikasi ini.`,
   },
   {
     id: 'tarif-home-care',
@@ -159,7 +159,7 @@ Laboratorium: GDS stik Rp120.000; Asam urat Rp120.000; Kolesterol total Rp120.00
 
 Sewa alat per hari: Tempat tidur Rp24.000; Oksigen konsentrator Rp12.000.
 
-Catatan penting: Jika pelaksanaan Home Care lebih dari satu tindakan, jasa pelaksana (Jasa Pelayanan) hanya dihitung satu kali. Biaya dapat berbeda bila ada tindakan di luar lampiran SK; konfirmasi ke kasir/bagian pelayanan. Dokumen SK resmi terlampir di aplikasi SOERA AI pada halaman Home Care.`,
+Catatan penting: Jika pelaksanaan Home Care lebih dari satu tindakan, jasa pelaksana (Jasa Pelayanan) hanya dihitung satu kali. Biaya dapat berbeda bila ada tindakan di luar lampiran SK; konfirmasi ke kasir/bagian pelayanan. Dokumen SK resmi terlampir di aplikasi SOERA AI pada [halaman Home Care](/home-care).`,
   },
   {
     id: 'keluhan-pengaduan',
@@ -172,7 +172,7 @@ Catatan penting: Jika pelaksanaan Home Care lebih dari satu tindakan, jasa pelak
 - Kotak saran/kritik tersedia di area rumah sakit
 - Contact Center: (0272) 321020
 - Email: rsupsoeradji_klaten@yahoo.com
-- Aplikasi SOERA AI: gunakan menu Keluhan untuk membuat tiket pengaduan tercatat & dapat dilacak statusnya
+- Aplikasi SOERA AI: gunakan [menu Keluhan](/keluhan) untuk membuat tiket pengaduan tercatat & dapat dilacak statusnya
 - Survei Kepuasan Masyarakat (IKM) periode September 2026 tersedia daring/luring — partisipasi Anda membantu peningkatan mutu layanan
 
 Setiap pengaduan akan ditindaklanjuti bagian terkait; sertakan nama, nomor rekam medis/nomor telepon, unit pelayanan, dan kronologi singkat agar penanganan lebih cepat.`,
@@ -231,7 +231,7 @@ Layanan tidak dipungut biaya di luar tarif resmi; minta bukti pembayaran (kuitan
 - Berhenti merokok — Klinik berhenti merokok tersedia di RST (konsultasi dokter).
 - Deteksi dini TB (DOTS) dan HIV (VCT) — layanan tersedia di poli terkait.
 
-Ikuti akun resmi @rssoeradjitirtonegoro (Instagram) dan rsupsoeradji.id untuk jadwal kampanye terkini, atau aktifkan notifikasi kampanye di aplikasi SOERA AI (menu Kampanye).`,
+Ikuti akun resmi @rssoeradjitirtonegoro (Instagram) dan rsupsoeradji.id untuk jadwal kampanye terkini, atau aktifkan notifikasi kampanye di aplikasi SOERA AI ([menu Kampanye](/kampanye)).`,
   },
   {
     id: 'speling',
