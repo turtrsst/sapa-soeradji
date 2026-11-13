@@ -3,10 +3,10 @@
 import crypto from 'node:crypto';
 import { cookies } from 'next/headers';
 
-const COOKIE_NAME = 'sapa_admin';
+const COOKIE_NAME = 'soera_admin';
 
 function secret(): string {
-  return process.env.SAPA_ADMIN_SECRET || 'sapa-pasien-dev-secret-ubah-di-produksi';
+  return process.env.SOERA_ADMIN_SECRET || process.env.SAPA_ADMIN_SECRET || 'soera-ai-dev-secret-ubah-di-produksi';
 }
 export function adminUsername(): string { return process.env.ADMIN_USERNAME || 'admin'; }
 export function adminPassword(): string { return process.env.ADMIN_PASSWORD || 'admin123'; }

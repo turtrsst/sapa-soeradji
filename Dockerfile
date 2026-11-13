@@ -1,4 +1,4 @@
-# SAPA PASIEN — image produksi (Node 22, node:sqlite bawaan, tanpa dependensi native)
+# SOERA AI — image produksi (Node 22, node:sqlite bawaan, tanpa dependensi native)
 FROM node:22-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
@@ -19,8 +19,8 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/next.config.mjs ./next.config.mjs
-RUN addgroup -S sapa && adduser -S sapa -G sapa && mkdir -p /data && chown -R sapa:sapa /data /app
-USER sapa
+RUN addgroup -S soera && adduser -S soera -G soera && mkdir -p /data && chown -R soera:soera /data /app
+USER soera
 EXPOSE 3000
 VOLUME ["/data"]
 CMD ["npm", "start"]

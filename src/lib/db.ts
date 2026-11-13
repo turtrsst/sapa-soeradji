@@ -10,7 +10,7 @@ export function getDb(): DatabaseSync {
   if (_db) return _db;
   const dir = process.env.SAPA_DATA_DIR || path.join(process.cwd(), 'data');
   fs.mkdirSync(dir, { recursive: true });
-  const file = path.join(dir, 'sapa-pasien.sqlite');
+  const file = path.join(dir, 'soera-ai.sqlite');
   _db = new DatabaseSync(file);
   _db.exec('PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON;');
   migrate(_db);
@@ -89,6 +89,13 @@ function migrate(db: DatabaseSync) {
     message_id INTEGER,
     rating INTEGER NOT NULL,
     created_at INTEGER NOT NULL
+  );
+  CREATE TABLE IF NOT EXISTS ai_usage (
+    subject TEXT NOT NULL,
+    day TEXT NOT NULL,
+    used INTEGER NOT NULL DEFAULT 0,
+    updated_at INTEGER NOT NULL,
+    PRIMARY KEY (subject, day)
   );
   `);
   seedDefaults(db);

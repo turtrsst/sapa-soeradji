@@ -1,7 +1,7 @@
-# Publikasi SAPA PASIEN di IP Publik — Arsitektur & Checklist
+# Publikasi SOERA AI di IP Publik — Arsitektur & Checklist
 
 > Dokumen ini menjawab: *"kalau yang diinstall di web? Kan rencananya sistem ini akan dipublikkan IP publik untuk pasien."*
-> Ringkasnya: **PrivateLM tidak bisa "diinstall di server web"** — ia aplikasi mobile. Tapi integrasinya tetap bisa, karena SAPA PASIEN memanggil LLM **dari sisi server**, dan engine yang dipakai PrivateLM (llama.cpp) tersedia juga untuk Linux.
+> Ringkasnya: **PrivateLM tidak bisa "diinstall di server web"** — ia aplikasi mobile. Tapi integrasinya tetap bisa, karena SOERA AI memanggil LLM **dari sisi server**, dan engine yang dipakai PrivateLM (llama.cpp) tersedia juga untuk Linux.
 
 ---
 
@@ -11,7 +11,7 @@
 Browser pasien ──HTTPS(443)──> Reverse proxy (Caddy/Nginx)
                                     │
                                     ▼
-                          Next.js SAPA PASIEN (127.0.0.1:3000)
+                          Next.js SOERA AI (127.0.0.1:3000)
                                     │  dipanggil SERVER-SIDE
                                     ▼
               llama-server OpenAI-compatible (127.0.0.1:8080 /v1)
@@ -34,7 +34,7 @@ Opsi cloud (OpenAI/dll.) tetap tersedia di **/admin → Pengaturan AI** bila RS 
 
 ## 2A. Kalau pakai FreeLLMAPI (`github.com/tashfeenahmed/freellmapi`)?
 
-FreeLLMAPI = agregator **free tier** 34 provider (~635 endpoint model, ~7,4 miliar token/bulan) di balik satu endpoint OpenAI-compatible `/v1` (localhost:3001). Kunci provider milik Anda (BYOK) disimpan AES-256-GCM terenkripsi; router memilih model sehat di bawah kuota, failover otomatis saat 429/5xx; keys/analytics/dashboard; MIT; self-host (Docker/desktop/Node 20+). Secara teknis **SAPA PASIEN bisa langsung memakainya** tanpa ubah kode: /admin → Pengaturan AI → pilih preset terdekat (mis. **llama.cpp llama-server (lokal)**) lalu ganti Base URL menjadi `http://127.0.0.1:3001/v1`, API Key = unified key `freellmapi-…`. (Preset hanyalah pengisi formulir — semua endpoint OpenAI-compatible bisa dipakai.)
+FreeLLMAPI = agregator **free tier** 34 provider (~635 endpoint model, ~7,4 miliar token/bulan) di balik satu endpoint OpenAI-compatible `/v1` (localhost:3001). Kunci provider milik Anda (BYOK) disimpan AES-256-GCM terenkripsi; router memilih model sehat di bawah kuota, failover otomatis saat 429/5xx; keys/analytics/dashboard; MIT; self-host (Docker/desktop/Node 20+). Secara teknis **SOERA AI bisa langsung memakainya** tanpa ubah kode: /admin → Pengaturan AI → pilih preset terdekat (mis. **llama.cpp llama-server (lokal)**) lalu ganti Base URL menjadi `http://127.0.0.1:3001/v1`, API Key = unified key `freellmapi-…`. (Preset hanyalah pengisi formulir — semua endpoint OpenAI-compatible bisa dipakai.)
 
 **Tapi layak untuk pasien publik? Tidak direkomendasikan.** Evaluasi jujur:
 
@@ -47,7 +47,7 @@ FreeLLMAPI = agregator **free tier** 34 provider (~635 endpoint model, ~7,4 mili
 
 Jika Anda **bisa RDP ke komputer server**, mesin itu bisa jadi host LLM (dan sekalian host aplikasi). Prinsip: RDP hanya kanal **admin** — jangan dibuka ke internet.
 
-**Skenario B1 — SAPA PASIEN ikut di mesin Windows yang sama** (paling sederhana; setara Opsi A di Windows):
+**Skenario B1 — SOERA AI ikut di mesin Windows yang sama** (paling sederhana; setara Opsi A di Windows):
 1. RDP masuk → install **Node.js 20 LTS** (jika belum) & driver GPU NVIDIA + CUDA (jika ada GPU; jika tidak, llama-server build CPU tetap jalan).
 2. Unduh **llama.cpp Windows release** dari rilis resminya (`llama-server.exe`, pilih build `cuda-*` atau `cpu-*`/`avx2`).
 3. Unduh model GGUF dari Hugging Face, mis. `Qwen2.5-3B-Instruct-Q4_K_M.gguf` (~2 GB; RAM 8 GB+) atau 1.5B (RAM 4–6 GB) → simpan di `C:\llm\models\`.
@@ -56,7 +56,7 @@ Jika Anda **bisa RDP ke komputer server**, mesin itu bisa jadi host LLM (dan sek
 6. **Firewall**: hanya port 443 (+80) publik; 3000 & 8080 tetap loopback/LAN. RDP (3389) **hanya** dari IP admin/VPN — aktifkan NLA, ganti port bila perlu, matikan sleep, jadwalkan Windows Update di luar jam layanan.
 7. /admin → Pengaturan AI → Base URL `http://127.0.0.1:8080/v1` → Uji Koneksi → Simpan. Selesai.
 
-**Skenario B2 — SAPA PASIEN di server Linux/VPS publik, LLM di mesin Windows RST** (LAN):
+**Skenario B2 — SOERA AI di server Linux/VPS publik, LLM di mesin Windows RST** (LAN):
 1. Di mesin Windows: `llama-server.exe --host 0.0.0.0 --port 8080 --api-key "KEY-PANJANG"` sebagai service (langkah 5 B1).
 2. Windows Defender Firewall → inbound rule port 8080 **hanya** dari IP server aplikasi; jangan pernah port-forward 8080 ke internet.
 3. Jika server aplikasi **di luar LAN RS** (VPS): jangan buka 8080 telanjang — pakai **Tailscale/WireGuard** (kedua mesin join tailnet; Base URL `http://100.x.y.z:8080/v1`) atau reverse SSH tunnel dari mesin Windows ke VPS. Ini satu-satunya cara aman menembus NAT RS.
@@ -80,19 +80,19 @@ Jika di mesin RDP Anda sudah terinstall **Ollama**, tidak perlu install llama.cp
    ```
    (Ollama tidak menuntut API key — kosongkan atau isi bebas.)
 5. **Auto-start**: Ollama (tray) biasanya start saat login. Untuk server kantor, pastikan **auto-login** atau pakai **Task Scheduler** *At startup → run whether user is logged on or not*: program `ollama.exe`, argumen `serve` (path umumnya `%LOCALAPPDATA%\Programs\Ollama\ollama.exe`). Jangan jalankan dua instance — port 11434 hanya bisa dipakai satu proses.
-6. **SAPA PASIEN di mesin yang sama** (B1): /admin → Pengaturan AI → preset **Ollama (lokal)** → Base URL `http://localhost:11434/v1`, Model = persis dari `ollama list` (mis. `qwen2.5:3b`) → **Uji Koneksi Sekarang** → **Simpan** → aktifkan. Selesai — tidak ada port yang dibuka ke LAN/internet.
-7. **Bila aplikasi di mesin lain** (B2): jalankan Ollama dengan env `OLLAMA_HOST=0.0.0.0:11434`, lalu **Windows Defender Firewall → inbound rule port 11434 HANYA dari IP server aplikasi**. Ollama tanpa auth — jangan pernah buka 11434 ke internet atau ke tunnel Cloudflare. Dari SAPA PASIEN: Base URL `http://<IP-server-RS>:11434/v1`.
+6. **SOERA AI di mesin yang sama** (B1): /admin → Pengaturan AI → preset **Ollama (lokal)** → Base URL `http://localhost:11434/v1`, Model = persis dari `ollama list` (mis. `qwen2.5:3b`) → **Uji Koneksi Sekarang** → **Simpan** → aktifkan. Selesai — tidak ada port yang dibuka ke LAN/internet.
+7. **Bila aplikasi di mesin lain** (B2): jalankan Ollama dengan env `OLLAMA_HOST=0.0.0.0:11434`, lalu **Windows Defender Firewall → inbound rule port 11434 HANYA dari IP server aplikasi**. Ollama tanpa auth — jangan pernah buka 11434 ke internet atau ke tunnel Cloudflare. Dari SOERA AI: Base URL `http://<IP-server-RS>:11434/v1`.
 8. **Model tetap hangat (opsional)**: env `OLLAMA_KEEP_ALIVE=-1` agar model tidak di-unload (mengurangi latensi jawaban pertama), dengan konsekuensi RAM terpakai terus.
-9. Bila endpoint mati → SAPA PASIEN otomatis fallback ke mode Offline KB (chat tetap menjawab + hotline).
+9. Bila endpoint mati → SOERA AI otomatis fallback ke mode Offline KB (chat tetap menjawab + hotline).
 
-**Catatan dari screenshot server (C:\):** ada `Cloudflared` (kemungkinan sias.rsupsoeradji.id diproxy lewat Cloudflare Tunnel) — bila SAPA PASIEN dipublikasikan lewat cara yang sama, **jangan** tambahkan 11434 (Ollama) maupun 3000 (Next) ke ingress tunnel; cukup hostname → `localhost:3000`. **"Activate Windows"** sebaiknya diselesaikan sebelum dipakai layanan pasien (aktivasi + Windows Update + patch XAMPP/Apache yang ikut terekspos).
+**Catatan dari screenshot server (C:\):** ada `Cloudflared` (kemungkinan sias.rsupsoeradji.id diproxy lewat Cloudflare Tunnel) — bila SOERA AI dipublikasikan lewat cara yang sama, **jangan** tambahkan 11434 (Ollama) maupun 3000 (Next) ke ingress tunnel; cukup hostname → `localhost:3000`. **"Activate Windows"** sebaiknya diselesaikan sebelum dipakai layanan pasien (aktivasi + Windows Update + patch XAMPP/Apache yang ikut terekspos).
 
 ## 3. Langkah praktis (Ubuntu/Debian)
 
 ### 3.1 Aplikasi
 ```bash
 sudo apt update && sudo apt install -y nodejs npm git
-git clone <repo> sapa-pasien && cd sapa-pasien
+git clone <repo> soera-ai && cd soera-ai
 npm ci && npm run build
 # jalankan via systemd / PM2 — contoh systemd di §3.4
 ```
@@ -118,7 +118,7 @@ curl -s http://127.0.0.1:8080/v1/chat/completions \
 Contoh unit systemd (`/etc/systemd/system/llama-server.service`):
 ```ini
 [Unit]
-Description=llama.cpp server (LLM SAPA PASIEN)
+Description=llama.cpp server (LLM SOERA AI)
 After=network.target
 
 [Service]
@@ -134,20 +134,20 @@ WantedBy=multi-user.target
 ### 3.3 Reverse proxy + HTTPS (Caddy — sertifikat otomatis Let's Encrypt)
 ```
 # /etc/caddy/Caddyfile — contoh subdomain; samakan dengan zona DNS RS
-sapa.rsupsoeradji.id {
+soera.rsupsoeradji.id {
     reverse_proxy 127.0.0.1:3000
 }
 ```
 `sudo systemctl reload caddy` — selesai. HTTP otomatis redirect ke HTTPS.
 
-### 3.4 Aplikasi via systemd (`/etc/systemd/system/sapa-pasien.service`)
+### 3.4 Aplikasi via systemd (`/etc/systemd/system/soera-ai.service`)
 ```ini
 [Unit]
-Description=SAPA PASIEN (Next.js)
+Description=SOERA AI (Next.js)
 After=network.target
 
 [Service]
-WorkingDirectory=/opt/sapa-pasien
+WorkingDirectory=/opt/soera-ai
 Environment=NODE_ENV=production
 ExecStart=/usr/bin/npm start
 Restart=always
@@ -157,12 +157,12 @@ RestartSec=5
 WantedBy=multi-user.target
 ```
 
-### 3.5 Hubungkan SAPA PASIEN ke LLM lokal
+### 3.5 Hubungkan SOERA AI ke LLM lokal
 `/admin` → **Pengaturan AI** → preset *llama.cpp / LocalAI (OpenAI-compatible)* → Base URL `http://127.0.0.1:8080/v1`, API Key = key di §3.2, Model = nama model. **Uji Koneksi Sekarang** → **Simpan** → aktifkan. Perilakunya identik dengan PrivateLM di HP — hanya endpoint-nya yang lokal.
 
 ## 4. DNS & firewall
 
-- Ajukan subdomain ke tim Sistem Informasi RS (satu zona dengan `sias.rsupsoeradji.id`), mis. **`sapa.rsupsoeradji.id` → IP publik server**; atau minta IP publik sendiri dari ISP/RS dan arahkan A record.
+- Ajukan subdomain ke tim Sistem Informasi RS (satu zona dengan `sias.rsupsoeradji.id`), mis. **`soera.rsupsoeradji.id` → IP publik server**; atau minta IP publik sendiri dari ISP/RS dan arahkan A record.
 - Bila behind NAT: port-forward **443 + 80 saja** (jangan forward 3000/8080).
 - Contoh `ufw`:
   ```bash
@@ -182,11 +182,11 @@ WantedBy=multi-user.target
 7. **Monitoring**: ping `/api/health` (berisi status DB, jumlah dokumen KB, status LLM) untuk uptime/alert; pantau disk (model GGUF + log).
 8. **Update rutin**: `npm audit`, patch Next.js/dependensi; rotasi sertifikat otomatis (Caddy).
 9. **Privasi operasional**: log akses tanpa menyimpan isi percakapan secara masal; batasi akses pegawai ke `/admin` sesuai SK.
-10. **Disclaimer medis** tetap tampil di footer & jawaban; SAPA PASIEN bukan diagnosis.
+10. **Disclaimer medis** tetap tampil di footer & jawaban; SOERA AI bukan diagnosis.
 
 ## 6. Hubungan dengan Soeradji GOCARE (homecare online resmi)
 
-SAPA PASIEN **tidak menggantikan** GOCARE. Aplikasi ini menautkan dan mengedukasi: halaman **Home Care** dan jawaban chatbot mengarahkan pasien ke pemesanan resmi **https://sias.rsupsoeradji.id/homecare/** (asisten Sora, katalog 80+ layanan, tarif SK Direktur, pemesanan minimal H-1, notifikasi tiap tahap). Pemesanan, akun, dan verifikasi tetap di GOCARE/SIAS. Formulir di SAPA PASIEN hanya mencatat permintaan untuk ditindaklanjuti petugas. Bila RS ingin integrasi lebih dalam (SSO/antrean tersinkron), perlu koordinasi API dengan tim SIAS — di luar cakupan aplikasi saat ini.
+SOERA AI **tidak menggantikan** GOCARE. Aplikasi ini menautkan dan mengedukasi: halaman **Home Care** dan jawaban chatbot mengarahkan pasien ke pemesanan resmi **https://sias.rsupsoeradji.id/homecare/** (asisten Sora, katalog 80+ layanan, tarif SK Direktur, pemesanan minimal H-1, notifikasi tiap tahap). Pemesanan, akun, dan verifikasi tetap di GOCARE/SIAS. Formulir di SOERA AI hanya mencatat permintaan untuk ditindaklanjuti petugas. Bila RS ingin integrasi lebih dalam (SSO/antrean tersinkron), perlu koordinasi API dengan tim SIAS — di luar cakupan aplikasi saat ini.
 
 ## 7. Bila LLM belum siap saat go-live
 

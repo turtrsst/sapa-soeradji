@@ -1,4 +1,6 @@
 import { getDb, uid } from '@/lib/db';
+import { AI_DAILY_LIMIT, aiSubject, consumeAiQuota, refundAiQuota } from '@/lib/aiUsage';
+import { streamAgent } from '@/lib/agent';
 import { SYSTEM_PROMPT, streamLlm, type ChatMessage } from '@/lib/llm';
 import { getLlmConfig } from '@/lib/settings';
 import { retrieve, detectIntent, matchJadwal, matchTarif, formatJadwalLines, formatTarifLines } from '@/lib/rag';
@@ -64,25 +66,55 @@ export async function POST(req: Request) {
   const sources = hits.map((h) => ({ title: h.doc.title, source: h.doc.source }));
   const started = Date.now();
 
+  // Pertanyaan BEBAS (intent general) dijawab agen AI — dibatasi 5/pengguna/hari (reset 00.00 WIB).
+  // Pertanyaan LAYANAN (jadwal/tarif/home care/pendaftaran/kampanye/dll.) tanpa kuota.
+  // Intent 'vitally_unknown' = pertanyaan bebas (di luar template) — dilayani agen AI bila AI aktif
+  const isFreeForm = intent === 'vitally_unknown';
+  const subject = isFreeForm ? aiSubject(req.headers) : '';
+  let quota: { used: number; max: number; remaining: number } | null = null;
+  let quotaExhausted = false;
+  if (cfg.enabled && isFreeForm) {
+    const q = consumeAiQuota(subject);
+    quota = { used: q.used, max: q.max, remaining: q.remaining };
+    quotaExhausted = !q.ok;
+  }
+
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       const send = (obj: unknown) => controller.enqueue(encoder.encode(`data: ${JSON.stringify(obj)}\n\n`));
-      send({ type: 'meta', conversationId, title, intent, sources, llmEnabled: cfg.enabled });
+      send({ type: 'meta', conversationId, title, intent, sources, llmEnabled: cfg.enabled, aiQuota: isFreeForm && cfg.enabled ? quota : undefined });
 
       let assistantText = '';
       let mode: 'llm' | 'offline' = 'offline';
       let llmFailedReason = '';
 
-      if (cfg.enabled) {
-        const result = await streamLlm(messages, (tok) => {
-          assistantText += tok;
-          send({ type: 'token', text: tok });
-        }, cfg);
-        if (result.ok && assistantText.trim()) {
-          mode = 'llm';
+      if (cfg.enabled && !quotaExhausted) {
+        if (isFreeForm) {
+          // Agen AI (tool-calling) untuk pertanyaan bebas — Vercel AI SDK + endpoint OpenAI-compatible
+          const r = await streamAgent({
+            message,
+            history: messages.slice(1, -1) as { role: 'user' | 'assistant'; content: string }[],
+            cfg,
+            onToken: (tok) => { assistantText += tok; send({ type: 'token', text: tok }); },
+          });
+          if (r.ok && assistantText.trim()) {
+            mode = 'llm';
+          } else {
+            llmFailedReason = r.reason || 'agen AI gagal';
+            if (!assistantText.trim()) refundAiQuota(subject); // gagal sebelum token pertama → kuota dikembalikan
+            assistantText = '';
+          }
         } else {
-          llmFailedReason = result.reason || 'LLM gagal';
-          assistantText = '';
+          const result = await streamLlm(messages, (tok) => {
+            assistantText += tok;
+            send({ type: 'token', text: tok });
+          }, cfg);
+          if (result.ok && assistantText.trim()) {
+            mode = 'llm';
+          } else {
+            llmFailedReason = result.reason || 'LLM gagal';
+            assistantText = '';
+          }
         }
       }
 
@@ -96,7 +128,11 @@ export async function POST(req: Request) {
         for (let i = 0; i < assistantText.length; i += chunkSize) {
           send({ type: 'token', text: assistantText.slice(i, i + chunkSize) });
         }
-        if (llmFailedReason) {
+        if (quotaExhausted) {
+          const note = `\n\n_⏳ Kuota pertanyaan bebas AI Anda hari ini (${AI_DAILY_LIMIT} pertanyaan) sudah habis — direset jam **00.00 WIB**. Pertanyaan layanan (jadwal dokter, tarif, pendaftaran, Home Care, kampanye) tetap bisa dijawab tanpa kuota. Untuk bantuan langsung: **(0272) 321020**._`;
+          assistantText += note;
+          send({ type: 'token', text: note });
+        } else if (llmFailedReason) {
           const note = `\n\n_⚠️ AI online/offline-LLM tidak merespons (${llmFailedReason}). Jawaban di atas disusun dari basis pengetahuan lokal._`;
           assistantText += note;
           send({ type: 'token', text: note });
@@ -109,7 +145,7 @@ export async function POST(req: Request) {
       db.prepare('UPDATE conversations SET updated_at = ? WHERE id = ?').run(Date.now(), conversationId);
       db.prepare('INSERT INTO chat_logs (intent, mode, created_at) VALUES (?,?,?)').run(intent, mode, Date.now());
 
-      send({ type: 'done', messageId: Number(inserted.lastInsertRowid), mode, latencyMs: latency, conversationId, title });
+      send({ type: 'done', messageId: Number(inserted.lastInsertRowid), mode, latencyMs: latency, conversationId, title, aiQuota: isFreeForm && cfg.enabled ? quota : undefined });
       controller.close();
     },
   });

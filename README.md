@@ -1,11 +1,13 @@
-# SAPA PASIEN
+# SOERA AI
 
-**Strategi Akses Pemasaran Digital & Pelayanan Terintegrasi** — asisten AI & platform layanan digital pasien **RSUP Dr. Soeradji Tirtonegoro Klaten** (Rumah Sakit Umum Pusat Kelas A, RS vertikal Kementerian Kesehatan RI, BLU).
+> Catatan: aplikasi sebelumnya bernama **SAPA PASIEN** — diganti **SOERA AI (SOERAdji Assistant Intelligent)** per 12 Nov 2026. Nama berkas DB legacy (`data/sapa-pasien.sqlite`) & env `SAPA_DATA_DIR` dipertahankan demi kompatibilitas data.
 
-SAPA PASIEN menjawab pertanyaan dan keluhan masyarakat secara cepat — **keluhan pelayanan, pertanyaan jadwal dokter, pendaftaran online, tanya tarif, hingga kampanye kesehatan daring** — dan tetap berfungsi **tanpa internet** (mode offline) dengan dua lapis:
+**Soeradji Assistant Intelligent** — asisten AI & platform layanan digital pasien **RSUP Dr. Soeradji Tirtonegoro Klaten** (Rumah Sakit Umum Pusat Kelas A, RS vertikal Kementerian Kesehatan RI, BLU).
+
+SOERA AI menjawab pertanyaan dan keluhan masyarakat secara cepat — **keluhan pelayanan, pertanyaan jadwal dokter, pendaftaran online, tanya tarif, hingga kampanye kesehatan daring** — dan tetap berfungsi **tanpa internet** (mode offline) dengan dua lapis:
 
 1. **Basis pengetahuan lokal (selalu aktif, tanpa model)** — jawaban deterministik dari data resmi RST (jadwal, tarif SK, kontak, FAQ, alur layanan).
-2. **AI generatif offline via [cross-platform-llm-client (PrivateLM)](https://github.com/orailnoor/cross-platform-llm-client)** — model GGUF berjalan di HP/tablet/PC (Android/iOS) lewat **API Server OpenAI-compatible bawaan PrivateLM** (port 8080). SAPA PASIEN otomatis menempel ke endpoint itu dan men-*stream* jawabannya. Alternatif: Ollama, llama.cpp, LM Studio, atau API cloud (OpenAI/Kimi/OpenRouter).
+2. **AI generatif offline via [cross-platform-llm-client (PrivateLM)](https://github.com/orailnoor/cross-platform-llm-client)** — model GGUF berjalan di HP/tablet/PC (Android/iOS) lewat **API Server OpenAI-compatible bawaan PrivateLM** (port 8080). SOERA AI otomatis menempel ke endpoint itu dan men-*stream* jawabannya. Alternatif: Ollama, llama.cpp, LM Studio, atau API cloud (OpenAI/Kimi/OpenRouter).
 
 ---
 
@@ -13,7 +15,7 @@ SAPA PASIEN menjawab pertanyaan dan keluhan masyarakat secara cepat — **keluha
 
 | Modul | Keterangan |
 |---|---|
-| **Tanya SAPA PASIEN** (`/chat`) | Chatbot gaya ChatGPT: streaming token, riwayat percakapan tersimpan (SQLite), rename/pin/hapus, mode indikator (AI Lokal/Online vs Offline KB), salin jawaban, rating 👍👎, sumber jawaban ditampilkan. Termasuk **edukasi kesehatan umum** (batuk, demam, hipertensi, diabetes, maag, nyeri dada, diare, pusing) dengan tanda bahaya & kapan ke IGD. Pertanyaan di luar basis pengetahuan dijawab jujur dengan arahan kontak — **tidak pernah** menampilkan dokumen yang tidak relevan. Bila AI (PrivateLM/cloud) diaktifkan, model selalu diutamakan untuk pertanyaan di luar template. |
+| **Tanya SOERA AI** (`/chat`) | Chatbot gaya ChatGPT: streaming token, riwayat percakapan tersimpan (SQLite), rename/pin/hapus, mode indikator (AI Lokal/Online vs Offline KB), salin jawaban, rating 👍👎, sumber jawaban ditampilkan. Termasuk **edukasi kesehatan umum** (batuk, demam, hipertensi, diabetes, maag, nyeri dada, diare, pusing) dengan tanda bahaya & kapan ke IGD. Pertanyaan di luar basis pengetahuan dijawab jujur dengan arahan kontak — **tidak pernah** menampilkan dokumen yang tidak relevan. Bila AI (PrivateLM/Ollama/cloud) diaktifkan, **agen AI tool-calling** (Vercel AI SDK) menjawab pertanyaan bebas: memanggil tool `cari_jadwal_dokter`, `cari_tarif_layanan`, `cari_info_rst`, `daftar_kampanye_aktif` — dibatasi **5 pertanyaan bebas per pengguna per hari** (reset 00.00 WIB, di-hash anonim). Pertanyaan layanan (jadwal/tarif/home care/dll.) tidak memakai kuota. Lihat [`docs/AI-AGENT.md`](docs/AI-AGENT.md). |
 | **Jadwal Dokter** (`/jadwal`) | ±55 baris jadwal poliklinik regular, cari per dokter/poli/spesialisasi, filter hari, cetak (print-friendly). Update 12 Mei 2026 — dapat berubah, konfirmasi (0272) 321020. |
 | **Home Care Go-Trah** (`/home-care`) | Semua ±80 item **Tarif Tindakan Pelayanan Home Care** hasil digitalisasi SK Dirut No. HK.02.03/D.XXVI/5441/2024 (dokumen SK dipindai, tarif terverifikasi per halaman), bisa dicari & dicetak, tersedia **unduhan PDF SK asli**, **formulir pengajuan kunjungan home care** ke petugas, dan tautan langsung ke pemesanan resmi online **Soeradji GOCARE** ([sias.rsupsoeradji.id/homecare](https://sias.rsupsoeradji.id/homecare/) — asisten Sora, 80+ layanan, minimal H-1). |
 | **Keluhan / Pengaduan** (`/keluhan`) | Buat tiket → nomor tiket `SKT-YYYYMMDD-XXXXXX`, lacak status (baru → diproses → selesai) + tanggapan petugas, kategori & prioritas. |
@@ -55,8 +57,8 @@ Jalankan pengujian basis pengetahuan & retrieval: `npm test`
 
 **Docker** (opsional, belum diuji di lingkungan pengembangan ini):
 ```bash
-docker build -t sapa-pasien .
-docker run -p 3000:3000 -v sapa-data:/data sapa-pasien
+docker build -t soera-ai .
+docker run -p 3000:3000 -v soera-data:/data soera-ai
 ```
 
 ## Konfigurasi (env opsional)
@@ -65,7 +67,7 @@ docker run -p 3000:3000 -v sapa-data:/data sapa-pasien
 |---|---|---|
 | `ADMIN_USERNAME` | `admin` | Username panel admin |
 | `ADMIN_PASSWORD` | `admin123` | **Wajib diganti di produksi** |
-| `SAPA_ADMIN_SECRET` | (dev) | Rahasia penandatangan cookie admin — isi string acak panjang di produksi |
+| `SOERA_ADMIN_SECRET` | (dev) | Rahasia penandatangan cookie admin — isi string acak panjang di produksi (`SAPA_ADMIN_SECRET` lama tetap dihormati) |
 | `SAPA_DATA_DIR` | `./data` | Lokasi file SQLite |
 
 ## Mode Offline & Integrasi PrivateLM (cross-platform-llm-client)
@@ -84,7 +86,7 @@ Pertanyaan pasien
 1. Pasang & jalankan **PrivateLM** dari <https://github.com/orailnoor/cross-platform-llm-client> (unduh APK/IPA dari halaman Releases, atau build via Flutter: `flutter build apk --release`).
 2. Unduh model GGUF (disarankan Qwen2.5-1.5B-Instruct / Llama-3.2-1B/3B `Q4_K_M`; HP/PC RAM 4–8 GB cukup) dan **muat model** hingga status *loaded*.
 3. Di PrivateLM buka **Settings → API Server**: aktifkan **Allow network access**, isi **API key** (wajib untuk mode jaringan), port tetap **8080**.
-4. Catat alamat yang tampil di layar server (mis. `http://192.168.1.10:8080`) — SAPA PASIEN dan perangkat PrivateLM harus **satu jaringan** (LAN/WiFi RS).
+4. Catat alamat yang tampil di layar server (mis. `http://192.168.1.10:8080`) — SOERA AI dan perangkat PrivateLM harus **satu jaringan** (LAN/WiFi RS).
 5. Login ke `/admin` → tab **Pengaturan AI (Offline)** → pilih preset **PrivateLM**, isi Base URL `http://<IP-perangkat>:8080/v1`, API key sama, model = nama model termuat (PrivateLM melayani model apa pun namanya) → **Uji Koneksi Sekarang** → aktifkan toggle → **Simpan**.
 
 Selesai — seluruh tanya-jawab kini 100% offline di infrastruktur RS. Contoh uji manual:
@@ -115,7 +117,7 @@ src/
     db.ts              # SQLite (node:sqlite) + migrasi + seed kampanye/pengaturan
     settings.ts auth.ts llm settings, autentikasi cookie admin
 public/documents/      # SK Tarif Home Care (PDF asli, dapat diunduh dari aplikasi)
-public/images/         # Logo SAPA PASIEN
+public/images/         # Logo SOERA AI
 test/rag-test.mjs      # 32 pengujian basis pengetahuan & retrieval
 ```
 
@@ -128,15 +130,16 @@ test/rag-test.mjs      # 32 pengujian basis pengetahuan & retrieval
 
 ## Dokumentasi
 
-- [`docs/PANDUAN-INSTALL-PRIVATELM.md`](docs/PANDUAN-INSTALL-PRIVATELM.md) — panduan langkah demi langkah memasang PrivateLM (aplikasi AI lokal/offline OpenAI-compatible) di Android/iOS dan menyambungkannya ke SAPA PASIEN.
-- [`docs/DEPLOYMENT-PUBLIK.md`](docs/DEPLOYMENT-PUBLIK.md) — arsitektur & checklist publikasi SAPA PASIEN di IP publik (HTTPS, firewall, reverse proxy, LLM lokal di server, keamanan & UU PDP).
+- [`docs/PANDUAN-INSTALL-PRIVATELM.md`](docs/PANDUAN-INSTALL-PRIVATELM.md) — panduan langkah demi langkah memasang PrivateLM (aplikasi AI lokal/offline OpenAI-compatible) di Android/iOS dan menyambungkannya ke SOERA AI.
+- [`docs/DEPLOYMENT-PUBLIK.md`](docs/DEPLOYMENT-PUBLIK.md) — arsitektur & checklist publikasi SOERA AI di IP publik (HTTPS, firewall, reverse proxy, LLM lokal di server, keamanan & UU PDP).
+- [`docs/AI-AGENT.md`](docs/AI-AGENT.md) — screening GitHub framework AI Agent (vercel/ai vs langchainjs/langgraph/LlamaIndex/privateGPT/RAGFlow) + arsitektur agen tool-calling & kuota 5/hari.
 
 ## Catatan Penting
 
-- SAPA PASIEN **bukan pengganti konsultasi medis**; tidak memberikan diagnosis atau resep. Untuk kondisi darurat: IGD RST (0272) 321020 ext 200 / **119**.
+- SOERA AI **bukan pengganti konsultasi medis**; tidak memberikan diagnosis atau resep. Untuk kondisi darurat: IGD RST (0272) 321020 ext 200 / **119**.
 - Data percakapan & tiket tersimpan lokal di server aplikasi (SQLite); tidak ada data yang dikirim ke pihak ketiga kecuali jika admin mengaktifkan API cloud.
 - Kampanye & jadwal bersifat informasional; rujukan terakhir adalah pengumuman resmi RST.
 
 ## Lisensi & Kredit
 
-Aplikasi dibangun untuk RSUP Dr. Soeradji Tirtonegoro Klaten. Integrasi AI offline: [orailnoor/cross-platform-llm-client](https://github.com/orailnoor/cross-platform-llm-client) (MIT). Logo SAPA PASIEN dibuat khusus untuk aplikasi ini.
+Aplikasi dibangun untuk RSUP Dr. Soeradji Tirtonegoro Klaten. Integrasi AI offline: [orailnoor/cross-platform-llm-client](https://github.com/orailnoor/cross-platform-llm-client) (MIT). Logo SOERA AI dibuat khusus untuk aplikasi ini.

@@ -1,4 +1,4 @@
-// Basis pengetahuan SAPA PASIEN — dokumen referensi RSUP Dr. Soeradji Tirtonegoro Klaten
+// Basis pengetahuan SOERA AI — dokumen referensi RSUP Dr. Soeradji Tirtonegoro Klaten
 // Setiap dokumen diberi tag kata kunci untuk pencarian offline (RAG).
 
 export interface KbDoc {
@@ -143,7 +143,7 @@ Pemesanan online resmi tersedia di Soeradji GOCARE: https://sias.rsupsoeradji.id
 
 Cara lain mengajukan: hubungi Contact Center (0272) 321020 atau WhatsApp 0816-9170-00 / datang ke bagian pelayanan (IRM) dengan membawa rekam medis/ringkasan pulang. Petugas akan menjadwalkan kunjungan. Tarif tindakan Home Care sesuai SK terbaru (berlaku sejak 18 Maret 2024); bila lebih dari satu tindakan dilakukan, jasa pelaksana hanya dihitung satu kali.
 
-Rincian tarif lengkap dapat ditanyakan ke SAPA PASIEN (misal: "berapa tarif pasang infus home care?") atau lihat tabel di halaman Home Care aplikasi ini.`,
+Rincian tarif lengkap dapat ditanyakan ke SOERA AI (misal: "berapa tarif pasang infus home care?") atau lihat tabel di halaman Home Care aplikasi ini.`,
   },
   {
     id: 'tarif-home-care',
@@ -159,7 +159,7 @@ Laboratorium: GDS stik Rp120.000; Asam urat Rp120.000; Kolesterol total Rp120.00
 
 Sewa alat per hari: Tempat tidur Rp24.000; Oksigen konsentrator Rp12.000.
 
-Catatan penting: Jika pelaksanaan Home Care lebih dari satu tindakan, jasa pelaksana (Jasa Pelayanan) hanya dihitung satu kali. Biaya dapat berbeda bila ada tindakan di luar lampiran SK; konfirmasi ke kasir/bagian pelayanan. Dokumen SK resmi terlampir di aplikasi SAPA PASIEN pada halaman Home Care.`,
+Catatan penting: Jika pelaksanaan Home Care lebih dari satu tindakan, jasa pelaksana (Jasa Pelayanan) hanya dihitung satu kali. Biaya dapat berbeda bila ada tindakan di luar lampiran SK; konfirmasi ke kasir/bagian pelayanan. Dokumen SK resmi terlampir di aplikasi SOERA AI pada halaman Home Care.`,
   },
   {
     id: 'keluhan-pengaduan',
@@ -172,7 +172,7 @@ Catatan penting: Jika pelaksanaan Home Care lebih dari satu tindakan, jasa pelak
 - Kotak saran/kritik tersedia di area rumah sakit
 - Contact Center: (0272) 321020
 - Email: rsupsoeradji_klaten@yahoo.com
-- Aplikasi SAPA PASIEN: gunakan menu Keluhan untuk membuat tiket pengaduan tercatat & dapat dilacak statusnya
+- Aplikasi SOERA AI: gunakan menu Keluhan untuk membuat tiket pengaduan tercatat & dapat dilacak statusnya
 - Survei Kepuasan Masyarakat (IKM) periode September 2026 tersedia daring/luring — partisipasi Anda membantu peningkatan mutu layanan
 
 Setiap pengaduan akan ditindaklanjuti bagian terkait; sertakan nama, nomor rekam medis/nomor telepon, unit pelayanan, dan kronologi singkat agar penanganan lebih cepat.`,
@@ -231,7 +231,7 @@ Layanan tidak dipungut biaya di luar tarif resmi; minta bukti pembayaran (kuitan
 - Berhenti merokok — Klinik berhenti merokok tersedia di RST (konsultasi dokter).
 - Deteksi dini TB (DOTS) dan HIV (VCT) — layanan tersedia di poli terkait.
 
-Ikuti akun resmi @rssoeradjitirtonegoro (Instagram) dan rsupsoeradji.id untuk jadwal kampanye terkini, atau aktifkan notifikasi kampanye di aplikasi SAPA PASIEN (menu Kampanye).`,
+Ikuti akun resmi @rssoeradjitirtonegoro (Instagram) dan rsupsoeradji.id untuk jadwal kampanye terkini, atau aktifkan notifikasi kampanye di aplikasi SOERA AI (menu Kampanye).`,
   },
   {
     id: 'speling',
@@ -277,7 +277,7 @@ T: Jam besuk? J: 17.00–19.00 WIB.
 T: Apakah RST menerima pasien rujukan dari luar Klaten? J: Ya, RST RS rujukan nasional — rujukan dari RS/klinik seluruh Indonesia diterima.
 T: Nomor darurat? J: IGD 24 jam (0272) 321020 ext 200 atau 119.
 T: Pendaftaran online? J: WhatsApp 0816-9170-00, H-7 s/d H-1 07.30–14.00 WIB.
-T: Bagaimana menyampaikan keluhan? J: Menu Keluhan di SAPA PASIEN, atau hotline 0851-7957-7302.
+T: Bagaimana menyampaikan keluhan? J: Menu Keluhan di SOERA AI, atau hotline 0851-7957-7302.
 T: Apakah ada layanan home care? J: Ada — Home Care Go-Trah; tarif sesuai SK HK.02.03/D.XXVI/5441/2024.
 T: Apakah RST melayani hari Sabtu? J: Poliklinik tutup Sabtu–Ahad/libur; IGD & rawat inap 24 jam tetap buka. (Poli penyakit dalam tertentu praktik Sabtu pagi 07.30–13.00 — konfirmasi ke Contact Center.)`,
   },
@@ -295,7 +295,7 @@ T: Apakah RST melayani hari Sabtu? J: Poliklinik tutup Sabtu–Ahad/libur; IGD &
     tags: ['e-yang', 'eyang', 'aplikasi', 'mobile', 'android', 'playstore', 'app store', 'antrian online'],
     updated: '2026-11',
     source: 'X/Twitter resmi @RSSoeradji',
-    body: `RST memiliki aplikasi mobile resmi "E-Yang Soeradji" untuk mempermudah akses layanan (informasi & pendaftaran) bagi pengguna Android/iOS. Cari "E-Yang Soeradji" di Play Store/App Store, atau tanyakan tautan unduhan ke Contact Center (0272) 321020. Aplikasi SAPA PASIEN ini melengkapi E-Yang Soeradji sebagai kanal tanya-jawab cerdas (chatbot), keluhan, dan kampanye kesehatan.`,
+    body: `RST memiliki aplikasi mobile resmi "E-Yang Soeradji" untuk mempermudah akses layanan (informasi & pendaftaran) bagi pengguna Android/iOS. Cari "E-Yang Soeradji" di Play Store/App Store, atau tanyakan tautan unduhan ke Contact Center (0272) 321020. Aplikasi SOERA AI ini melengkapi E-Yang Soeradji sebagai kanal tanya-jawab cerdas (chatbot), keluhan, dan kampanye kesehatan.`,
   },
   {
     id: 'edukasi-batuk',
@@ -309,7 +309,7 @@ Waspada & SEGERA periksa ke dokter bila: batuk lebih dari 2 minggu; dahak bercam
 
 Pertolongan awal di rumah: perbanyak minum air hangat, istirahat, hindari asap rokok & polusi, jangan sembarangan minum antibiotik tanpa resep (antibiotik hanya untuk infeksi bakteri atas anjuran dokter). Anak di bawah 5 tahun, lansia, dan penderita penyakit jantung/paru kronik sebaiknya langsung diperiksa.
 
-Ini edukasi umum, BUKAN diagnosis. Untuk kepastian dan penanganan yang tepat, konsultasikan ke dokter RST: poli Paru/TB DOTS, poli Penyakit Dalam, atau IGD bila sesak. SAPA PASIEN tidak dapat mendiagnosis penyakit.`,
+Ini edukasi umum, BUKAN diagnosis. Untuk kepastian dan penanganan yang tepat, konsultasikan ke dokter RST: poli Paru/TB DOTS, poli Penyakit Dalam, atau IGD bila sesak. SOERA AI tidak dapat mendiagnosis penyakit.`,
   },
   {
     id: 'edukasi-demam',

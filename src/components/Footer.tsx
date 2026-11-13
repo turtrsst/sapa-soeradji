@@ -8,13 +8,13 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-10 grid gap-8 md:grid-cols-4 text-sm">
         <div className="md:col-span-1">
           <div className="flex items-center gap-2">
-            <Image src="/images/sapa-pasien-logo.png" alt="SAPA PASIEN" width={40} height={40} className="h-10 w-10 object-contain" />
+            <Image src="/images/soera-ai-logo.png" alt="SOERA AI" width={40} height={40} className="h-10 w-10 object-contain" />
             <div>
-              <p className="font-extrabold text-white leading-tight">SAPA PASIEN</p>
+              <p className="font-extrabold text-white leading-tight">SOERA AI</p>
               <p className="text-[10px] uppercase tracking-widest text-gold-400 font-bold">RSUP Dr. Soeradji Tirtonegoro</p>
             </div>
           </div>
-          <p className="mt-3 text-rst-200/90 leading-relaxed">Strategi Akses Pemasaran Digital &amp; Pelayanan Terintegrasi — respons cepat terhadap keluhan, pertanyaan jadwal dokter, dan kampanye kesehatan daring RSUP Dr. Soeradji Tirtonegoro Klaten.</p>
+          <p className="mt-3 text-rst-200/90 leading-relaxed">Soeradji Assistant Intelligent — respons cepat terhadap keluhan, pertanyaan jadwal dokter, dan kampanye kesehatan daring RSUP Dr. Soeradji Tirtonegoro Klaten.</p>
         </div>
         <div>
           <p className="text-[11px] font-bold uppercase tracking-widest text-rst-300 mb-2">Kontak RST</p>
@@ -35,7 +35,7 @@ export default function Footer() {
         <div>
           <p className="text-[11px] font-bold uppercase tracking-widest text-rst-300 mb-2">Tautan</p>
           <ul className="space-y-1.5">
-            <li><Link href="/chat" className="hover:text-white">Tanya SAPA PASIEN (Chatbot)</Link></li>
+            <li><Link href="/chat" className="hover:text-white">Tanya SOERA AI (Chatbot)</Link></li>
             <li><Link href="/jadwal" className="hover:text-white">Jadwal Dokter Poliklinik</Link></li>
             <li><Link href="/home-care" className="hover:text-white">Home Care Go-Trah &amp; Tarif</Link></li>
             <li><a href="https://sias.rsupsoeradji.id/homecare/" target="_blank" rel="noreferrer" className="hover:text-white">Soeradji GOCARE — Homecare Online ↗</a></li>
@@ -49,7 +49,7 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="mx-auto max-w-7xl px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-rst-300">
           <p>© {new Date().getFullYear()} RSUP Dr. Soeradji Tirtonegoro Klaten — Instalasi PKRS/Humas &amp; Sistem Informasi. Bukan pengganti konsultasi medis.</p>
-          <p>SAPA PASIEN v1.0 · Jaringan internal &amp; internet · Mode offline tersedia</p>
+          <p>SOERA AI v1.1 · Jaringan internal &amp; internet · Mode offline tersedia</p>
         </div>
       </div>
     </footer>

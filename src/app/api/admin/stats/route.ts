@@ -1,5 +1,6 @@
 import { getDb } from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
+import { dayKeyJakarta } from '@/lib/aiUsage';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,6 +22,7 @@ export async function GET() {
       homecareRequests: count('SELECT COUNT(*) as n FROM homecare_requests').n,
       campaigns: count('SELECT COUNT(*) as n FROM campaigns WHERE active = 1').n,
       chatsToday: count("SELECT COUNT(*) as n FROM chat_logs WHERE strftime('%Y-%m-%d', created_at/1000, 'unixepoch') = strftime('%Y-%m-%d', 'now')").n,
+      aiQueriesToday: (db.prepare('SELECT COALESCE(SUM(used), 0) as n FROM ai_usage WHERE day = ?').get(dayKeyJakarta()) as any).n,
     },
     ticketsByStatus, logsPerDay, intentStats, modeStats, recentTickets, recentHomecare,
   });

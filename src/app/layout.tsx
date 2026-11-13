@@ -5,12 +5,12 @@ import Footer from '@/components/Footer';
 import CampaignTicker from '@/components/CampaignTicker';
 
 export const metadata: Metadata = {
-  title: { default: 'SAPA PASIEN — RSUP Dr. Soeradji Tirtonegoro Klaten', template: '%s | SAPA PASIEN RST' },
-  description: 'SAPA PASIEN (Strategi Akses Pemasaran Digital & Pelayanan Terintegrasi): chatbot & layanan digital RSUP Dr. Soeradji Tirtonegoro Klaten. Tanya jadwal dokter, keluhan, Home Care, kampanye kesehatan — online maupun offline.',
-  applicationName: 'SAPA PASIEN',
+  title: { default: 'SOERA AI — RSUP Dr. Soeradji Tirtonegoro Klaten', template: '%s | SOERA AI RST' },
+  description: 'SOERA AI (Soeradji Assistant Intelligent): chatbot & layanan digital RSUP Dr. Soeradji Tirtonegoro Klaten. Tanya jadwal dokter, keluhan, Home Care, kampanye kesehatan — online maupun offline.',
+  applicationName: 'SOERA AI',
   manifest: '/manifest.webmanifest',
-  icons: { icon: '/images/sapa-pasien-logo.png', apple: '/images/sapa-pasien-logo.png' },
-  keywords: ['RSUP Dr Soeradji Tirtonegoro', 'SAPA PASIEN', 'rumah sakit Klaten', 'jadwal dokter', 'home care', 'pendaftaran online RST'],
+  icons: { icon: '/images/soera-ai-logo.png', apple: '/images/soera-ai-logo.png' },
+  keywords: ['RSUP Dr Soeradji Tirtonegoro', 'SOERA AI', 'rumah sakit Klaten', 'jadwal dokter', 'home care', 'pendaftaran online RST'],
 };
 
 export const viewport: Viewport = {

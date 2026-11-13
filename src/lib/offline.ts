@@ -73,7 +73,7 @@ export function composeOfflineAnswer(message: string): OfflineAnswer {
     return {
       intent,
       sources: [`${doc.title} — ${doc.source}`],
-      text: `Terima kasih telah menyampaikan masukan Anda — kritik & keluhan Anda penting bagi perbaikan layanan RST.\n\n**Cara menyampaikan keluhan:**\n1. **Menu "Keluhan" di aplikasi SAPA PASIEN** — buat tiket, dapatkan nomor tiket, dan lacak status penindakannya.\n2. Hotline pengaduan: **0851-7957-7302** (telepon/WhatsApp)\n3. Contact Center: **(0272) 321020**\n4. Email: rsupsoeradji_klaten@yahoo.com\n\nMohon sertakan nama, No. rekam medis/HP, unit pelayanan, dan kronologi agar cepat ditindaklanjuti.${FOOTER}`,
+      text: `Terima kasih telah menyampaikan masukan Anda — kritik & keluhan Anda penting bagi perbaikan layanan RST.\n\n**Cara menyampaikan keluhan:**\n1. **Menu "Keluhan" di aplikasi SOERA AI** — buat tiket, dapatkan nomor tiket, dan lacak status penindakannya.\n2. Hotline pengaduan: **0851-7957-7302** (telepon/WhatsApp)\n3. Contact Center: **(0272) 321020**\n4. Email: rsupsoeradji_klaten@yahoo.com\n\nMohon sertakan nama, No. rekam medis/HP, unit pelayanan, dan kronologi agar cepat ditindaklanjuti.${FOOTER}`,
     };
   }
 
@@ -123,6 +123,6 @@ export function composeOfflineAnswer(message: string): OfflineAnswer {
   return {
     intent: 'vitally_unknown',
     sources: [],
-    text: `Mohon maaf, pertanyaan Anda ("${excerpt}") belum dapat saya jawab dari basis pengetahuan resmi RST — mencakup profil & kontak RS, pendaftaran, jadwal dokter, tarif, Home Care, kampanye, layanan unggulan, dan edukasi kesehatan umum. Saya tidak ingin memberi jawaban yang salah.\n\n**Yang bisa Anda lakukan:**\n1. Hubungi **Contact Center (0272) 321020** atau WhatsApp **0816-9170-00**\n2. Kunjungi **rsupsoeradji.id**\n3. Kondisi gawat darurat: **IGD 24 jam (0272) 321020 ext 200** atau **119**${relatedLine}\n\n💡 Jika **SAPA PASIEN-AI** (model offline PrivateLM / API cloud) diaktifkan petugas melalui Panel Admin → *Pengaturan AI*, pertanyaan umum seperti ini akan dijawab otomatis oleh AI — bukan template.${FOOTER.replace('\n\n_Mode jawaban offline', '\n\n_Anda juga bisa mencoba kata kunci lain, mis. "jadwal poli jantung", "cara daftar online", "tarif home care"._\n\n_Mode jawaban offline')}`,
+    text: `Mohon maaf, pertanyaan Anda ("${excerpt}") belum dapat saya jawab dari basis pengetahuan resmi RST — mencakup profil & kontak RS, pendaftaran, jadwal dokter, tarif, Home Care, kampanye, layanan unggulan, dan edukasi kesehatan umum. Saya tidak ingin memberi jawaban yang salah.\n\n**Yang bisa Anda lakukan:**\n1. Hubungi **Contact Center (0272) 321020** atau WhatsApp **0816-9170-00**\n2. Kunjungi **rsupsoeradji.id**\n3. Kondisi gawat darurat: **IGD 24 jam (0272) 321020 ext 200** atau **119**${relatedLine}\n\n💡 Jika **SOERA AI** (model offline PrivateLM / API cloud) diaktifkan petugas melalui Panel Admin → *Pengaturan AI*, pertanyaan umum seperti ini akan dijawab otomatis oleh AI — bukan template.${FOOTER.replace('\n\n_Mode jawaban offline', '\n\n_Anda juga bisa mencoba kata kunci lain, mis. "jadwal poli jantung", "cara daftar online", "tarif home care"._\n\n_Mode jawaban offline')}`,
   };
 }

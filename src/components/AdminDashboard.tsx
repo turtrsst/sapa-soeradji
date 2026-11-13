@@ -8,7 +8,7 @@ import { JADWAL_UPDATE } from '@/lib/jadwal';
 type Tab = 'ringkasan' | 'keluhan' | 'homecare' | 'kampanye' | 'ai';
 
 const PROVIDER_PRESETS: { name: string; baseUrl: string; model: string; note: string }[] = [
-  { name: 'PrivateLM API Server (Offline — perangkat ini/LAN)', baseUrl: 'http://localhost:8080/v1', model: 'model-lokal-privatelm', note: 'Jalankan PrivateLM (cross-platform-llm-client) di HP/PC, muat model GGUF, aktifkan API Server + Allow network + API key. SAPA PASIEN server menghubungi endpoint ini — tanpa internet.' },
+  { name: 'PrivateLM API Server (Offline — perangkat ini/LAN)', baseUrl: 'http://localhost:8080/v1', model: 'model-lokal-privatelm', note: 'Jalankan PrivateLM (cross-platform-llm-client) di HP/PC, muat model GGUF, aktifkan API Server + Allow network + API key. SOERA AI server menghubungi endpoint ini — tanpa internet.' },
   { name: 'PrivateLM di perangkat lain (LAN/WiFi)', baseUrl: 'http://192.168.1.10:8080/v1', model: 'model-lokal-privatelm', note: 'Ganti 192.168.1.10 dengan IP perangkat menjalankan PrivateLM (terlihat di layar server PrivateLM). Wajib Allow network + API key.' },
   { name: 'Ollama (lokal)', baseUrl: 'http://localhost:11434/v1', model: 'qwen2.5:3b', note: 'Endpoint OpenAI-compatible bawaan Ollama (localhost:11434). Pastikan model sudah di-pull: ollama pull qwen2.5:3b. Tidak butuh API key (kosongkan / isi bebas).' },
   { name: 'llama.cpp llama-server (lokal)', baseUrl: 'http://localhost:8080/v1', model: 'gguf-model', note: 'llama-server -m model.gguf --port 8080 --api-key <key>' },
@@ -115,7 +115,7 @@ export default function AdminDashboard() {
         <div className="flex items-center gap-3">
           <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-rst-800 text-gold-400"><Icon name="building" size={22} /></span>
           <div>
-            <h1 className="text-xl sm:text-2xl font-black text-rst-900 tracking-tight">Panel Admin SAPA PASIEN</h1>
+            <h1 className="text-xl sm:text-2xl font-black text-rst-900 tracking-tight">Panel Admin SOERA AI</h1>
             <p className="text-[11px] text-rst-500 font-semibold">RSUP Dr. Soeradji Tirtonegoro Klaten · Jadwal {JADWAL_UPDATE} · Tarif SK {TARIF_META.nomor}</p>
           </div>
         </div>
@@ -132,7 +132,7 @@ export default function AdminDashboard() {
       {/* ============ RINGKASAN ============ */}
       {tab === 'ringkasan' && stats && (
         <div className="mt-5 space-y-5">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3">
             {[
               ['Percakapan', stats.totals.conversations],
               ['Pesan', stats.totals.messages],
@@ -140,6 +140,7 @@ export default function AdminDashboard() {
               ['Tiket Keluhan', stats.totals.tickets],
               ['Permintaan HC', stats.totals.homecareRequests],
               ['Kampanye Aktif', stats.totals.campaigns],
+              ['AI Bebas Hari Ini', stats.totals.aiQueriesToday],
             ].map(([label, n]) => (
               <div key={label as string} className="card p-4 text-center">
                 <p className="text-2xl sm:text-3xl font-black text-rst-800">{n as number}</p>
@@ -356,7 +357,7 @@ export default function AdminDashboard() {
           <div className="lg:col-span-5 space-y-4">
             <div className="card p-5 border-gold-400/50">
               <p className="font-extrabold text-rst-900 flex items-center gap-2"><Icon name="wifiOff" size={17} className="text-gold-600" /> Offline dengan PrivateLM (cross-platform-llm-client)</p>
-              <p className="mt-1.5 text-[11px] text-rst-600">Jalankan model GGUF sepenuhnya di perangkat (Android/iOS/iPad/PC) tanpa internet — SAPA PASIEN menempel ke API server OpenAI-compatible bawaan PrivateLM (port 8080).</p>
+              <p className="mt-1.5 text-[11px] text-rst-600">Jalankan model GGUF sepenuhnya di perangkat (Android/iOS/iPad/PC) tanpa internet — SOERA AI menempel ke API server OpenAI-compatible bawaan PrivateLM (port 8080).</p>
               <ol className="mt-3 space-y-2 text-[11.5px] text-rst-800 leading-relaxed list-none">
                 {[
                   'Pasang PrivateLM (github.com/orailnoor/cross-platform-llm-client) di Android/iOS, atau build via Flutter.',
@@ -368,7 +369,8 @@ export default function AdminDashboard() {
                   'Klik "Uji Koneksi Sekarang" — bila ✓, aktifkan toggle mesin AI dan Simpan. Semua tanya-jawab kini 100% offline di server RS.',
                 ].map((s, i) => <li key={i} className="flex gap-2"><span className="font-black text-rst-400">{i + 1}.</span>{s}</li>)}
               </ol>
-              <p className="mt-3 text-[10px] text-rst-500">Catatan: server SAPA PASIEN dan perangkat PrivateLM harus satu jaringan (LAN/WiFi RS). Tanpa AI sekalipun, jawaban dasar tetap tersedia dari basis pengetahuan lokal (jadwal, tarif, kontak, pendaftaran, dll).</p>
+              <p className="mt-3 text-[10px] text-rst-500">Catatan: server SOERA AI dan perangkat PrivateLM harus satu jaringan (LAN/WiFi RS). Tanpa AI sekalipun, jawaban dasar tetap tersedia dari basis pengetahuan lokal (jadwal, tarif, kontak, pendaftaran, dll).</p>
+              <p className="mt-2 text-[10px] text-rst-500">Kuota AI publik: <strong>pertanyaan bebas</strong> (di luar template) dibatasi <strong>5/pengguna/hari</strong>, reset 00.00 WIB — pengguna di-hash anonim (IP tidak disimpan). Pertanyaan layanan (jadwal/tarif/home care/kampanye/pendaftaran) tidak dikenakan kuota.</p>
             </div>
             <div className="card p-5">
               <p className="font-extrabold text-rst-900 flex items-center gap-2"><Icon name="info" size={15} className="text-rst-500" /> Perilaku jawaban</p>

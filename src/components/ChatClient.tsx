@@ -32,6 +32,7 @@ function ChatPageInner() {
   const [busy, setBusy] = useState(false);
   const [mode, setMode] = useState<string>('');
   const [llmEnabled, setLlmEnabled] = useState<boolean | null>(null);
+  const [aiQuota, setAiQuota] = useState<{ used: number; max: number; remaining: number } | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [copied, setCopied] = useState<number | null>(null);
   const [feedbackSent, setFeedbackSent] = useState<Record<number, number>>({});
@@ -134,6 +135,7 @@ function ChatPageInner() {
             } else if (evt.type === 'done') {
               finalMode = evt.mode;
               setMode(evt.mode);
+              if (evt.aiQuota) setAiQuota(evt.aiQuota);
               setMessages((prev) => {
                 const copy = [...prev];
                 const last = copy[copy.length - 1];
@@ -229,7 +231,7 @@ function ChatPageInner() {
             ))}
           </div>
           <div className="p-4 border-t border-white/10 text-[10.5px] text-rst-300/80 leading-relaxed">
-            <p className="flex items-center gap-1.5 font-bold text-rst-100"><Icon name="shield" size={12} className="text-gold-400" /> SAPA PASIEN aman &amp; tercatat</p>
+            <p className="flex items-center gap-1.5 font-bold text-rst-100"><Icon name="shield" size={12} className="text-gold-400" /> SOERA AI aman &amp; tercatat</p>
             <p className="mt-1">Jawaban disusun dari basis pengetahuan resmi RST + AI. Untuk kondisi darurat tetap ke IGD (0272) 321020 ext 200.</p>
           </div>
         </aside>
@@ -240,9 +242,9 @@ function ChatPageInner() {
           {/* top bar */}
           <div className="flex items-center gap-2 px-3 sm:px-5 h-14 border-b border-rst-100 bg-white/70 backdrop-blur">
             <button onClick={() => setSidebarOpen(true)} className="md:hidden p-2 rounded-lg hover:bg-rst-50 text-rst-700" aria-label="Riwayat"><Icon name="menu" size={20} /></button>
-            <Image src="/images/sapa-pasien-logo.png" alt="SAPA PASIEN" width={30} height={30} className="h-7 w-7 object-contain" />
+            <Image src="/images/soera-ai-logo.png" alt="SOERA AI" width={30} height={30} className="h-7 w-7 object-contain" />
             <div className="leading-tight min-w-0">
-              <p className="text-[13px] font-extrabold text-rst-900 truncate">SAPA PASIEN — Asisten RST</p>
+              <p className="text-[13px] font-extrabold text-rst-900 truncate">SOERA AI — Asisten RST</p>
               <p className="text-[10px] font-semibold text-rst-500 flex items-center gap-1">
                 {mode === 'llm' ? (<><Icon name="wifi" size={10} className="text-emerald-600" /> AI aktif ({llmEnabled ? 'model terhubung' : 'endpoint aktif'})</>)
                   : mode === 'offline' ? (<><Icon name="wifiOff" size={10} className="text-amber-600" /> Mode offline — basis pengetahuan lokal</>)
@@ -256,8 +258,8 @@ function ChatPageInner() {
           <div ref={scrollRef} className="flex-1 overflow-y-auto chat-scroll px-3 sm:px-6 py-5">
             {isEmpty ? (
               <div className="max-w-2xl mx-auto text-center pt-6 sm:pt-12">
-                <Image src="/images/sapa-pasien-logo.png" alt="SAPA PASIEN" width={92} height={92} className="mx-auto h-20 w-20 object-contain" />
-                <h2 className="mt-4 text-2xl sm:text-3xl font-black text-rst-900 tracking-tight">Halo! Ada yang bisa <span className="text-rst-600">SAPA PASIEN</span> bantu?</h2>
+                <Image src="/images/soera-ai-logo.png" alt="SOERA AI" width={92} height={92} className="mx-auto h-20 w-20 object-contain" />
+                <h2 className="mt-4 text-2xl sm:text-3xl font-black text-rst-900 tracking-tight">Halo! Ada yang bisa <span className="text-rst-600">SOERA AI</span> bantu?</h2>
                 <p className="mt-2 text-sm text-rst-600">Asisten resmi RSUP Dr. Soeradji Tirtonegoro Klaten — keluhan Anda, jadwal dokter, pendaftaran, tarif layanan, hingga kampanye kesehatan.</p>
                 <div className="mt-6 grid sm:grid-cols-2 gap-2 text-left">
                   {SUGGESTIONS.map((s) => (
@@ -272,7 +274,7 @@ function ChatPageInner() {
                 {messages.map((m, i) => (
                   <div key={i} className={`flex gap-3 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
                     {m.role === 'assistant'
-                      ? <Image src="/images/sapa-pasien-logo.png" alt="SAPA PASIEN" width={34} height={34} className="h-8 w-8 mt-1 rounded-full object-contain bg-white border border-rst-100 p-0.5 shrink-0" />
+                      ? <Image src="/images/soera-ai-logo.png" alt="SOERA AI" width={34} height={34} className="h-8 w-8 mt-1 rounded-full object-contain bg-white border border-rst-100 p-0.5 shrink-0" />
                       : <span className="h-8 w-8 mt-1 rounded-full bg-rst-700 text-white text-[11px] font-black flex items-center justify-center shrink-0">ANDA</span>}
                     <div className={`max-w-[85%] sm:max-w-[78%] rounded-2xl px-4 py-3 text-[14.5px] leading-relaxed shadow-sm ${m.role === 'user' ? 'bg-rst-700 text-white rounded-tr-md' : 'bg-white border border-rst-100 text-rst-900 rounded-tl-md'}`}>
                       {m.role === 'assistant' && !m.content && m.streaming ? (
@@ -324,7 +326,9 @@ function ChatPageInner() {
                   </button>
                 )}
               </div>
-              <p className="mt-1.5 text-center text-[10px] text-rst-400">SAPA PASIEN dapat keliru — periksa kembali info penting ke <a href="tel:0272321020" className="underline">(0272) 321020</a>. Bukan diagnosis medis.</p>
+              <p className="mt-1.5 text-center text-[10px] text-rst-400">SOERA AI dapat keliru — periksa kembali info penting ke <a href="tel:0272321020" className="underline">(0272) 321020</a>. Bukan diagnosis medis.
+                {aiQuota && <span className="block mt-0.5 text-rst-500">Kuota AI bebas hari ini: <strong>sisa {aiQuota.remaining}/{aiQuota.max}</strong> · reset 00.00 WIB · pertanyaan layanan (jadwal/tarif/dll.) tetap tersedia</span>}
+              </p>
             </form>
           </div>
         </section>

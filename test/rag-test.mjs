@@ -1,4 +1,4 @@
-// Uji basis pengetahuan & retrieval SAPA PASIEN (jalan lokal, tanpa server, tanpa jaringan).
+// Uji basis pengetahuan & retrieval SOERA AI (jalan lokal, tanpa server, tanpa jaringan).
 // Jalankan: npm test
 import assert from 'node:assert/strict';
 import { KB_DOCS } from '../src/lib/kb.ts';
@@ -10,7 +10,7 @@ import { composeOfflineAnswer } from '../src/lib/offline.ts';
 let passed = 0;
 const ok = (name, cond) => { assert.ok(cond, name); console.log('  ✓', name); passed++; };
 
-console.log('SAPA PASIEN — uji basis pengetahuan & retrieval\n');
+console.log('SOERA AI — uji basis pengetahuan & retrieval\n');
 
 console.log('Database jadwal & tarif:');
 ok('KB docs >= 15', KB_DOCS.length >= 15);

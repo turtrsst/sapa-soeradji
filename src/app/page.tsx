@@ -5,7 +5,7 @@ import Icon from '@/components/Icon';
 export const metadata = { title: 'Beranda' };
 
 const QUICK = [
-  { href: '/chat', icon: 'chat' as const, title: 'Tanya SAPA PASIEN', desc: 'Chatbot cerdas 24 jam: keluhan, jadwal dokter, tarif, pendaftaran — online & offline.', tone: 'bg-rst-600 text-white' },
+  { href: '/chat', icon: 'chat' as const, title: 'Tanya SOERA AI', desc: 'Chatbot cerdas 24 jam: keluhan, jadwal dokter, tarif, pendaftaran — online & offline.', tone: 'bg-rst-600 text-white' },
   { href: '/jadwal', icon: 'calendar' as const, title: 'Jadwal Dokter', desc: 'Cari jadwal poliklinik & dokter spesialis terbaru, bisa dicetak.', tone: 'bg-white text-rst-900' },
   { href: '/home-care', icon: 'home' as const, title: 'Home Care Go-Trah', desc: 'Layanan dokter & perawat ke rumah + tarif SK 2024 · pesan online via Soeradji GOCARE.', tone: 'bg-white text-rst-900' },
   { href: '/keluhan', icon: 'inbox' as const, title: 'Keluhan & Pengaduan', desc: 'Buat tiket pengaduan, lacak status penindakannya.', tone: 'bg-white text-rst-900' },
@@ -31,10 +31,10 @@ export default function LandingPage() {
               <Icon name="shield" size={14} /> RSUP Dr. Soeradji Tirtonegoro · RS Vertikal Kemenkes RI · Kelas A
             </div>
             <h1 className="mt-5 text-4xl sm:text-6xl font-black tracking-tight leading-[1.05]">
-              SAPA<br /><span className="text-gold-400">PASIEN</span>
+              SOERA<br /><span className="text-gold-400">AI</span>
             </h1>
             <p className="mt-3 text-sm sm:text-base font-semibold uppercase tracking-[0.14em] text-rst-100/90 max-w-xl">
-              Strategi Akses Pemasaran Digital &amp; Pelayanan Terintegrasi
+              Soeradji Assistant Intelligent
             </p>
             <p className="mt-5 text-lg sm:text-xl text-rst-50 max-w-2xl leading-relaxed">
               Asisten digital resmi rumah sakit untuk <strong>respons cepat keluhan</strong>, <strong>pertanyaan jadwal dokter</strong>, dan <strong>kampanye kesehatan daring</strong> — bisa dipakai <strong>online maupun offline</strong>.
@@ -54,9 +54,9 @@ export default function LandingPage() {
           <div className="lg:col-span-5">
             <div className="rounded-3xl border border-white/15 bg-white/10 backdrop-blur-md p-4 sm:p-5 shadow-2xl">
               <div className="flex items-center gap-2 border-b border-white/10 pb-3">
-                <Image src="/images/sapa-pasien-logo.png" alt="SAPA PASIEN" width={36} height={36} className="h-9 w-9 object-contain bg-white rounded-full p-0.5" />
+                <Image src="/images/soera-ai-logo.png" alt="SOERA AI" width={36} height={36} className="h-9 w-9 object-contain bg-white rounded-full p-0.5" />
                 <div className="leading-tight">
-                  <p className="font-bold">SAPA PASIEN</p>
+                  <p className="font-bold">SOERA AI</p>
                   <p className="text-[10px] text-emerald-300 flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400 inline-block" /> Online — siap membantu 24/7</p>
                 </div>
               </div>

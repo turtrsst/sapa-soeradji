@@ -7,7 +7,7 @@ import Icon from './Icon';
 
 const NAV = [
   { href: '/', label: 'Beranda' },
-  { href: '/chat', label: 'Tanya SAPA PASIEN' },
+  { href: '/chat', label: 'Tanya SOERA AI' },
   { href: '/jadwal', label: 'Jadwal Dokter' },
   { href: '/home-care', label: 'Home Care' },
   { href: '/kampanye', label: 'Kampanye' },
@@ -37,10 +37,10 @@ export default function Header() {
       <div className="mx-auto max-w-7xl px-3 sm:px-4">
         <div className="flex h-16 items-center justify-between gap-3">
           <Link href="/" className="flex items-center gap-2.5 shrink-0">
-            <Image src="/images/sapa-pasien-logo.png" alt="Logo SAPA PASIEN" width={44} height={44} className="h-11 w-11 object-contain" priority />
+            <Image src="/images/soera-ai-logo.png" alt="Logo SOERA AI" width={44} height={44} className="h-11 w-11 object-contain" priority />
             <span className="leading-tight">
-              <span className="block text-[17px] font-extrabold tracking-tight text-rst-900">SAPA PASIEN</span>
-              <span className="hidden sm:block text-[9.5px] font-semibold uppercase tracking-[0.14em] text-rst-500 max-w-[240px]">Strategi Akses Pemasaran Digital &amp; Pelayanan Terintegrasi</span>
+              <span className="block text-[17px] font-extrabold tracking-tight text-rst-900">SOERA AI</span>
+              <span className="hidden sm:block text-[9.5px] font-semibold uppercase tracking-[0.14em] text-rst-500 max-w-[240px]">Soeradji Assistant Intelligent</span>
             </span>
           </Link>
 
