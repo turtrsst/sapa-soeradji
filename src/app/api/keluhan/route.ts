@@ -12,7 +12,13 @@ function ticketNumber(): string {
   return `SKT-${ymd}-${rand}`;
 }
 
+import { RATE_PUBLIC_POST_LIMIT, RATE_PUBLIC_POST_WINDOW, rateLimit, rateLimitKey } from '@/lib/rateLimit';
+
 export async function POST(req: Request) {
+  const rl = rateLimit(rateLimitKey('public-post', req.headers), RATE_PUBLIC_POST_LIMIT, RATE_PUBLIC_POST_WINDOW);
+  if (!rl.ok) {
+    return Response.json({ error: `Terlalu banyak pengiriman. Coba lagi dalam ±${Math.ceil(rl.retryAfterSec / 60)} menit.` }, { status: 429, headers: { 'Retry-After': String(rl.retryAfterSec) } });
+  }
   let body: any;
   try { body = await req.json(); } catch { return Response.json({ error: 'Body bukan JSON' }, { status: 400 }); }
   const name = String(body?.name ?? '').trim();

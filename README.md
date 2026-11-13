@@ -68,6 +68,13 @@ docker run -p 3000:3000 -v soera-data:/data soera-ai
 | `ADMIN_USERNAME` | `admin` | Username panel admin |
 | `ADMIN_PASSWORD` | `admin123` | **Wajib diganti di produksi** |
 | `SOERA_ADMIN_SECRET` | (dev) | Rahasia penandatangan cookie admin — isi string acak panjang di produksi (`SAPA_ADMIN_SECRET` lama tetap dihormati) |
+| `SOERA_AI_DAILY_LIMIT` | `5` | Maks. pertanyaan bebas AI per pengguna/IP per hari (reset 00.00 WIB) |
+| `SOERA_RATE_CHAT_LIMIT` | `30` | Maks. request `/api/chat` per IP per window (429 bila lewat) |
+| `SOERA_RATE_CHAT_WINDOW_MS` | `300000` | Window rate limit chat (5 menit) |
+| `SOERA_RATE_LOGIN_LIMIT` | `5` | Maks. kegagalan login admin per IP per window (blokir 429) |
+| `SOERA_RATE_LOGIN_WINDOW_MS` | `600000` | Window throttle login (10 menit) |
+| `SOERA_RATE_PUBLIC_POST_LIMIT` | `10` | Maks. pengiriman publik (keluhan + home care) per IP per jam |
+| `SOERA_RATE_PUBLIC_POST_WINDOW_MS` | `3600000` | Window limit pengiriman publik (1 jam) |
 | `SAPA_DATA_DIR` | `./data` | Lokasi file SQLite |
 
 ## Mode Offline & Integrasi PrivateLM (cross-platform-llm-client)
@@ -127,6 +134,13 @@ test/rag-test.mjs      # 32 pengujian basis pengetahuan & retrieval
 - **Tarif Home Care**: Keputusan Direktur Utama RST No. **HK.02.03/D.XXVI/5441/2024** (18 Maret 2024), melampirkan 5 kelompok tarif — digitalisasi dilakukan dari pindaian SK (scan) dan diverifikasi halaman demi halaman; salinan PDF tersedia di aplikasi (`/home-care` → Unduh SK).
 - **Jadwal dokter**: diolah dari situs resmi & direktori jadwal publik (update **12 Mei 2026**); **jadwal dapat berubah sewaktu-waktu** — selalu konfirmasi ke (0272) 321020.
 - Kampanye: berita/kegiatan resmi RST (bakti sosial & khitanan massal Nov 2026, SPELING Gantiwarno) serta program Kemenkes (CERDIK, GERMAS, DOTS).
+
+## Keamanan (hardening bawaan)
+
+- **Rate limit in-memory** (fixed window): `/api/chat` 30 req/5 mnt/IP · login admin 5 gagal/10 mnt/IP (429 + `Retry-After`) · pengiriman publik (keluhan + home care) 10/jam/IP. Limit dapat diubah via env di atas. Untuk multi-instance/produksi besar tambahkan limit di reverse proxy (Caddy/Nginx/Cloudflare).
+- **Security headers** di semua respons: CSP (default-src 'self'), `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy`, `Permissions-Policy`, HSTS.
+- **IP tidak disimpan**: subjek kuota AI di-hash SHA-256; kredensial admin default HARUS diganti sebelum publik; cookie `HttpOnly; SameSite=Lax`; sesi 12 jam.
+- **`sharp`** terpasang untuk optimasi gambar Next.js produksi.
 
 ## Dokumentasi
 

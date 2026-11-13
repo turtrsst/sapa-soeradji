@@ -175,7 +175,7 @@ WantedBy=multi-user.target
 
 1. **Ganti password admin default (`admin123`) sebelum publik pertama kali.** Idealnya `/admin` hanya boleh diakses dari VPN/IP allowlist (Caddy: `basic_auth` atau matcher path `/admin*`).
 2. **HTTPS saja**; aktifkan HSTS (Caddy otomatis), header `X-Content-Type-Options: nosniff`, `Referrer-Policy`.
-3. **Rate limit `/api/chat`** (mis. 20 req/menit/IP) — lewat Cloudflare/WAF di depan, atau `limit_req` di Nginx.
+3. Rate limit **sudah bawaan aplikasi** (chat 30 req/5 mnt/IP, login 5 gagal/10 mnt/IP, pengiriman publik 10/jam/IP — env `SOERA_RATE_*`); tetap tambahkan limit di edge (Cloudflare/Nginx `limit_req`) untuk defense-in-depth.
 4. **UU PDP (UU No. 27/2022)**: data kesehatan = data pribadi spesifik. Tampilkan disclaimer yang sudah ada; **jangan** kirim percakapan pasien ke API cloud tanpa persetujuan/tata kelola; enkripsi disk server; enkripsi backup `data/sapa-pasien.sqlite`.
 5. **Jangan ekspos port 8080** ke mana pun selain web server; gunakan API key berbeda per environment; rotasi berkala.
 6. **Backup** SQLite harian (cron + `sqlite3 .backup`) + salinan di luar server; retensi tiket diatur sesuai kebutuhan RS.

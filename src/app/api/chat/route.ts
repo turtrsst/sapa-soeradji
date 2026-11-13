@@ -1,5 +1,6 @@
 import { getDb, uid } from '@/lib/db';
 import { AI_DAILY_LIMIT, aiSubject, consumeAiQuota, refundAiQuota } from '@/lib/aiUsage';
+import { RATE_CHAT_LIMIT, RATE_CHAT_WINDOW, rateLimit, rateLimitKey, rateLimitHeaders } from '@/lib/rateLimit';
 import { streamAgent } from '@/lib/agent';
 import { SYSTEM_PROMPT, streamLlm, type ChatMessage } from '@/lib/llm';
 import { getLlmConfig } from '@/lib/settings';
@@ -14,6 +15,10 @@ export const runtime = 'nodejs';
 const encoder = new TextEncoder();
 
 export async function POST(req: Request) {
+  const rl = rateLimit(rateLimitKey('chat', req.headers), RATE_CHAT_LIMIT, RATE_CHAT_WINDOW);
+  if (!rl.ok) {
+    return json({ error: `Terlalu banyak permintaan. Coba lagi dalam ±${Math.ceil(rl.retryAfterSec / 60)} menit.` }, 429, { 'Retry-After': String(rl.retryAfterSec), ...rateLimitHeaders(rl) });
+  }
   let body: any;
   try { body = await req.json(); } catch { return json({ error: 'Body bukan JSON' }, 400); }
   const message = String(body?.message ?? '').trim();
@@ -156,10 +161,11 @@ export async function POST(req: Request) {
       'Cache-Control': 'no-cache, no-transform',
       'Connection': 'keep-alive',
       'X-Accel-Buffering': 'no',
+      ...rateLimitHeaders(rl),
     },
   });
 }
 
-function json(obj: unknown, status = 200) {
-  return new Response(JSON.stringify(obj), { status, headers: { 'Content-Type': 'application/json' } });
+function json(obj: unknown, status = 200, extraHeaders: Record<string, string> = {}) {
+  return new Response(JSON.stringify(obj), { status, headers: { 'Content-Type': 'application/json', ...extraHeaders } });
 }
