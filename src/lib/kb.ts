@@ -131,11 +131,11 @@ Informasi paket & biaya MCU: hubungi Contact Center (0272) 321020 atau WhatsApp 
   },
   {
     id: 'home-care',
-    title: 'Home Care Go-Trah (Pelayanan di Rumah)',
+    title: 'Soeradji Go Care (Pelayanan di Rumah)',
     tags: ['home care', 'homecare', 'go-trah', 'kunjung rumah', 'perawatan rumah', 'visite', 'dokter visit', 'layanan rumah'],
     updated: '2026-11',
     source: 'sias.rsupsoeradji.id (Soeradji GOCARE) / rsupsoeradji.id',
-    body: `Home Care Go-Trah adalah layanan kesehatan RSUP Dr. Soeradji Tirtonegoro yang mengantarkan pelayanan medis dan keperawatan langsung ke rumah pasien (rawat jalan di rumah), antara lain untuk pasien pasca rawat inap, lansia, disabilitas, atau yang sulit bepergian ke rumah sakit.
+    body: `Soeradji Go Care adalah layanan kesehatan RSUP Dr. Soeradji Tirtonegoro yang mengantarkan pelayanan medis dan keperawatan langsung ke rumah pasien (rawat jalan di rumah), antara lain untuk pasien pasca rawat inap, lansia, disabilitas, atau yang sulit bepergian ke rumah sakit.
 
 Layanan mencakup (sesuai SK Direktur Utama HK.02.03/D.XXVI/5441/2024): tindakan medik non operatif (pemasangan NGT/cateter, infus, injeksi, nebuliser, perawatan luka, pengambilan darah), pemeriksaan laboratorium sederhana (GDS, asam urat, kolesterol, darah rutin), rehabilitasi medik/fisioterapi di rumah, kunjungan dokter umum/spesialis/subspesialis, konsultasi psikologi, serta sewa alat medik (tempat tidur & oksigen konsentrator).
 
@@ -278,7 +278,7 @@ T: Apakah RST menerima pasien rujukan dari luar Klaten? J: Ya, RST RS rujukan na
 T: Nomor darurat? J: IGD 24 jam (0272) 321020 ext 200 atau 119.
 T: Pendaftaran online? J: WhatsApp 0816-9170-00, H-7 s/d H-1 07.30–14.00 WIB.
 T: Bagaimana menyampaikan keluhan? J: Menu Keluhan di SOERA AI, atau hotline 0851-7957-7302.
-T: Apakah ada layanan home care? J: Ada — Home Care Go-Trah; tarif sesuai SK HK.02.03/D.XXVI/5441/2024.
+T: Apakah ada layanan home care? J: Ada — Soeradji Go Care; tarif sesuai SK HK.02.03/D.XXVI/5441/2024.
 T: Apakah RST melayani hari Sabtu? J: Poliklinik tutup Sabtu–Ahad/libur; IGD & rawat inap 24 jam tetap buka. (Poli penyakit dalam tertentu praktik Sabtu pagi 07.30–13.00 — konfirmasi ke Contact Center.)`,
   },
   {

@@ -33,8 +33,8 @@ export default function HomeCarePage() {
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8">
       {/* Header */}
-      <p className="chip bg-rst-100 text-rst-700 mb-2"><Icon name="home" size={12} /> Home Care Go-Trah</p>
-      <h1 className="text-3xl font-black text-rst-900 tracking-tight">Home Care — Pelayanan di Rumah</h1>
+      <p className="chip bg-rst-100 text-rst-700 mb-2"><Icon name="home" size={12} /> Soeradji Go Care</p>
+      <h1 className="text-3xl font-black text-rst-900 tracking-tight">Soeradji Go Care — Pelayanan di Rumah</h1>
       <p className="mt-1 text-sm text-rst-600 max-w-3xl">Tim dokter, perawat, dan fisioterapis RSUP Dr. Soeradji Tirtonegoro datang langsung ke rumah Anda — untuk pasien pasca rawat inap, lansia, disabilitas, atau yang sulit bepergian.</p>
 
       {/* Soeradji GOCARE — pemesanan homecare resmi online */}

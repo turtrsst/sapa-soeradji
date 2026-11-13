@@ -7,7 +7,7 @@ export const metadata = { title: 'Beranda' };
 const QUICK = [
   { href: '/chat', icon: 'chat' as const, title: 'Tanya SOERA AI', desc: 'Chatbot cerdas 24 jam: keluhan, jadwal dokter, tarif, pendaftaran — online & offline.', tone: 'bg-rst-600 text-white' },
   { href: '/jadwal', icon: 'calendar' as const, title: 'Jadwal Dokter', desc: 'Cari jadwal poliklinik & dokter spesialis terbaru, bisa dicetak.', tone: 'bg-white text-rst-900' },
-  { href: '/home-care', icon: 'home' as const, title: 'Home Care Go-Trah', desc: 'Layanan dokter & perawat ke rumah + tarif SK 2024 · pesan online via Soeradji GOCARE.', tone: 'bg-white text-rst-900' },
+  { href: '/home-care', icon: 'home' as const, title: 'Soeradji Go Care', desc: 'Layanan dokter & perawat ke rumah + tarif resmi SK 2024 · pemesanan homecare online.', tone: 'bg-white text-rst-900' },
   { href: '/keluhan', icon: 'inbox' as const, title: 'Keluhan & Pengaduan', desc: 'Buat tiket pengaduan, lacak status penindakannya.', tone: 'bg-white text-rst-900' },
 ];
 
