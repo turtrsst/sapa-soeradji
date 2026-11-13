@@ -2,7 +2,7 @@
   "name": "soera-ai",
   "version": "1.0.0",
   "private": true,
-  "description": "SOERA AI — Soeradji Assistant Intelligent. Chatbot AI RSUP Dr. Soeradji Tirtonegoro Klaten (online & offline via PrivateLM / cross-platform-llm-client).",
+  "description": "SOERA AI — Soeradji Assistant Intelligent. Chatbot AI RSUP Dr. Soeradji Tirtonegoro Klaten (online & offline via Jan / Ollama / endpoint OpenAI-compatible).",
   "scripts": {
     "dev": "next dev -H 0.0.0.0 -p 3000",
     "build": "next build",

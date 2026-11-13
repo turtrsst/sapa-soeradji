@@ -44,7 +44,7 @@ export default function LandingPage() {
               <Link href="/jadwal" className="btn btn-ghost text-base px-6 py-4"><Icon name="calendar" size={20} /> Lihat Jadwal Dokter</Link>
             </div>
             <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-rst-100/80">
-              <span className="flex items-center gap-1.5"><Icon name="wifiOff" size={14} className="text-gold-400" /> Bisa offline (AI lokal via PrivateLM)</span>
+              <span className="flex items-center gap-1.5"><Icon name="wifiOff" size={14} className="text-gold-400" /> Bisa offline (AI lokal via Jan)</span>
               <span className="flex items-center gap-1.5"><Icon name="bolt" size={14} className="text-gold-400" /> Respons &lt; 1 menit</span>
               <span className="flex items-center gap-1.5"><Icon name="shield" size={14} className="text-gold-400" /> Data tersimpan di server RS, aman</span>
             </div>

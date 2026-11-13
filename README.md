@@ -7,7 +7,7 @@
 SOERA AI menjawab pertanyaan dan keluhan masyarakat secara cepat — **keluhan pelayanan, pertanyaan jadwal dokter, pendaftaran online, tanya tarif, hingga kampanye kesehatan daring** — dan tetap berfungsi **tanpa internet** (mode offline) dengan dua lapis:
 
 1. **Basis pengetahuan lokal (selalu aktif, tanpa model)** — jawaban deterministik dari data resmi RST (jadwal, tarif SK, kontak, FAQ, alur layanan).
-2. **AI generatif offline via [cross-platform-llm-client (PrivateLM)](https://github.com/orailnoor/cross-platform-llm-client)** — model GGUF berjalan di HP/tablet/PC (Android/iOS) lewat **API Server OpenAI-compatible bawaan PrivateLM** (port 8080). SOERA AI otomatis menempel ke endpoint itu dan men-*stream* jawabannya. Alternatif: Ollama, llama.cpp, LM Studio, atau API cloud (OpenAI/Kimi/OpenRouter).
+2. **AI generatif offline via [Jan (janhq/jan)](https://github.com/janhq/jan)** — ChatGPT open-source yang berjalan 100% offline di komputer (Windows/macOS/Linux); model GGUF (Llama, Qwen, GPT-oss, …) berjalan lokal lewat **Local API Server OpenAI-compatible bawaan Jan** (port 1337). SOERA AI otomatis menempel ke endpoint itu dan men-*stream* jawabannya. Alternatif: Ollama, llama.cpp, LM Studio, atau API cloud (OpenAI/Kimi/OpenRouter).
 
 ---
 
@@ -15,12 +15,12 @@ SOERA AI menjawab pertanyaan dan keluhan masyarakat secara cepat — **keluhan p
 
 | Modul | Keterangan |
 |---|---|
-| **Tanya SOERA AI** (`/chat`) | Chatbot gaya ChatGPT: streaming token, riwayat percakapan tersimpan (SQLite), rename/pin/hapus, mode indikator (AI Lokal/Online vs Offline KB), salin jawaban, rating 👍👎, sumber jawaban ditampilkan. Termasuk **edukasi kesehatan umum** (batuk, demam, hipertensi, diabetes, maag, nyeri dada, diare, pusing) dengan tanda bahaya & kapan ke IGD. Pertanyaan di luar basis pengetahuan dijawab jujur dengan arahan kontak — **tidak pernah** menampilkan dokumen yang tidak relevan. Bila AI (PrivateLM/Ollama/cloud) diaktifkan, **agen AI tool-calling** (Vercel AI SDK) menjawab pertanyaan bebas: memanggil tool `cari_jadwal_dokter`, `cari_tarif_layanan`, `cari_info_rst`, `daftar_kampanye_aktif` — dibatasi **5 pertanyaan bebas per pengguna per hari** (reset 00.00 WIB, di-hash anonim). Pertanyaan layanan (jadwal/tarif/home care/dll.) tidak memakai kuota. Lihat [`docs/AI-AGENT.md`](docs/AI-AGENT.md). |
+| **Tanya SOERA AI** (`/chat`) | Chatbot gaya ChatGPT: streaming token, riwayat percakapan tersimpan (SQLite), rename/pin/hapus, mode indikator (AI Lokal/Online vs Offline KB), salin jawaban, rating 👍👎, sumber jawaban ditampilkan. Termasuk **edukasi kesehatan umum** (batuk, demam, hipertensi, diabetes, maag, nyeri dada, diare, pusing) dengan tanda bahaya & kapan ke IGD. Pertanyaan di luar basis pengetahuan dijawab jujur dengan arahan kontak — **tidak pernah** menampilkan dokumen yang tidak relevan. Bila AI (Jan/Ollama/cloud) diaktifkan, **agen AI tool-calling** (Vercel AI SDK) menjawab pertanyaan bebas: memanggil tool `cari_jadwal_dokter`, `cari_tarif_layanan`, `cari_info_rst`, `daftar_kampanye_aktif` — dibatasi **5 pertanyaan bebas per pengguna per hari** (reset 00.00 WIB, di-hash anonim). Pertanyaan layanan (jadwal/tarif/home care/dll.) tidak memakai kuota. Lihat [`docs/AI-AGENT.md`](docs/AI-AGENT.md). |
 | **Jadwal Dokter** (`/jadwal`) | ±55 baris jadwal poliklinik regular, cari per dokter/poli/spesialisasi, filter hari, cetak (print-friendly). Update 12 Mei 2026 — dapat berubah, konfirmasi (0272) 321020. |
 | **Soeradji Go Care** (`/home-care`) | Semua ±80 item **Tarif Tindakan Pelayanan Home Care** hasil digitalisasi SK Dirut No. HK.02.03/D.XXVI/5441/2024 (dokumen SK dipindai, tarif terverifikasi per halaman), bisa dicari & dicetak, tersedia **unduhan PDF SK asli**, **formulir pengajuan kunjungan home care** ke petugas, dan tautan langsung ke pemesanan resmi online **Soeradji GOCARE** ([sias.rsupsoeradji.id/homecare](https://sias.rsupsoeradji.id/homecare/) — asisten Sora, 80+ layanan, minimal H-1). |
 | **Keluhan / Pengaduan** (`/keluhan`) | Buat tiket → nomor tiket `SKT-YYYYMMDD-XXXXXX`, lacak status (baru → diproses → selesai) + tanggapan petugas, kategori & prioritas. |
 | **Kampanye Kesehatan** (`/kampanye`) | Kampanye daring RST (SPELING, Bakti Sosial, CERDIK, Stop Gratifikasi, dll) + berbagi ke WhatsApp. Dikelola admin. |
-| **Panel Admin** (`/admin`) | Login ber-cookie HMAC: statistik (grafik volume chat 14 hari, topik terbanyak), manajemen tiket keluhan (tanggapi + WA balasan), manajemen permintaan Home Care, kelola kampanye, **Pengaturan AI** (preset PrivateLM/Ollama/llama.cpp/LM Studio/OpenAI/Kimi/OpenRouter, uji koneksi, mode offline). |
+| **Panel Admin** (`/admin`) | Login ber-cookie HMAC: statistik (grafik volume chat 14 hari, topik terbanyak), manajemen tiket keluhan (tanggapi + WA balasan), manajemen permintaan Home Care, kelola kampanye, **Pengaturan AI** (preset Jan/Ollama/llama.cpp/LM Studio/OpenAI/Kimi/OpenRouter, uji koneksi, mode offline). |
 | **API publik** | `/api/health`, `/api/jadwal`, `/api/tarif`, `/api/kampanye`, `/api/keluhan`, `/api/homecare`, SSE `/api/chat`, `/api/conversations*`. |
 
 ## Teknologi
@@ -28,14 +28,14 @@ SOERA AI menjawab pertanyaan dan keluhan masyarakat secara cepat — **keluhan p
 - **Next.js 14** (App Router, React 18, TypeScript, Tailwind CSS) — SSR + API routes, tanpa layanan eksternal.
 - **SQLite bawaan Node** (`node:sqlite`) — persistensi percakapan, tiket, campaign, konfigurasi. Tanpa dependensi native; folder data: `data/` (dapat diatur via `SAPA_DATA_DIR`).
 - **RAG offline** (retrieval berbasis kata kunci + intent detection) — `src/lib/rag.ts`.
-- **OpenAI-compatible streaming client** — `src/lib/llm.ts` (SSE), 100% kompatibel dengan API server PrivateLM.
+- **OpenAI-compatible streaming client** — `src/lib/llm.ts` (SSE), 100% kompatibel dengan Local API Server Jan dan endpoint OpenAI-compatible lainnya.
 - Seluruh aset lokal (logo, ikon, PDF SK) — tidak ada CDN eksternal; bisa jalan tanpa internet.
 
 ## Prasyarat
 
 - **Node.js ≥ 22.5** (dibutuhkan untuk `node:sqlite`). Disarankan Node 22 LTS terbaru.
 - npm ≥ 10.
-- Untuk AI generatif offline (opsional): perangkat dengan [PrivateLM (cross-platform-llm-client)](https://github.com/orailnoor/cross-platform-llm-client) terinstal (Android/iOS/iPad/PC) atau runtime GGUF lain.
+- Untuk AI generatif offline (opsional): komputer dengan [Jan (janhq/jan)](https://github.com/janhq/jan) terinstal (Windows/macOS/Linux), atau runtime OpenAI-compatible lain (Ollama, llama-server, LM Studio).
 
 ## Menjalankan (pengembangan)
 
@@ -77,7 +77,7 @@ docker run -p 3000:3000 -v soera-data:/data soera-ai
 | `SOERA_RATE_PUBLIC_POST_WINDOW_MS` | `3600000` | Window limit pengiriman publik (1 jam) |
 | `SAPA_DATA_DIR` | `./data` | Lokasi file SQLite |
 
-## Mode Offline & Integrasi PrivateLM (cross-platform-llm-client)
+## Mode Offline & Integrasi Jan (janhq/jan)
 
 Arsitektur tanya-jawab:
 
@@ -88,22 +88,23 @@ Pertanyaan pasien
   → AI nonaktif / endpoint gagal / key salah? → jawaban basis pengetahuan (fallback otomatis + catatan)
 ```
 
-**Langkah mengaktifkan AI offline dengan PrivateLM:**
+**Langkah mengaktifkan AI offline dengan Jan:**
 
-1. Pasang & jalankan **PrivateLM** dari <https://github.com/orailnoor/cross-platform-llm-client> (unduh APK/IPA dari halaman Releases, atau build via Flutter: `flutter build apk --release`).
-2. Unduh model GGUF (disarankan Qwen2.5-1.5B-Instruct / Llama-3.2-1B/3B `Q4_K_M`; HP/PC RAM 4–8 GB cukup) dan **muat model** hingga status *loaded*.
-3. Di PrivateLM buka **Settings → API Server**: aktifkan **Allow network access**, isi **API key** (wajib untuk mode jaringan), port tetap **8080**.
-4. Catat alamat yang tampil di layar server (mis. `http://192.168.1.10:8080`) — SOERA AI dan perangkat PrivateLM harus **satu jaringan** (LAN/WiFi RS).
-5. Login ke `/admin` → tab **Pengaturan AI (Offline)** → pilih preset **PrivateLM**, isi Base URL `http://<IP-perangkat>:8080/v1`, API key sama, model = nama model termuat (PrivateLM melayani model apa pun namanya) → **Uji Koneksi Sekarang** → aktifkan toggle → **Simpan**.
+1. Pasang **Jan** dari <https://github.com/janhq/jan> ([Windows `jan.exe`](https://app.jan.ai/download/latest/win-x64) / [macOS `jan.dmg`](https://app.jan.ai/download/latest/mac-universal) / Linux `jan.deb`·AppImage·Flatpak).
+2. Di tab **Hub**, unduh model GGUF (disarankan **Qwen2.5-3B-Instruct `Q4_K_M`** untuk RAM 8 GB, atau 7B untuk 16 GB) dan **muat model** di chat.
+3. Jan → **Settings → Local API Server** → pilih model → **Start Server** (log: `JAN API listening at http://127.0.0.1:1337`).
+4. Endpoint OpenAI-compatible aktif di `http://127.0.0.1:1337/v1` (loopback default; set Host `0.0.0.0` bila SOERA AI di mesin lain di LAN RS).
+5. Login ke `/admin` → tab **Pengaturan AI (Offline)** → pilih preset **Jan**, isi Base URL `http://127.0.0.1:1337/v1` (atau `http://<IP-PC-Jan>:1337/v1`), Model = model id dari `GET /v1/models` (mis. `qwen2.5-3b-instruct`), API key bebas (mis. `jan`) → **Uji Koneksi Sekarang** → aktifkan toggle → **Simpan**.
+
+Catatan: Jan adalah aplikasi **desktop (GUI)** — untuk server produksi 24/7 disarankan Ollama sebagai Windows Service (lihat [`docs/DEPLOYMENT-PUBLIK.md`](docs/DEPLOYMENT-PUBLIK.md) §2C). Jan paling cocok untuk PC petugas/pilot/demo. Tidak ada versi Android/iOS resmi.
 
 Selesai — seluruh tanya-jawab kini 100% offline di infrastruktur RS. Contoh uji manual:
 
 ```bash
-curl http://192.168.1.10:8080/v1/health            # {"status":"ok"}
-curl http://192.168.1.10:8080/v1/models             # daftar model termuat
-curl -X POST http://192.168.1.10:8080/v1/chat/completions \
-  -H "Authorization: Bearer <API_KEY>" -H "Content-Type: application/json" \
-  -d '{"model":"model-lokal-privatelm","messages":[{"role":"user","content":"halo"}],"stream":true}'
+curl http://127.0.0.1:1337/v1/models              # model id yang dikenali server Jan
+curl -X POST http://127.0.0.1:1337/v1/chat/completions \
+  -H "Authorization: Bearer jan" -H "Content-Type: application/json" \
+  -d '{"model":"qwen2.5-3b-instruct","messages":[{"role":"user","content":"halo"}],"stream":true}'
 ```
 
 Preset lain tersedia di panel: Ollama (`http://localhost:11434/v1`), llama.cpp `llama-server` (`http://localhost:8080/v1`), LM Studio (`http://localhost:1234/v1`), OpenAI, Kimi/Moonshot, OpenRouter.
@@ -120,7 +121,7 @@ src/
     jadwal.ts          # ±55 baris jadwal poliklinik (update 12 Mei 2026)
     rag.ts             # Retrieval + intent detection
     offline.ts         # Penyusun jawaban deterministik (mode offline)
-    llm.ts             # Klien OpenAI-compatible streaming (PrivateLM dkk)
+    llm.ts             # Klien OpenAI-compatible streaming (Jan/Ollama dkk)
     db.ts              # SQLite (node:sqlite) + migrasi + seed kampanye/pengaturan
     settings.ts auth.ts llm settings, autentikasi cookie admin
 public/documents/      # SK Tarif Home Care (PDF asli, dapat diunduh dari aplikasi)
@@ -144,7 +145,7 @@ test/rag-test.mjs      # 32 pengujian basis pengetahuan & retrieval
 
 ## Dokumentasi
 
-- [`docs/PANDUAN-INSTALL-PRIVATELM.md`](docs/PANDUAN-INSTALL-PRIVATELM.md) — panduan langkah demi langkah memasang PrivateLM (aplikasi AI lokal/offline OpenAI-compatible) di Android/iOS dan menyambungkannya ke SOERA AI.
+- [`docs/PANDUAN-INSTALL-JAN.md`](docs/PANDUAN-INSTALL-JAN.md) — panduan langkah demi langkah memasang Jan (aplikasi AI lokal/offline OpenAI-compatible) di Windows/macOS/Linux dan menyambungkannya ke SOERA AI.
 - [`docs/DEPLOYMENT-PUBLIK.md`](docs/DEPLOYMENT-PUBLIK.md) — arsitektur & checklist publikasi SOERA AI di IP publik (HTTPS, firewall, reverse proxy, LLM lokal di server, keamanan & UU PDP).
 - [`docs/AI-AGENT.md`](docs/AI-AGENT.md) — screening GitHub framework AI Agent (vercel/ai vs langchainjs/langgraph/LlamaIndex/privateGPT/RAGFlow) + arsitektur agen tool-calling & kuota 5/hari.
 
@@ -156,4 +157,4 @@ test/rag-test.mjs      # 32 pengujian basis pengetahuan & retrieval
 
 ## Lisensi & Kredit
 
-Aplikasi dibangun untuk RSUP Dr. Soeradji Tirtonegoro Klaten. Integrasi AI offline: [orailnoor/cross-platform-llm-client](https://github.com/orailnoor/cross-platform-llm-client) (MIT). Logo SOERA AI dibuat khusus untuk aplikasi ini.
+Aplikasi dibangun untuk RSUP Dr. Soeradji Tirtonegoro Klaten. Integrasi AI offline: [janhq/jan](https://github.com/janhq/jan) (Apache-2.0). Logo SOERA AI dibuat khusus untuk aplikasi ini.

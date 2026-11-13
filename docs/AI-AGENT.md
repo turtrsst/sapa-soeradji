@@ -6,7 +6,7 @@
 
 | Repositori | ⭐ | Tipe | Evaluasi untuk SOERA AI |
 |---|---|---|---|
-| [vercel/ai](https://github.com/vercel/ai) (AI SDK) | **27.898** | Library TS (embeddable) | ✅ **Dipilih.** Dibuat tim Next.js; `streamText` + `tool()` + `stepCountIs`; provider OpenAI-compatible (`createOpenAI` → `openai.chat(model)`) — kompatibel dengan **Ollama** (`localhost:11434/v1`), **PrivateLM** (`:8080/v1`), llama.cpp, LM Studio. Streaming SSE, tool-calling, stop-condition bawaan. Terpasang: `ai@7.0.171`, `@ai-sdk/openai@4.0.116`, `zod@4.6.7`. |
+| [vercel/ai](https://github.com/vercel/ai) (AI SDK) | **27.898** | Library TS (embeddable) | ✅ **Dipilih.** Dibuat tim Next.js; `streamText` + `tool()` + `stepCountIs`; provider OpenAI-compatible (`createOpenAI` → `openai.chat(model)`) — kompatibel dengan **Ollama** (`localhost:11434/v1`), **Jan** (`:1337/v1`), llama.cpp, LM Studio. Streaming SSE, tool-calling, stop-condition bawaan. Terpasang: `ai@7.0.171`, `@ai-sdk/openai@4.0.116`, `zod@4.6.7`. |
 | [langchain-ai/langchainjs](https://github.com/langchain-ai/langchainjs) | 18.341 | Library TS (framework) | ⚠️ Mampu (agent & tool), tapi jauh lebih berat & abstrak; banyak paket `@langchain/*` terpisah; overkill untuk 4 tool read-only. Cadangan bila kelak butuh chain/RAG kompleks. |
 | [langchain-ai/langgraphjs](https://github.com/langchain-ai/langgraphjs) | 3.415 | Orkestrasi graph | ❌ Multi-step graph/multi-agent — tidak dibutuhkan sekarang. |
 | [run-llama/LlamaIndexTS](https://github.com/run-llama/LlamaIndexTS) | 3.081 | Framework RAG TS | ⚠️ Unggul untuk RAG dokumen; KB kita sudah custom (retrieval + intent sendiri). Duplikasi. |
@@ -14,7 +14,7 @@
 | [infiniflow/ragflow](https://github.com/infiniflow/ragflow) | 94.095 | **Platform RAG penuh** (Docker, ES, dll.) | ❌ Infrastruktur berat; cocok produk data, bukan chatbot RS embedded. |
 | h2oai/h2ogpt (11.922 ⭐), AutoGPT/AgentGPT (produk konsumen) | — | Service/produk | ❌ Bukan embed-lib; mis-scope untuk layanan terarah RS. |
 
-Kriteria: bisa di-embed di Next.js (App Router) · OpenAI-compatible (offline Ollama/PrivateLM) · tool-calling · streaming · lisensi MIT · aktif ter-update.
+Kriteria: bisa di-embed di Next.js (App Router) · OpenAI-compatible (offline Ollama/Jan) · tool-calling · streaming · lisensi MIT · aktif ter-update.
 
 ## 2. Arsitektur yang dipasang
 
@@ -56,13 +56,13 @@ Prinsip: **agen tidak boleh mengarang data RS** — jawaban faktual wajib dari t
 
 ## 5. Cara mengaktifkan
 
-1. Jalankan endpoint OpenAI-compatible (Ollama `ollama pull qwen2.5:3b` → `:11434/v1`, atau PrivateLM `:8080/v1`, atau llama-server/cloud).
+1. Jalankan endpoint OpenAI-compatible (Ollama `ollama pull qwen2.5:3b` → `:11434/v1`, atau Jan → Settings → Local API Server → `:1337/v1`, atau llama-server/cloud).
 2. `/admin` → **Pengaturan AI** → pilih preset (mis. *Ollama (lokal)*) → isi Model → **Uji Koneksi** → **Simpan** → aktifkan.
 3. Pasien bertanya di `/chat`. Pertanyaan bebas ditandai kuota 5/hari di antarmuka; sisa kuota terlihat setelah tiap jawaban.
 
 ## 6. Batasan & kejujuran
 
 - Agen memilih tool sendiri — kualitas pemilihan tergantung model (Qwen2.5-3B ke atas cukup andal untuk 4 tool; model lebih kecil bisa salah pilih — naikkan ke 7B bila tersedia).
-- Tool-calling butuh endpoint yang mendukung `tools` (Ollama/OpenAI/llama-server mendukung; PrivateLM ikut standar OpenAI — bila build lama belum mendukung tool-calling, jawaban tetap mengalir sebagai teks sepanjang model mendeskripsikan kebutuhan tool-nya — naik/upgrade bila perlu).
+- Tool-calling butuh endpoint yang mendukung `tools` (Ollama/OpenAI/llama-server/Jan mendukung — Jan ikut standar OpenAI; bila model lokal belum stabil memanggil tool, jawaban tetap mengalir sebagai teks — naikkan ukuran model bila perlu).
 - Kuota per IP ≠ per orang; terapkan login bila perlu pengukuran individual.
 - 5/hari adalah kebijakan produk (hemat + anti-abuse), bukan batas teknis endpoint — ubah `SOERA_AI_DAILY_LIMIT` bila RS ingin lain.

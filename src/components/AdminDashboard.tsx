@@ -8,8 +8,8 @@ import { JADWAL_UPDATE } from '@/lib/jadwal';
 type Tab = 'ringkasan' | 'keluhan' | 'homecare' | 'kampanye' | 'ai';
 
 const PROVIDER_PRESETS: { name: string; baseUrl: string; model: string; note: string }[] = [
-  { name: 'PrivateLM API Server (Offline — perangkat ini/LAN)', baseUrl: 'http://localhost:8080/v1', model: 'model-lokal-privatelm', note: 'Jalankan PrivateLM (cross-platform-llm-client) di HP/PC, muat model GGUF, aktifkan API Server + Allow network + API key. SOERA AI server menghubungi endpoint ini — tanpa internet.' },
-  { name: 'PrivateLM di perangkat lain (LAN/WiFi)', baseUrl: 'http://192.168.1.10:8080/v1', model: 'model-lokal-privatelm', note: 'Ganti 192.168.1.10 dengan IP perangkat menjalankan PrivateLM (terlihat di layar server PrivateLM). Wajib Allow network + API key.' },
+  { name: 'Jan (Local API Server — offline, komputer ini)', baseUrl: 'http://127.0.0.1:1337/v1', model: 'qwen2.5-3b-instruct', note: 'Jalankan Jan (github.com/janhq/jan) di Windows/macOS/Linux, unduh model GGUF dari Hub, Settings → Local API Server → Start Server. Tanpa internet setelah model termuat. API key boleh string apa pun (mis. jan).' },
+  { name: 'Jan di perangkat lain (LAN, Host 0.0.0.0)', baseUrl: 'http://192.168.1.10:1337/v1', model: 'qwen2.5-3b-instruct', note: 'Ganti 192.168.1.10 dengan IP PC tempat Jan berjalan; di Jan set Host 0.0.0.0 di Local API Server. Hanya untuk LAN internal RS — jangan pernah expose port 1337 ke internet.' },
   { name: 'Ollama (lokal)', baseUrl: 'http://localhost:11434/v1', model: 'qwen2.5:3b', note: 'Endpoint OpenAI-compatible bawaan Ollama (localhost:11434). Pastikan model sudah di-pull: ollama pull qwen2.5:3b. Tidak butuh API key (kosongkan / isi bebas).' },
   { name: 'llama.cpp llama-server (lokal)', baseUrl: 'http://localhost:8080/v1', model: 'gguf-model', note: 'llama-server -m model.gguf --port 8080 --api-key <key>' },
   { name: 'LM Studio (lokal)', baseUrl: 'http://localhost:1234/v1', model: 'local-model', note: 'Aktifkan "Local Server" di LM Studio.' },
@@ -328,8 +328,8 @@ export default function AdminDashboard() {
 
             <div><label className="label">Nama penyedia</label><input className="input" value={llm.provider} onChange={(e) => setLlm({ ...llm, provider: e.target.value })} /></div>
             <div className="grid sm:grid-cols-5 gap-3">
-              <div className="sm:col-span-3"><label className="label">Base URL (OpenAI-compatible /v1)</label><input className="input font-mono text-xs" value={llm.baseUrl} onChange={(e) => setLlm({ ...llm, baseUrl: e.target.value })} placeholder="http://localhost:8080/v1" /></div>
-              <div className="sm:col-span-2"><label className="label">Model</label><input className="input font-mono text-xs" value={llm.model} onChange={(e) => setLlm({ ...llm, model: e.target.value })} placeholder="model-lokal-privatelm" /></div>
+              <div className="sm:col-span-3"><label className="label">Base URL (OpenAI-compatible /v1)</label><input className="input font-mono text-xs" value={llm.baseUrl} onChange={(e) => setLlm({ ...llm, baseUrl: e.target.value })} placeholder="http://127.0.0.1:1337/v1" /></div>
+              <div className="sm:col-span-2"><label className="label">Model</label><input className="input font-mono text-xs" value={llm.model} onChange={(e) => setLlm({ ...llm, model: e.target.value })} placeholder="qwen2.5-3b-instruct" /></div>
             </div>
             <div className="grid sm:grid-cols-2 gap-3">
               <div><label className="label">API Key {llm.hasApiKey && <span className="text-emerald-600 normal-case">(tersimpan: {llm.apiKey})</span>}</label><input className="input font-mono text-xs" type="password" value={llm.apiKey?.startsWith('••••') ? '' : llm.apiKey} onChange={(e) => setLlm({ ...llm, apiKey: e.target.value })} placeholder={llm.hasApiKey ? 'Isi untuk mengganti key' : 'Kosongkan bila endpoint tanpa key'} autoComplete="new-password" /></div>
@@ -353,23 +353,23 @@ export default function AdminDashboard() {
             )}
           </form>
 
-          {/* Panduan offline PrivateLM */}
+          {/* Panduan offline Jan */}
           <div className="lg:col-span-5 space-y-4">
             <div className="card p-5 border-gold-400/50">
-              <p className="font-extrabold text-rst-900 flex items-center gap-2"><Icon name="wifiOff" size={17} className="text-gold-600" /> Offline dengan PrivateLM (cross-platform-llm-client)</p>
-              <p className="mt-1.5 text-[11px] text-rst-600">Jalankan model GGUF sepenuhnya di perangkat (Android/iOS/iPad/PC) tanpa internet — SOERA AI menempel ke API server OpenAI-compatible bawaan PrivateLM (port 8080).</p>
+              <p className="font-extrabold text-rst-900 flex items-center gap-2"><Icon name="wifiOff" size={17} className="text-gold-600" /> Offline dengan Jan (janhq/jan)</p>
+              <p className="mt-1.5 text-[11px] text-rst-600">Jalankan model GGUF sepenuhnya di komputer (Windows/macOS/Linux) tanpa internet — SOERA AI menempel ke Local API Server OpenAI-compatible bawaan Jan (port 1337).</p>
               <ol className="mt-3 space-y-2 text-[11.5px] text-rst-800 leading-relaxed list-none">
                 {[
-                  'Pasang PrivateLM (github.com/orailnoor/cross-platform-llm-client) di Android/iOS, atau build via Flutter.',
-                  'Unduh model GGUF (mis. Qwen2.5-1.5B-Instruct/Llama-3.2-1B/3B Q4_K_M — aman untuk RAM 4–8 GB).',
-                  'Muat model sampai status "Loaded" (chat internal PrivateLM bisa menjawab).',
-                  'Buka pengaturan → API Server → aktifkan "Allow network access" + isi API key (wajib untuk jaringan).',
-                  'Catat alamat server yang tampil, format: http://<IP-perangkat>:8080',
-                  'Isi Base URL: http://<IP-perangkat>:8080/v1 dan API key yang sama di formulir sebelah, model: nama model yang termuat (PrivateLM melayani model apa pun namanya).',
+                  'Pasang Jan (github.com/janhq/jan): jan.exe (Windows), jan.dmg (macOS), atau jan.deb/AppImage/Flatpak (Linux).',
+                  'Di tab Hub, unduh model GGUF (mis. Qwen2.5-3B-Instruct Q4_K_M — aman untuk RAM 8 GB; 7B untuk 16 GB).',
+                  'Pilih model di chat — Jan memuatnya (chat internal Jan bisa menjawab).',
+                  'Settings → Local API Server → pilih model → Start Server (log: "JAN API listening at http://127.0.0.1:1337").',
+                  'Bila SOERA AI di mesin lain: set Host 0.0.0.0 di Local API Server + catat IP PC tersebut (LAN RS).',
+                  'Isi Base URL: http://127.0.0.1:1337/v1 (satu mesin) atau http://<IP-PC>:1337/v1 (LAN). Model: model id dari `GET /v1/models` (mis. qwen2.5-3b-instruct); API key bebas (mis. jan).',
                   'Klik "Uji Koneksi Sekarang" — bila ✓, aktifkan toggle mesin AI dan Simpan. Semua tanya-jawab kini 100% offline di server RS.',
                 ].map((s, i) => <li key={i} className="flex gap-2"><span className="font-black text-rst-400">{i + 1}.</span>{s}</li>)}
               </ol>
-              <p className="mt-3 text-[10px] text-rst-500">Catatan: server SOERA AI dan perangkat PrivateLM harus satu jaringan (LAN/WiFi RS). Tanpa AI sekalipun, jawaban dasar tetap tersedia dari basis pengetahuan lokal (jadwal, tarif, kontak, pendaftaran, dll).</p>
+              <p className="mt-3 text-[10px] text-rst-500">Catatan: Jan adalah aplikasi desktop (GUI) — butuh sesi desktop yang berjalan; untuk server produksi 24/7 gunakan Ollama sebagai service (lihat docs/DEPLOYMENT-PUBLIK.md §2C). Tanpa AI sekalipun, jawaban dasar tetap tersedia dari basis pengetahuan lokal (jadwal, tarif, kontak, pendaftaran, dll).</p>
               <p className="mt-2 text-[10px] text-rst-500">Kuota AI publik: <strong>pertanyaan bebas</strong> (di luar template) dibatasi <strong>5/pengguna/hari</strong>, reset 00.00 WIB — pengguna di-hash anonim (IP tidak disimpan). Pertanyaan layanan (jadwal/tarif/home care/kampanye/pendaftaran) tidak dikenakan kuota.</p>
             </div>
             <div className="card p-5">

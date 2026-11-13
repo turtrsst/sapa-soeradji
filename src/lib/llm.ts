@@ -1,5 +1,5 @@
 // Klien OpenAI-compatible — kompatibel dengan:
-//  • PrivateLM (orailnoor/cross-platform-llm-client) API Server → mode OFFLINE/on-device (port 8080, /v1)
+//  • Jan (janhq/jan) Local API Server → mode OFFLINE/on-device (port 1337, /v1) · Ollama (:11434/v1) · llama.cpp (:8080/v1)
 //  • llama.cpp llama-server, Ollama (/v1), LM Studio, vLLM
 //  • Cloud: OpenAI, Kimi/Moonshot, OpenRouter, dll (selama OpenAI-compatible)
 import { getLlmConfig, type LlmConfig } from './settings';

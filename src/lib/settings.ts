@@ -13,10 +13,10 @@ export interface LlmConfig {
 
 const DEFAULT_CONFIG: LlmConfig = {
   enabled: false,
-  provider: 'PrivateLM (cross-platform-llm-client) API Server — Mode Offline',
-  baseUrl: 'http://localhost:8080/v1',
+  provider: 'Jan (janhq/jan) Local API Server — Mode Offline',
+  baseUrl: 'http://127.0.0.1:1337/v1',
   apiKey: '',
-  model: 'model-lokal-privatelm',
+  model: 'qwen2.5-3b-instruct',
   temperature: 0.4,
   maxTokens: 900,
   timeoutMs: 60000,

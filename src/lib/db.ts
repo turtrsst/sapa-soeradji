@@ -121,15 +121,36 @@ function seedDefaults(db: DatabaseSync) {
     const ins = db.prepare('INSERT INTO settings (key, value) VALUES (?, ?)');
     ins.run('llm_config', JSON.stringify({
       enabled: false,
-      provider: 'PrivateLM (cross-platform-llm-client) API Server — Mode Offline',
-      baseUrl: 'http://localhost:8080/v1',
+      provider: 'Jan (janhq/jan) Local API Server — Mode Offline',
+      baseUrl: 'http://127.0.0.1:1337/v1',
       apiKey: '',
-      model: 'model-lokal-privatelm',
+      model: 'qwen2.5-3b-instruct',
       temperature: 0.4,
       maxTokens: 900,
       timeoutMs: 60000,
     }));
   }
+  // Migrasi satu kali: config LLM bawaan lama ("PrivateLM") → preset Jan.
+  // Hanya menyentuh konfigurasi yang PERSIS template bawaan (belum diubah admin):
+  // provider masih "PrivateLM (cross-platform-llm-client)..." + model model-lokal-privatelm + belum enabled.
+  try {
+    const row = db.prepare("SELECT value FROM settings WHERE key = 'llm_config'").get() as { value: string } | undefined;
+    if (row) {
+      const cfg = JSON.parse(row.value);
+      const isLegacyDefault =
+        cfg && cfg.enabled === false &&
+        typeof cfg.provider === 'string' && cfg.provider.startsWith('PrivateLM (cross-platform-llm-client)') &&
+        cfg.model === 'model-lokal-privatelm';
+      if (isLegacyDefault) {
+        db.prepare("UPDATE settings SET value = ? WHERE key = 'llm_config'").run(JSON.stringify({
+          ...cfg,
+          provider: 'Jan (janhq/jan) Local API Server — Mode Offline',
+          baseUrl: 'http://127.0.0.1:1337/v1',
+          model: 'qwen2.5-3b-instruct',
+        }));
+      }
+    }
+  } catch { /* jangan gagalkan startup karena migrasi */ }
 }
 
 export function uid(): string {

@@ -1,4 +1,4 @@
-// Agen AI SOERA AI — tool-calling di atas endpoint OpenAI-compatible (Ollama/PrivateLM/
+// Agen AI SOERA AI — tool-calling di atas endpoint OpenAI-compatible (Ollama/Jan/
 // llama.cpp/LM Studio/OpenAI) memakai Vercel AI SDK (package `ai` + `@ai-sdk/openai`).
 // Agen WAJIB memakai tool untuk data RS (jadwal/tarif/kampanye/info) — dilarang mengarang.
 // Per tanya-jawab, agen hanya resmi dipakai untuk "pertanyaan bebas" (intent general);

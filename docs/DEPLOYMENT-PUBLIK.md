@@ -1,7 +1,7 @@
 # Publikasi SOERA AI di IP Publik — Arsitektur & Checklist
 
 > Dokumen ini menjawab: *"kalau yang diinstall di web? Kan rencananya sistem ini akan dipublikkan IP publik untuk pasien."*
-> Ringkasnya: **PrivateLM tidak bisa "diinstall di server web"** — ia aplikasi mobile. Tapi integrasinya tetap bisa, karena SOERA AI memanggil LLM **dari sisi server**, dan engine yang dipakai PrivateLM (llama.cpp) tersedia juga untuk Linux.
+> Ringkasnya: **Jan (janhq/jan) pun aplikasi desktop (GUI)** — tidak bisa "diinstall sebagai service" di server web headless. Tapi integrasinya tetap bisa, karena SOERA AI memanggil LLM **dari sisi server**; dan untuk server yang disarankan dipakai **Ollama** (jalan sebagai service) atau **llama-server** (llama.cpp — engine yang juga dipakai Jan). Jan tetap bisa dipasang di PC petugas/pilot sebagai mesin AI LAN.
 
 ---
 
@@ -19,16 +19,16 @@ Browser pasien ──HTTPS(443)──> Reverse proxy (Caddy/Nginx)
 
 - Kunci API LLM **tidak pernah** menyentuh browser pasien; semua panggilan `/api/chat` → LLM terjadi di server.
 - Port LLM (8080) dan port Next.js (3000) **tidak perlu — dan tidak boleh — dibuka ke internet**. Hanya 443 (dan 80 untuk redirect) yang publik.
-- Ini pola yang sama persis dengan PrivateLM di HP; hanya lokasi endpoint-nya berbeda (localhost/LAN, bukan 192.168.x.x HP).
+- Ini pola yang sama dengan Jan di PC petugas; hanya lokasi endpoint-nya berbeda (localhost/LAN, bukan 192.168.x.x PC).
 
 ## 2. Opsi LLM untuk deployment publik
 
 | Opsi | Kapan dipakai | Catatan |
 |---|---|---|
-| **A. llama-server di mesin yang sama** *(disarankan)* | Server publik sekaligus menjadi "mesin AI" | llama.cpp = engine di balik PrivateLM; OpenAI-compatible `/v1/chat/completions`. Model GGUF yang sama bisa dipakai (mis. Qwen2.5-1.5B/3B **Q4_K_M**). CPU-only cukup untuk model kecil; RAM 8–16 GB nyaman. |
+| **A. llama-server di mesin yang sama** *(disarankan)* | Server publik sekaligus menjadi "mesin AI" | llama.cpp = engine di balik Jan; OpenAI-compatible `/v1/chat/completions`. Model GGUF yang sama bisa dipakai (mis. Qwen2.5-1.5B/3B **Q4_K_M**). CPU-only cukup untuk model kecil; RAM 8–16 GB nyaman. |
 | **B. Mesin/VM/GPU khusus di LAN RST** | RS punya GPU/workstation di datacenter | Web server publik → LLM hanya boleh diakses dari IP web server (firewall/UFW atau bind LAN + allowlist). |
 | **C. Tanpa LLM (mode Offline KB)** | Langsung go-live tanpa menunggu pengadaan | Chatbot menjawab dari basis pengetahuan resmi RST + edukasi kesehatan umum; pertanyaan di luar KB dijawab jujur + hotline. **Sudah berfungsi penuh hari ini.** |
-| **D. HP PrivateLM via WiFi RS** | Demo / pilot saja | **Tidak disarankan 24/7 publik**: baterai, layar, WiFi putus, reboot untuk update, dan IP HP berubah. |
+| **D. PC petugas dengan Jan via LAN RS** | Demo / pilot saja | Jan = aplikasi desktop GUI; mesin harus menyala dengan sesi desktop aktif. **Tidak disarankan 24/7 publik**: tidur/reboot, update app, dan IP PC berubah (pakai DHCP reservation). |
 
 Opsi cloud (OpenAI/dll.) tetap tersedia di **/admin → Pengaturan AI** bila RS mengizinkan — dengan catatan privasi di §5.
 
@@ -66,7 +66,9 @@ Jika Anda **bisa RDP ke komputer server**, mesin itu bisa jadi host LLM (dan sek
 
 ## 2C. Komputer server Windows RS sudah ada Ollama (jalur tercepat)
 
-Jika di mesin RDP Anda sudah terinstall **Ollama**, tidak perlu install llama.cpp/PrivateLM — Ollama sudah menyajikan endpoint OpenAI-compatible `http://localhost:11434/v1`. Urutan kerja (PowerShell di dalam sesi RDP):
+> Butuh mesin AI cepat untuk demo/pilot tanpa mengubah server? Pasang **Jan** di PC petugas (lihat [`PANDUAN-INSTALL-JAN.md`](PANDUAN-INSTALL-JAN.md)) dan arahkan Pengaturan AI ke `http://<IP-PC>:1337/v1`. Catatan: Jan adalah GUI — mesin harus menyala & tidak sleep.
+
+Jika di mesin RDP Anda sudah terinstall **Ollama**, tidak perlu install llama.cpp/Jan — Ollama sudah menyajikan endpoint OpenAI-compatible `http://localhost:11434/v1`. Urutan kerja (PowerShell di dalam sesi RDP):
 
 1. **Cek Ollama jalan** (ikon di system tray / Task Manager: `ollama.exe`). Bila belum: Start Menu → **Ollama**.
 2. **Lihat model yang sudah ada**: `ollama list`
@@ -158,7 +160,7 @@ WantedBy=multi-user.target
 ```
 
 ### 3.5 Hubungkan SOERA AI ke LLM lokal
-`/admin` → **Pengaturan AI** → preset *llama.cpp / LocalAI (OpenAI-compatible)* → Base URL `http://127.0.0.1:8080/v1`, API Key = key di §3.2, Model = nama model. **Uji Koneksi Sekarang** → **Simpan** → aktifkan. Perilakunya identik dengan PrivateLM di HP — hanya endpoint-nya yang lokal.
+`/admin` → **Pengaturan AI** → preset *llama.cpp / LocalAI (OpenAI-compatible)* → Base URL `http://127.0.0.1:8080/v1`, API Key = key di §3.2, Model = nama model. **Uji Koneksi Sekarang** → **Simpan** → aktifkan. Perilakunya identik dengan Jan di PC — hanya endpoint-nya yang lokal.
 
 ## 4. DNS & firewall
 
