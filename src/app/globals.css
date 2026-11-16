@@ -64,3 +64,12 @@ body { background: #f4f8f7; color: #12312e; -webkit-font-smoothing: antialiased;
   main { padding: 0 !important; }
   .card { box-shadow: none; border: 1px solid #ddd; }
 }
+
+/* ===== msg-md: tabel & elemen GFM (react-markdown + remark-gfm) ===== */
+.msg-md table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin: 0.4rem 0 0.7rem; overflow: hidden; border-radius: 0.6rem; }
+.msg-md th, .msg-md td { border: 1px solid rgba(31,127,120,0.25); padding: 0.35rem 0.55rem; text-align: left; vertical-align: top; }
+.msg-md th { background: rgba(31,127,120,0.10); font-weight: 700; }
+.msg-md tr:nth-child(even) td { background: rgba(31,127,120,0.04); }
+.msg-md hr { border: none; border-top: 1px solid rgba(31,127,120,0.25); margin: 0.6rem 0; }
+.msg-md ol { padding-left: 1.25rem; margin: 0.25rem 0 0.6rem; list-style: decimal; }
+.msg-md blockquote { border-left: 3px solid #1f7f78; padding-left: 0.7rem; margin: 0.4rem 0; opacity: 0.9; }

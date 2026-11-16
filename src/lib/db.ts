@@ -130,6 +130,15 @@ function seedDefaults(db: DatabaseSync) {
       timeoutMs: 60000,
     }));
   }
+  // Migrasi: kolom owner untuk isolasi percakapan anonim (UU PDP — percakapan pasien
+  // tidak boleh terlihat pengunjung lain). Baris lama dibiarkan owner='' (tidak terlihat publik).
+  try {
+    const cols = db.prepare('PRAGMA table_info(conversations)').all() as { name: string }[];
+    if (!cols.some((c) => c.name === 'owner')) {
+      db.prepare("ALTER TABLE conversations ADD COLUMN owner TEXT NOT NULL DEFAULT ''").run();
+    }
+  } catch { /* jangan gagalkan startup karena migrasi */ }
+
   // Migrasi satu kali: config LLM bawaan lama ("PrivateLM") → preset Jan.
   // Hanya menyentuh konfigurasi yang PERSIS template bawaan (belum diubah admin):
   // provider masih "PrivateLM (cross-platform-llm-client)..." + model model-lokal-privatelm + belum enabled.

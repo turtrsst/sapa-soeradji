@@ -4,6 +4,7 @@ import { RATE_CHAT_LIMIT, RATE_CHAT_WINDOW, rateLimit, rateLimitKey, rateLimitHe
 import { streamAgent } from '@/lib/agent';
 import { SYSTEM_PROMPT, streamLlm, type ChatMessage } from '@/lib/llm';
 import { getLlmConfig } from '@/lib/settings';
+import { ensureOwnerKey, ownerCookieHeader } from '@/lib/owner';
 import { retrieve, detectIntent, matchJadwal, matchTarif, formatJadwalLines, formatTarifLines } from '@/lib/rag';
 import { composeOfflineAnswer } from '@/lib/offline';
 import { TARIF_META } from '@/lib/tarif';
@@ -25,20 +26,22 @@ export async function POST(req: Request) {
   if (!message) return json({ error: 'Pesan kosong' }, 400);
   if (message.length > 4000) return json({ error: 'Pesan terlalu panjang (maks 4000 karakter)' }, 400);
 
+  const { key: owner, isNew: ownerIsNew } = ensureOwnerKey(req.headers);
   const db = getDb();
   const now = Date.now();
   let conversationId: string = String(body?.conversationId ?? '').trim();
   let title = '';
+  // Percakapan milik pengunjung LAIN diabaikan → dibuat percakapan baru untuk pengunjung ini
   const existing = conversationId
-    ? (db.prepare('SELECT id, title FROM conversations WHERE id = ?').get(conversationId) as { id: string; title: string } | undefined)
+    ? (db.prepare('SELECT id, title FROM conversations WHERE id = ? AND owner = ?').get(conversationId, owner) as { id: string; title: string } | undefined)
     : undefined;
   if (existing) {
     title = existing.title;
   } else {
     conversationId = uid();
     title = message.replace(/\s+/g, ' ').slice(0, 64) + (message.length > 64 ? '…' : '');
-    db.prepare('INSERT INTO conversations (id, title, pinned, created_at, updated_at) VALUES (?,?,?,?,?)')
-      .run(conversationId, title, 0, now, now);
+    db.prepare('INSERT INTO conversations (id, title, pinned, created_at, updated_at, owner) VALUES (?,?,?,?,?,?)')
+      .run(conversationId, title, 0, now, now, owner);
   }
 
   db.prepare('INSERT INTO messages (conversation_id, role, content, created_at) VALUES (?,?,?,?)')
@@ -155,15 +158,15 @@ export async function POST(req: Request) {
     },
   });
 
-  return new Response(stream, {
-    headers: {
-      'Content-Type': 'text/event-stream; charset=utf-8',
-      'Cache-Control': 'no-cache, no-transform',
-      'Connection': 'keep-alive',
-      'X-Accel-Buffering': 'no',
-      ...rateLimitHeaders(rl),
-    },
-  });
+  const sseHeaders: Record<string, string> = {
+    'Content-Type': 'text/event-stream; charset=utf-8',
+    'Cache-Control': 'no-cache, no-transform',
+    'Connection': 'keep-alive',
+    'X-Accel-Buffering': 'no',
+    ...rateLimitHeaders(rl),
+  };
+  if (ownerIsNew) sseHeaders['Set-Cookie'] = ownerCookieHeader(owner);
+  return new Response(stream, { headers: sseHeaders });
 }
 
 function json(obj: unknown, status = 200, extraHeaders: Record<string, string> = {}) {

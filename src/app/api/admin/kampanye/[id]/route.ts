@@ -3,12 +3,13 @@ import { isAdmin } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id: paramId } = await params;
   if (!(await isAdmin())) return Response.json({ error: 'Unauthorized' }, { status: 401 });
   let body: any;
   try { body = await req.json(); } catch { return Response.json({ error: 'Bad JSON' }, { status: 400 }); }
   const db = getDb();
-  const id = Number(params.id);
+  const id = Number(paramId);
   const row = db.prepare('SELECT * FROM campaigns WHERE id = ?').get(id) as any;
   if (!row) return Response.json({ error: 'Kampanye tidak ditemukan' }, { status: 404 });
   if (typeof body.active === 'boolean' || body.active === 0 || body.active === 1) {
@@ -25,9 +26,10 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   return Response.json({ ok: true });
 }
 
-export async function DELETE(_req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id: paramId } = await params;
   if (!(await isAdmin())) return Response.json({ error: 'Unauthorized' }, { status: 401 });
   const db = getDb();
-  db.prepare('DELETE FROM campaigns WHERE id = ?').run(Number(params.id));
+  db.prepare('DELETE FROM campaigns WHERE id = ?').run(Number(paramId));
   return Response.json({ ok: true });
 }
