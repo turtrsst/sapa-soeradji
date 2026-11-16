@@ -138,14 +138,20 @@ test/rag-test.mjs      # 32 pengujian basis pengetahuan & retrieval
 
 ## Keamanan (hardening bawaan)
 
-- **Rate limit in-memory** (fixed window): `/api/chat` 30 req/5 mnt/IP · login admin 5 gagal/10 mnt/IP (429 + `Retry-After`) · pengiriman publik (keluhan + home care) 10/jam/IP. Limit dapat diubah via env di atas. Untuk multi-instance/produksi besar tambahkan limit di reverse proxy (Caddy/Nginx/Cloudflare).
+- **Rate limit in-memory** (fixed window): `/api/chat` 30 req/5 mnt/IP · login admin 5 gagal/10 mnt/IP (429 + `Retry-After`) · pengiriman publik (keluhan + home care + feedback + percakapan) 10/jam/IP. Limit dapat diubah via env di atas. Untuk multi-instance/produksi besar tambahkan limit di reverse proxy (Caddy/Nginx/Cloudflare).
 - **Security headers** di semua respons: CSP (default-src 'self'), `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy`, `Permissions-Policy`, HSTS.
-- **IP tidak disimpan**: subjek kuota AI di-hash SHA-256; kredensial admin default HARUS diganti sebelum publik; cookie `HttpOnly; SameSite=Lax`; sesi 12 jam.
-- **`sharp`** terpasang untuk optimasi gambar Next.js produksi.
+- **Percakapan pasien diisolasi per pengunjung** (cookie anonim httpOnly `soera_owner`, bukan akun) — tanpa cookie, tidak ada yang bisa membaca daftar/isi percakapan siapa pun; percakapan milik orang lain tidak bisa dibaca/dihapus/ditimpa (lihat UU PDP).
+- **Password admin** bisa memakai hash **bcrypt** (`SOERA_ADMIN_PASSWORD_HASH`, pola `node -e "console.log(require('bcryptjs').hashSync('pw', 12))"`); fallback plain (timing-safe compare); startup memperingatkan kredensial default (`src/instrumentation.ts`).
+- **`/api/health`**: publik hanya menampilkan status dasar; detail provider/baseUrl AI & peringatan keamanan hanya untuk admin (cookie).
+- **IP tidak disimpan**: subjek kuota AI di-hash SHA-256; cookie `HttpOnly; SameSite=Lax`; sesi 12 jam.
+- **Framework**: Next.js **15.5.29** + React 19 + `sharp` — `npm audit`: **0 vulnerabilities**. Markdown dirender via react-markdown + remark-gfm (tanpa HTML mentah → anti-XSS).
+- **robots.txt & sitemap.xml** tersedia (set `SOERA_PUBLIC_URL`); `/admin` & `/api/` tidak diindeks. Lihat [`.env.example`](.env.example).
 
 ## Dokumentasi
 
 - [`docs/PANDUAN-INSTALL-JAN.md`](docs/PANDUAN-INSTALL-JAN.md) — panduan langkah demi langkah memasang Jan (aplikasi AI lokal/offline OpenAI-compatible) di Windows/macOS/Linux dan menyambungkannya ke SOERA AI.
+- [`docs/PANDUAN-INSTALL-WINDOWS-SERVER.md`](docs/PANDUAN-INSTALL-WINDOWS-SERVER.md) — **panduan instalasi di Windows Server (XAMPP)**: menaruh aplikasi di `C:\xampp\htdocs\soera-ai`, NSSM (Windows Service 24 jam), reverse proxy Apache ke port 3000, domain publik + HTTPS (Cloudflare Tunnel / win-acme), backup SQLite, monitoring, prosedur update.
+- [`docs/DEPLOYMENT-PUBLIK.md`](docs/DEPLOYMENT-PUBLIK.md) — arsitektur publikasi IP publik (llama-server/Ollama/Jan, Caddy, firewall, UU PDP).
 - [`docs/DEPLOYMENT-PUBLIK.md`](docs/DEPLOYMENT-PUBLIK.md) — arsitektur & checklist publikasi SOERA AI di IP publik (HTTPS, firewall, reverse proxy, LLM lokal di server, keamanan & UU PDP).
 - [`docs/AI-AGENT.md`](docs/AI-AGENT.md) — screening GitHub framework AI Agent (vercel/ai vs langchainjs/langgraph/LlamaIndex/privateGPT/RAGFlow) + arsitektur agen tool-calling & kuota 5/hari.
 

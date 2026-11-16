@@ -1,6 +1,8 @@
 # Publikasi SOERA AI di IP Publik — Arsitektur & Checklist
 
 > Dokumen ini menjawab: *"kalau yang diinstall di web? Kan rencananya sistem ini akan dipublikkan IP publik untuk pasien."*
+> **Instalasi di Windows Server + XAMPP (path `C:\xampp\htdocs\soera-ai`): lihat [`PANDUAN-INSTALL-WINDOWS-SERVER.md`](PANDUAN-INSTALL-WINDOWS-SERVER.md).**
+
 > Ringkasnya: **Jan (janhq/jan) pun aplikasi desktop (GUI)** — tidak bisa "diinstall sebagai service" di server web headless. Tapi integrasinya tetap bisa, karena SOERA AI memanggil LLM **dari sisi server**; dan untuk server yang disarankan dipakai **Ollama** (jalan sebagai service) atau **llama-server** (llama.cpp — engine yang juga dipakai Jan). Jan tetap bisa dipasang di PC petugas/pilot sebagai mesin AI LAN.
 
 ---

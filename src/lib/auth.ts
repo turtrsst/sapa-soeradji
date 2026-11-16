@@ -1,6 +1,7 @@
-// Autentikasi admin sederhana (cookie HMAC-signed). Untuk demo/internal;
-// ganti ADMIN_USERNAME/ADMIN_PASSWORD via env di produksi.
+// Autentikasi admin (cookie HMAC-signed). Produksi: set SOERA_ADMIN_PASSWORD_HASH (bcrypt)
+// dan SOERA_ADMIN_SECRET. Fallback: ADMIN_PASSWORD plain (timing-safe compare) + default admin123.
 import crypto from 'node:crypto';
+import bcrypt from 'bcryptjs';
 import { cookies } from 'next/headers';
 
 const COOKIE_NAME = 'soera_admin';
@@ -38,14 +39,28 @@ export async function isAdmin(): Promise<boolean> {
   return verifyAdminToken(store.get(COOKIE_NAME)?.value);
 }
 
+function safeEqual(a: string, b: string): boolean {
+  const ba = Buffer.from(a); const bb = Buffer.from(b);
+  return ba.length === bb.length && crypto.timingSafeEqual(ba, bb);
+}
+
 export function checkAdminCredentials(username: string, password: string): boolean {
-  const u = Buffer.from(String(username));
-  const p = Buffer.from(String(password));
-  const eu = Buffer.from(adminUsername());
-  const ep = Buffer.from(adminPassword());
-  const okU = u.length === eu.length && crypto.timingSafeEqual(u, eu);
-  const okP = p.length === ep.length && crypto.timingSafeEqual(p, ep);
-  return okU && okP;
+  const okU = safeEqual(String(username), adminUsername());
+  const hash = process.env.SOERA_ADMIN_PASSWORD_HASH;
+  if (hash) return okU && bcrypt.compareSync(String(password), hash);
+  return okU && safeEqual(String(password), adminPassword());
+}
+
+/** Daftar kelemahan kredensial yang terdeteksi (untuk peringatan startup & panel admin). */
+export function adminAuthWeaknesses(): string[] {
+  const issues: string[] = [];
+  if (!process.env.SOERA_ADMIN_PASSWORD_HASH && !process.env.ADMIN_PASSWORD) {
+    issues.push('password admin masih default (admin123) — set SOERA_ADMIN_PASSWORD_HASH (bcrypt) atau ADMIN_PASSWORD');
+  }
+  if (!process.env.SOERA_ADMIN_SECRET && !process.env.SAPA_ADMIN_SECRET) {
+    issues.push('secret cookie admin masih bawaan — set SOERA_ADMIN_SECRET (string acak panjang)');
+  }
+  return issues;
 }
 
 export const ADMIN_COOKIE = COOKIE_NAME;

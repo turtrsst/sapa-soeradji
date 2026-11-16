@@ -1,8 +1,11 @@
 import { getDb } from '@/lib/db';
+import { RATE_PUBLIC_POST_LIMIT, RATE_PUBLIC_POST_WINDOW, rateLimit, rateLimitKey } from '@/lib/rateLimit';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
+  const rl = rateLimit(rateLimitKey('feedback', req.headers), RATE_PUBLIC_POST_LIMIT, RATE_PUBLIC_POST_WINDOW);
+  if (!rl.ok) return Response.json({ error: 'Terlalu banyak. Coba lagi nanti.' }, { status: 429, headers: { 'Retry-After': String(rl.retryAfterSec) } });
   let body: any;
   try { body = await req.json(); } catch { return Response.json({ error: 'Body bukan JSON' }, { status: 400 }); }
   const rating = Number(body?.rating);

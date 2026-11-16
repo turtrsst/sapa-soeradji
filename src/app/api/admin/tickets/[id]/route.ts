@@ -3,12 +3,13 @@ import { isAdmin } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id: paramId } = await params;
   if (!(await isAdmin())) return Response.json({ error: 'Unauthorized' }, { status: 401 });
   let body: any;
   try { body = await req.json(); } catch { return Response.json({ error: 'Bad JSON' }, { status: 400 }); }
   const db = getDb();
-  const row = db.prepare('SELECT * FROM tickets WHERE id = ? OR ticket_number = ?').get(params.id, params.id) as any;
+  const row = db.prepare('SELECT * FROM tickets WHERE id = ? OR ticket_number = ?').get(paramId, paramId) as any;
   if (!row) return Response.json({ error: 'Tiket tidak ditemukan' }, { status: 404 });
   const status = ['baru', 'diproses', 'selesai', 'ditolak'].includes(body?.status) ? body.status : row.status;
   const response = typeof body?.response === 'string' ? body.response.slice(0, 4000) : row.response;
