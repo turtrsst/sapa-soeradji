@@ -10,6 +10,8 @@ Panduan operasional untuk memasang **SOERA AI** (aplikasi Next.js 15 + SQLite) p
 >   → Node.js 127.0.0.1:3000  (aplikasi SOERA AI, jalan sebagai Windows Service via NSSM)
 >   → SQLite di C:\xampp\htdocs\soera-ai\data\soera-ai.sqlite
 > ```
+> **Otomatisasi:** langkah 2–6 bisa dijalankan dengan [`scripts/Install-SoeraAI.ps1`](../scripts/Install-SoeraAI.ps1) (instalasi + Windows Service NSSM + verifikasi), backup harian dengan [`scripts/Backup-SoeraAI.ps1`](../scripts/Backup-SoeraAI.ps1), dan cek kesehatan dengan [`scripts/Verify-SoeraAI.ps1`](../scripts/Verify-SoeraAI.ps1). Operasional harian mengacu pada [`SOP-OPERASIONAL.md`](SOP-OPERASIONAL.md).
+
 > Aplikasi ini **bukan PHP** — Apache XAMPP di sini hanya menjadi *reverse proxy* (penerus). Tidak perlu mengubah/memindahkan `htdocs` yang lain, dan **folder `soera-ai` tidak boleh dilayani Apache sebagai file statis** (berisi kode & data). Konfigurasi di bawah sudah mengamankannya.
 
 Estimasi waktu: 60–90 menit termasuk konfigurasi domain.
