@@ -47,8 +47,12 @@ try {
 } catch { Check 'GET /api/health' $false $_.Exception.Message }
 
 # 4) Header keamanan
+# Catatan: PS 5.1 Invoke-WebRequest TIDAK mengikuti 308 Permanent Redirect (/x/ -> /x).
+# Untuk basePath, pakai URL aplikasi TANPA trailing slash.
+$berandaUrl = $app
+if (-not $BasePath) { $berandaUrl = $app + '/' }
 try {
-  $resp = Invoke-WebRequest -Uri ($app + '/') -UseBasicParsing -TimeoutSec 10
+  $resp = Invoke-WebRequest -Uri $berandaUrl -UseBasicParsing -TimeoutSec 10
   $h = $resp.Headers
   Check 'Header X-Content-Type-Options nosniff' ($h['X-Content-Type-Options'] -eq 'nosniff') $h['X-Content-Type-Options']
   Check 'Header Content-Security-Policy ada' ($null -ne $h['Content-Security-Policy']) ''
