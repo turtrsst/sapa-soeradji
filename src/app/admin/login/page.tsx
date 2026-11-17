@@ -37,7 +37,7 @@ export default function AdminLoginPage() {
           {error && <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-xs text-red-700 font-semibold">{error}</p>}
           <button type="submit" disabled={loading} className="btn btn-primary w-full justify-center">{loading ? 'Memeriksa…' : 'Masuk'}<Icon name="shield" size={17} /></button>
         </div>
-        <p className="mt-4 text-center text-[10.5px] text-rst-400">Default kredensial pengembangan: <code className="bg-rst-50 px-1.5 py-0.5 rounded">admin / admin123</code><br />Ubah via env <code className="bg-rst-50 px-1.5 py-0.5 rounded">ADMIN_USERNAME</code> &amp; <code className="bg-rst-50 px-1.5 py-0.5 rounded">ADMIN_PASSWORD</code>.</p>
+        <p className="mt-4 text-center text-[10.5px] text-rst-400">Kredensial diatur oleh administrator RSUP Dr. Soeradji Tirtonegoro.<br />Hubungi petugas SI bila Anda lupa password.</p>
       </form>
     </div>
   );

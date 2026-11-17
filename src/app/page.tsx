@@ -46,7 +46,7 @@ export default function LandingPage() {
             </div>
             <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-rst-100/80">
               <span className="flex items-center gap-1.5"><Icon name="wifiOff" size={14} className="text-gold-400" /> Bisa offline (AI lokal via Jan)</span>
-              <span className="flex items-center gap-1.5"><Icon name="bolt" size={14} className="text-gold-400" /> Respons &lt; 1 menit</span>
+              <span className="flex items-center gap-1.5"><Icon name="bolt" size={14} className="text-gold-400" /> Jawaban KB instan — tanya apa pun tentang RST</span>
               <span className="flex items-center gap-1.5"><Icon name="shield" size={14} className="text-gold-400" /> Data tersimpan di server RS, aman</span>
             </div>
           </div>
@@ -58,7 +58,7 @@ export default function LandingPage() {
                 <Image src={bp('/images/soera-ai-logo.png')} alt="SOERA AI" width={36} height={36} className="h-9 w-9 object-contain bg-white rounded-full p-0.5" />
                 <div className="leading-tight">
                   <p className="font-bold">SOERA AI</p>
-                  <p className="text-[10px] text-emerald-300 flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400 inline-block" /> Online — siap membantu 24/7</p>
+                  <p className="text-[10px] text-emerald-300 flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400 inline-block" /> Asisten digital RST — siap membantu 24/7</p>
                 </div>
               </div>
               <div className="mt-4 space-y-3 text-[13px]">
@@ -126,7 +126,7 @@ export default function LandingPage() {
               ['Bedah Digestif', 'Digestive Laparoscopic Surgery'],
               ['Bedah Vaskuler & Endovaskuler', 'EVLA — terapi varises laser minimal invasif'],
               ['Orthopedi Hip & Knee', 'Sendi pinggul & lutut, termasuk spine'],
-              ['Hematologi Onkologi Medik', 'Penatalaksanaan kelainan darah paripurna — bertaraf Asia'],
+              ['Hematologi Onkologi Medik', 'Penatalaksanaan kelainan darah paripurna'],
               ['Bedah Saraf & Bedah Jantung Anak', 'Rujukan nasional bedah saraf & jantung anak'],
             ].map(([t, d]) => (
               <div key={t as string} className="rounded-2xl border border-rst-100 bg-rst-50/50 p-4 hover:border-rst-300 transition">
