@@ -16,7 +16,7 @@ param(
   [string]$InstallPath = 'C:\xampp\htdocs\soera-ai',
   [string]$ServiceName = 'SoeraAI',
   [string]$BindHost    = '127.0.0.1',
-  [int]$Port           = 3000,
+  [int]$Port           = 0,  # 0 = auto-detect dari service (NSSM AppParameters -p)
   [string]$Branch      = 'main',
   [string]$BackupRoot  = 'D:\backup-soera-ai',
   [switch]$SkipBackup,
@@ -28,6 +28,13 @@ function Ok($m)   { Write-Host ('[OK] ' + $m) -ForegroundColor Green }
 function Warn($m) { Write-Host ('[!!] ' + $m) -ForegroundColor Yellow }
 
 $oldCommit = $null
+# Hentikan service SEJAK AWAL (DLL sharp terkunci saat service jalan).
+$svcEarly = Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
+if ($svcEarly -and $svcEarly.Status -ne 'Stopped') {
+  Info 'Menghentikan service SoeraAI sementara (backup + build butuh akses penuh)...'
+  & nssm stop $ServiceName | Out-Null
+  Start-Sleep -Seconds 2
+}
 # BasePath: bila tidak diberikan, baca dari environment service yang sedang berjalan
 # (build HARUS memakai nilai yang sama dengan saat install).
 $BasePath = $BasePath.TrimEnd('/')
@@ -39,6 +46,14 @@ if (-not $BasePath) {
   } catch { Warn 'Tidak bisa membaca env service - build mode root.' }
 }
 if ($BasePath) { $env:SOERA_BASE_PATH = $BasePath; Info ('Build dengan SOERA_BASE_PATH=' + $BasePath) }
+if (-not $PSBoundParameters.ContainsKey('Port')) {
+  try {
+    $svcParams = (& nssm get $ServiceName AppParameters) -join ' '
+    $pm = [regex]::Match($svcParams, '-p\s+(\d+)')
+    if ($pm.Success) { $Port = [int]$pm.Groups[1].Value; Info ('Port terdeteksi dari service: ' + $Port) }
+  } catch {}
+  if ($Port -le 0) { $Port = 3100; Warn 'Tidak bisa deteksi port service - pakai 3100.' }
+}
 try {
   if (-not (Test-Path (Join-Path $InstallPath '.git'))) { throw ($InstallPath + ' bukan repo git. Jalankan Install-SoeraAI.ps1 dulu.') }
   Push-Location $InstallPath
@@ -54,7 +69,7 @@ try {
   if (-not $SkipBackup) {
     Info 'Backup SQLite sebelum update...'
     & (Join-Path $PSScriptRoot 'Backup-SoeraAI.ps1') -SourcePath (Join-Path $InstallPath 'data') -BackupRoot $BackupRoot
-    if ($LASTEXITCODE -ne 0) { throw 'Backup gagal - update dibatalkan (pakai -SkipBackup bila yakin).' }
+    if ($LASTEXITCODE -ne 0) { throw ('Backup gagal ke ' + $BackupRoot + ' - update dibatalkan. Periksa akses/disk folder itu (atau pakai -BackupRoot ke folder lain, mis. C:\soera-ai-backup), atau -SkipBackup bila yakin.') }
   } else { Warn 'Backup dilewati (-SkipBackup).' }
 
   # 3) Ambil versi terbaru (fast-forward saja)
@@ -65,10 +80,7 @@ try {
   if ($newCommit -eq $oldCommit) { Ok ('Sudah versi terbaru (' + $newCommit + ').'); Pop-Location; exit 0 }
   Info ('Update: ' + $oldCommit + ' -> ' + $newCommit)
 
-  # Hentikan service dulu (DLL sharp terkunci selama service jalan -> npm ci EPERM)
-  if (Get-Service -Name $ServiceName -ErrorAction SilentlyContinue) { Info 'Menghentikan service sementara untuk update...'; & nssm stop $ServiceName | Out-Null; Start-Sleep -Seconds 2 }
-
-  # 4) Dependensi dan build
+  # 4) Dependensi dan build (service sudah dihentikan di awal)
   Info 'npm ci...'; & npm ci --no-audit --no-fund
   if ($LASTEXITCODE -ne 0) { throw 'npm ci gagal.' }
   Info 'npm run build...'; & npm run build
@@ -88,6 +100,8 @@ try {
   Warn ('UPDATE GAGAL: ' + $_.Exception.Message)
   if ($oldCommit) {
     Warn ('ROLLBACK OTOMATIS ke ' + $oldCommit + '...')
+    $svcRb0 = Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
+    if ($svcRb0 -and $svcRb0.Status -ne 'Stopped') { & nssm stop $ServiceName | Out-Null; Start-Sleep -Seconds 2 }
     Push-Location $InstallPath
     & git reset --hard $oldCommit | Out-Null
     & npm ci --no-audit --no-fund | Out-Null
