@@ -106,9 +106,15 @@ try {
   }
   $env:SOERA_TMP_PW = $plainPass
   Push-Location $InstallPath
-  $hash = (& node -e 'console.log(require("bcryptjs").hashSync(process.env.SOERA_TMP_PW, 12))').Trim()
+  # PowerShell 5.1 men-strip tanda kutip ganda di argumen native -> tulis JS ke file sementara
+  $tmpJs = Join-Path $env:TEMP 'soera-hash.js'
+  [IO.File]::WriteAllText($tmpJs, 'console.log(require("bcryptjs").hashSync(process.env.SOERA_TMP_PW, 12));', [Text.Encoding]::ASCII)
+  $hashRaw = & node $tmpJs
+  Remove-Item $tmpJs -Force -ErrorAction SilentlyContinue
   Pop-Location
-  Remove-Item Env:SOERA_TMP_PW
+  Remove-Item Env:SOERA_TMP_PW -ErrorAction SilentlyContinue
+  if (-not $hashRaw) { Die 'Gagal membuat hash bcrypt password admin (node tidak menghasilkan output).' }
+  $hash = $hashRaw.Trim()
   if (-not $hash) { Die 'Gagal membuat hash bcrypt password admin.' }
 
   $secretBytes = New-Object byte[] 48
