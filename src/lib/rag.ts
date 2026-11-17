@@ -72,22 +72,38 @@ export function retrieve(query: string, topK = 5): RetrievalHit[] {
 
 export type Intent =
   | 'darurat' | 'jadwal' | 'tarif' | 'homecare' | 'keluhan' | 'kampanye'
-  | 'daftar' | 'kontak' | 'profil' | 'vitally_unknown';
+  | 'daftar' | 'kontak' | 'profil' | 'sapaan' | 'vitally_unknown';
+
+const GREET_WORDS = new Set([
+  'halo', 'hai', 'hei', 'hallo', 'alo', 'hey', 'p', 'hallo-world',
+  'pagi', 'siang', 'sore', 'malam', 'selamat', 'sugeng', 'monggo', 'kulonuwun',
+  'permisi', 'salam', 'assalamualaikum', 'alaikum', 'assalamu',
+]);
+
+/** Sapaan murni (<= 6 kata, semua kata adalah sapaan) — mis. "halo", "halo selamat pagi", "monggo". */
+export function isGreeting(message: string): boolean {
+  const words = message.toLowerCase().split(/[^a-z]+/).filter(Boolean);
+  return words.length > 0 && words.length <= 6 && words.every((w) => GREET_WORDS.has(w));
+}
 
 export function detectIntent(message: string): Intent {
   const m = message.toLowerCase();
   const has = (...ws: string[]) => ws.some((w) => m.includes(w));
+  if (isGreeting(m)) return 'sapaan';
   if (has('gawat darurat', 'darurat', 'igd', 'sesak napas', 'nyeri dada', 'stroke', 'kejang', 'kecelakaan', 'pingsan', 'henti jantung', 'perdarahan hebat', 'pendarahan hebat', 'bunuh diri', '119')) return 'darurat';
   if (has('keluhan', 'komplain', 'pengaduan', 'lapor', 'kecewa', 'antrian lama', 'petugas tidak', 'kurang puas', 'kritik', 'saran', 'kotak saran')) return 'keluhan';
   if (has('home care', 'homecare', 'go-trah', 'gotrah', 'kunjungan rumah', 'rawat di rumah', 'visite ke rumah')) return 'homecare';
-  if (has('tarif', 'biaya', 'harga', 'berapa', 'bayar', 'jasa sarana', 'jasa pelayanan', 'mahal')) return 'tarif';
+  if (has('kontak', 'nomor', 'telepon', 'telpon', 'alamat', 'lokasi', 'maps', 'jam buka', 'jam besuk', 'fax', 'email', 'hotline', 'call center')) return 'kontak';
   if (has('jadwal', 'praktek', 'praktik', 'poli ', 'dokter', 'spesialis', 'jam praktik', 'jam poli')) return 'jadwal';
+  if (has('tarif', 'biaya', 'harga', 'berapa', 'bayar', 'jasa sarana', 'jasa pelayanan', 'mahal')) return 'tarif';
   if (has('kampanye', 'promosi kesehatan', 'imunisasi', 'skrining', 'screening', 'penyuluhan', 'cerdik', 'germas', 'bakti sosial', 'khitanan', 'speling', 'berhenti merokok', 'kegiatan rs')) return 'kampanye';
   if (has('daftar', 'pendaftaran', 'registrasi', 'antrian online', 'booking', 'perjanjian', 'check in', 'check-in')) return 'daftar';
-  if (has('kontak', 'nomor', 'telepon', 'telpon', 'alamat', 'lokasi', 'maps', 'jam buka', 'jam besuk', 'fax', 'email', 'hotline', 'call center')) return 'kontak';
   if (has('profil', 'sejarah', 'tentang', 'visi', 'misi', 'akreditasi', 'kelas a')) return 'profil';
   return 'vitally_unknown';
 }
+
+const DAY_WORDS = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
+const isDayWord = (w: string) => DAY_WORDS.some((d) => w.startsWith(d));
 
 export function matchJadwal(message: string, limit = 6): JadwalDokter[] {
   const m = message.toLowerCase();
@@ -96,6 +112,16 @@ export function matchJadwal(message: string, limit = 6): JadwalDokter[] {
   const words = tokenize(m).filter((w) => !stop.has(w));
   if (!words.length) return [];
   const scored = searchJadwal(words.join(' '));
+  // Prioritaskan baris yang cocok dengan kata NON-hari (mis. "jantung") — hari hanya mempersempit.
+  // Hindari baris "Selasa saja" ikut karena cocok kata hari, padahal tidak relevan dengan spesialisasi.
+  const nonDay = words.filter((w) => !isDayWord(w));
+  if (nonDay.length) {
+    const relevant = scored.filter((r) => {
+      const hay = `${r.poli} ${r.dokter} ${r.spesialis}`.toLowerCase();
+      return nonDay.some((w) => hay.includes(w));
+    });
+    if (relevant.length) return relevant.slice(0, limit);
+  }
   return scored.slice(0, limit);
 }
 

@@ -18,6 +18,14 @@ export function composeOfflineAnswer(message: string): OfflineAnswer {
   const top = hits[0]?.doc;
 
   // Jawaban terstruktur berbasis intent
+  if (intent === 'sapaan') {
+    return {
+      intent,
+      sources: [],
+      text: `Halo, **Bapak/Ibu** — saya **SOERA AI**, asisten digital RSUP Dr. Soeradji Tirtonegoro. Senang bisa membantu.\n\n**Yang paling sering ditanyakan:**\n- [Jadwal Dokter](/jadwal) — praktik poli & spesialis per hari\n- [Home Care](/home-care) — rawat jalan di rumah + daftar tarif resmi\n- [Kampanye Kesehatan](/kampanye) — kegiatan & penyuluhan RST\n- [Keluhan](/keluhan) — sampaikan masukan / pengaduan Anda\n\nSilakan ketik pertanyaan Anda — atau hubungi **Contact Center (0272) 321020** / WhatsApp **0816-9170-00**.${FOOTER}`,
+    };
+  }
+
   if (intent === 'darurat') {
     const doc = KB_DOCS.find((d) => d.id === 'igd-darurat')!;
     return {

@@ -312,7 +312,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="font-extrabold text-rst-900">Mesin Jawaban AI</p>
-                <p className="text-[11px] text-rst-500">Nonaktifkan = 100% offline (basis pengetahuan lokal, tanpa model). Aktifkan untuk jalur AI generatif.</p>
+                <p className="text-[11px] text-rst-500">Pertanyaan layanan (jadwal/tarif/kontak/daftar/keluhan/dll.) selalu dijawab instan dari basis pengetahuan. Pertanyaan BEBAS dijawab AI (tool-calling, kuota harian). Nonaktifkan = 100% offline, tanpa model.</p>
               </div>
               <button type="button" onClick={() => setLlm({ ...llm, enabled: !llm.enabled })} className={`relative h-8 w-14 rounded-full transition ${llm.enabled ? 'bg-emerald-500' : 'bg-rst-200'}`} aria-pressed={llm.enabled} aria-label="Aktif/nonaktif AI">
                 <span className={`absolute top-1 h-6 w-6 rounded-full bg-white shadow transition-all ${llm.enabled ? 'left-7' : 'left-1'}`} />

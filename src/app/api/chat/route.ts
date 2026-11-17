@@ -2,12 +2,11 @@ import { getDb, uid } from '@/lib/db';
 import { AI_DAILY_LIMIT, aiSubject, consumeAiQuota, refundAiQuota } from '@/lib/aiUsage';
 import { RATE_CHAT_LIMIT, RATE_CHAT_WINDOW, rateLimit, rateLimitKey, rateLimitHeaders } from '@/lib/rateLimit';
 import { streamAgent } from '@/lib/agent';
-import { SYSTEM_PROMPT, streamLlm, type ChatMessage } from '@/lib/llm';
+import { SYSTEM_PROMPT, type ChatMessage } from '@/lib/llm';
 import { getLlmConfig } from '@/lib/settings';
 import { ensureOwnerKey, ownerCookieHeader } from '@/lib/owner';
-import { retrieve, detectIntent, matchJadwal, matchTarif, formatJadwalLines, formatTarifLines } from '@/lib/rag';
+import { retrieve, detectIntent } from '@/lib/rag';
 import { composeOfflineAnswer } from '@/lib/offline';
-import { TARIF_META } from '@/lib/tarif';
 import { JADWAL_UPDATE } from '@/lib/jadwal';
 
 export const dynamic = 'force-dynamic';
@@ -50,25 +49,6 @@ export async function POST(req: Request) {
   // Konteks retrieval
   const intent = detectIntent(message);
   const hits = retrieve(message, 5);
-  const jadwalRows = intent === 'jadwal' ? matchJadwal(message, 8) : [];
-  const tarifRows = intent === 'tarif' || intent === 'homecare' ? matchTarif(message, 12) : [];
-  const contextBlock = [
-    `=== KONTEKS BASIS PENGETAHUAN RST (update ${JADWAL_UPDATE}) ===`,
-    ...hits.map((h, i) => `[Dokumen ${i + 1}] ${h.doc.title}\n${h.doc.body.slice(0, 1600)}\n(Sumber: ${h.doc.source})`),
-    jadwalRows.length ? `=== DATA JADWAL DOKTER (update ${JADWAL_UPDATE}, dapat berubah) ===\n${formatJadwalLines(jadwalRows)}` : '',
-    tarifRows.length ? `=== DATA TARIF (${TARIF_META.nomor}, ${TARIF_META.tanggal}) ===\n${formatTarifLines(tarifRows)}\n${TARIF_META.catatan}` : '',
-    '=== AKHIR KONTEKS ===',
-  ].filter(Boolean).join('\n\n');
-
-  const history = (db.prepare(
-    'SELECT role, content FROM messages WHERE conversation_id = ? AND id < (SELECT MAX(id) FROM messages WHERE conversation_id = ?) ORDER BY id DESC LIMIT 10'
-  ).all(conversationId, conversationId) as { role: string; content: string }[]).reverse();
-
-  const messages: ChatMessage[] = [
-    { role: 'system', content: `${SYSTEM_PROMPT}\n\n${contextBlock}` },
-    ...history.map((h) => ({ role: h.role as 'user' | 'assistant', content: h.content })),
-    { role: 'user', content: message },
-  ];
 
   const cfg = getLlmConfig();
   const sources = hits.map((h) => ({ title: h.doc.title, source: h.doc.source }));
@@ -96,35 +76,37 @@ export async function POST(req: Request) {
       let mode: 'llm' | 'offline' = 'offline';
       let llmFailedReason = '';
 
-      if (cfg.enabled && !quotaExhausted) {
-        if (isFreeForm) {
-          // Agen AI (tool-calling) untuk pertanyaan bebas — Vercel AI SDK + endpoint OpenAI-compatible
-          const r = await streamAgent({
-            message,
-            history: messages.slice(1, -1) as { role: 'user' | 'assistant'; content: string }[],
-            cfg,
-            onToken: (tok) => { assistantText += tok; send({ type: 'token', text: tok }); },
-          });
-          if (r.ok && assistantText.trim()) {
-            mode = 'llm';
-          } else {
-            llmFailedReason = r.reason || 'agen AI gagal';
-            if (!assistantText.trim()) refundAiQuota(subject); // gagal sebelum token pertama → kuota dikembalikan
-            assistantText = '';
-          }
+      if (cfg.enabled && !quotaExhausted && isFreeForm) {
+        // Agen AI (tool-calling) untuk pertanyaan bebas — Vercel AI SDK + endpoint OpenAI-compatible
+        const contextBlock = [
+          `=== KONTEKS BASIS PENGETAHUAN RST (update ${JADWAL_UPDATE}) ===`,
+          ...hits.map((h, i) => `[Dokumen ${i + 1}] ${h.doc.title}\n${h.doc.body.slice(0, 1600)}\n(Sumber: ${h.doc.source})`),
+          '=== AKHIR KONTEKS ===',
+        ].filter(Boolean).join('\n\n');
+        const history = (db.prepare(
+          'SELECT role, content FROM messages WHERE conversation_id = ? AND id < (SELECT MAX(id) FROM messages WHERE conversation_id = ?) ORDER BY id DESC LIMIT 10'
+        ).all(conversationId, conversationId) as { role: string; content: string }[]).reverse();
+        const messages: ChatMessage[] = [
+          { role: 'system', content: `${SYSTEM_PROMPT}\n\n${contextBlock}` },
+          ...history.map((h) => ({ role: h.role as 'user' | 'assistant', content: h.content })),
+          { role: 'user', content: message },
+        ];
+        const r = await streamAgent({
+          message,
+          history: messages.slice(1, -1) as { role: 'user' | 'assistant'; content: string }[],
+          cfg,
+          onToken: (tok) => { assistantText += tok; send({ type: 'token', text: tok }); },
+        });
+        if (r.ok && assistantText.trim()) {
+          mode = 'llm';
         } else {
-          const result = await streamLlm(messages, (tok) => {
-            assistantText += tok;
-            send({ type: 'token', text: tok });
-          }, cfg);
-          if (result.ok && assistantText.trim()) {
-            mode = 'llm';
-          } else {
-            llmFailedReason = result.reason || 'LLM gagal';
-            assistantText = '';
-          }
+          llmFailedReason = r.reason || 'agen AI gagal';
+          if (!assistantText.trim()) refundAiQuota(subject); // gagal sebelum token pertama → kuota dikembalikan
+          assistantText = '';
         }
       }
+      // Pertanyaan layanan (intent template): dijawab INSTAN dari basis pengetahuan lokal —
+      // tidak memanggil LLM (lebih cepat, deterministik, grounded), tidak memakai kuota AI.
 
       if (!assistantText.trim()) {
         // Fallback offline (selalu tersedia)
@@ -137,7 +119,7 @@ export async function POST(req: Request) {
           send({ type: 'token', text: assistantText.slice(i, i + chunkSize) });
         }
         if (quotaExhausted) {
-          const note = `\n\n_⏳ Kuota pertanyaan bebas AI Anda hari ini (${AI_DAILY_LIMIT} pertanyaan) sudah habis — direset jam **00.00 WIB**. Pertanyaan layanan (jadwal dokter, tarif, pendaftaran, Home Care, kampanye) tetap bisa dijawab tanpa kuota. Untuk bantuan langsung: **(0272) 321020**._`;
+          const note = `\n\n_⏳ **Kuota pertanyaan AI di luar layanan RST Anda hari ini sudah habis** (maks ${AI_DAILY_LIMIT}/hari) — direset pukul **00.00 WIB**. Pertanyaan layanan (jadwal dokter, tarif, pendaftaran, Home Care, kampanye, kontak, keluhan) **tetap bisa dijawab tanpa kuota**. Bantuan langsung: **(0272) 321020** / WhatsApp **0816-9170-00**._`;
           assistantText += note;
           send({ type: 'token', text: note });
         } else if (llmFailedReason) {
