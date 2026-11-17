@@ -35,30 +35,45 @@ if ($svcEarly -and $svcEarly.Status -ne 'Stopped') {
   & nssm stop $ServiceName | Out-Null
   Start-Sleep -Seconds 2
 }
-# BasePath: bila tidak diberikan, baca dari environment service yang sedang berjalan
-# (build HARUS memakai nilai yang sama dengan saat install).
-$BasePath = $BasePath.TrimEnd('/')
-if (-not $BasePath) {
-  try {
-    $svcEnv = (& nssm get $ServiceName AppEnvironmentExtra) -join ' '
-    $m = [regex]::Match($svcEnv, 'SOERA_BASE_PATH=([^\s"]+)')
-    if ($m.Success) { $BasePath = $m.Groups[1].Value.TrimEnd('/'); Info ('BasePath terdeteksi dari service env: ' + $BasePath) }
-  } catch { Warn 'Tidak bisa membaca env service - build mode root.' }
+# BasePath: bila tidak diberikan eksplisit (-BasePath), baca dari registry NSSM
+# (HKLM ...\Services\<svc>\Parameters : AppEnvironmentExtra = REG_MULTI_SZ, AppParameters).
+# JANGAN pernah diam-diam build root-mode lalu diverifikasi vs sub-path -> 404 massal & rollback menyesatkan.
+$regOk = $false
+$reg = $null
+try {
+  $reg = Get-ItemProperty -Path ('HKLM:\SYSTEM\CurrentControlSet\Services\' + $ServiceName + '\Parameters') -ErrorAction Stop
+  $regOk = $true
+} catch {}
+if (-not $PSBoundParameters.ContainsKey('BasePath')) {
+  $BasePath = $BasePath.TrimEnd('/')
+  $detected = $null
+  if ($regOk) {
+    $envs = @($reg.AppEnvironmentExtra)
+    $hit = $null
+    foreach ($e in $envs) { if (($e | Out-String) -match '^\s*SOERA_BASE_PATH\s*=') { $hit = $e } }
+    if ($hit) {
+      $detected = (($hit -replace '^\s*SOERA_BASE_PATH\s*=', '').Trim().Trim('"').Trim("'")).TrimEnd('/')
+    } else { $detected = '' }
+  } else {
+    try {
+      $svcEnv = (& nssm get $ServiceName AppEnvironmentExtra) -join ' '
+      $mm = [regex]::Match($svcEnv, 'SOERA_BASE_PATH\s*=\s*([^\s";&]+)')
+      if ($mm.Success) { $detected = $mm.Groups[1].Value.TrimEnd('/') }
+    } catch {}
+  }
+  if ($null -ne $detected) { $BasePath = $detected; Info ('BasePath terdeteksi dari service env: "' + ($BasePath -replace '^$','(root)') + '"') }
+  else { throw 'Tidak bisa membaca AppEnvironmentExtra service. Jalankan ulang dengan -BasePath eksplisit (mis. -BasePath /soera-ai untuk sub-path, atau -BasePath "" untuk root).' }
 }
 if ($BasePath) { $env:SOERA_BASE_PATH = $BasePath; Info ('Build dengan SOERA_BASE_PATH=' + $BasePath) }
 if (-not $PSBoundParameters.ContainsKey('Port')) {
-  try {
-    $svcParams = (& nssm get $ServiceName AppParameters) -join ' '
-    $pm = [regex]::Match($svcParams, '-p\s*(\d+)')
-    if (-not $pm.Success) {
-      try {
-        $reg = Get-ItemProperty -Path ('HKLM:\SYSTEM\CurrentControlSet\Services\' + $ServiceName + '\Parameters') -ErrorAction Stop
-        if ($reg.AppParameters) { $svcParams = ($svcParams + ' ' + $reg.AppParameters); $pm = [regex]::Match($svcParams, '-p\s*(\d+)') }
-      } catch {}
-    }
-    if ($pm.Success) { $Port = [int]$pm.Groups[1].Value; Info ('Port terdeteksi dari service: ' + $Port) }
-  } catch {}
-  if ($Port -le 0) { $Port = 3100; Warn 'Tidak bisa deteksi port service - pakai 3100.' }
+  $paramBlob = ''
+  if ($regOk -and $reg.AppParameters) { $paramBlob = ($reg.AppParameters | Out-String) }
+  else {
+    try { $paramBlob = (& nssm get $ServiceName AppParameters) -join ' ' } catch {}
+  }
+  $pm = [regex]::Match($paramBlob, '-p\s*(\d+)')
+  if ($pm.Success) { $Port = [int]$pm.Groups[1].Value; Info ('Port terdeteksi dari service: ' + $Port) }
+  else { $Port = 3100; Warn 'Tidak bisa deteksi port service - pakai 3100.' }
 }
 try {
   if (-not (Test-Path (Join-Path $InstallPath '.git'))) { throw ($InstallPath + ' bukan repo git. Jalankan Install-SoeraAI.ps1 dulu.') }
