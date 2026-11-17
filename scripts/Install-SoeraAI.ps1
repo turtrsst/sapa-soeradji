@@ -125,7 +125,7 @@ try {
   # 5) NSSM (auto-download bila perlu)
   if (-not (Get-Command nssm -ErrorAction SilentlyContinue)) {
     Info 'NSSM belum ada - mengunduh nssm 2.24 (nssm.cc)...'
-    # PS 5.1 default: TLS 1.0 — nssm.cc hanya menerima TLS 1.2+
+    # PS 5.1 default: TLS 1.0 - nssm.cc hanya menerima TLS 1.2+
     try { [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 } catch {}
     $zip = Join-Path $env:TEMP 'nssm-2.24.zip'
     try {
@@ -138,14 +138,25 @@ try {
     Ok 'NSSM terpasang di C:\Windows\System32\nssm.exe'
   }
 
-  # 6) Service SoeraAI (idempoten: reinstall bila sudah ada)
+  # 6) Port bebas? (server RS menjalankan aplikasi lain)
+  $chosenPort = $Port
+  $inUse = Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue
+  if ($inUse) {
+    Warn ('Port ' + $Port + ' sedang dipakai proses lain - mencari port bebas di 3100-3120...')
+    foreach ($c in 3100..3120) {
+      if (-not (Get-NetTCPConnection -LocalPort $c -State Listen -ErrorAction SilentlyContinue)) { $chosenPort = $c; break }
+    }
+    Warn ('Port ' + $Port + ' dipakai aplikasi lain - SOERA AI akan memakai port ' + $chosenPort)
+  }
+
+  # 7) Service SoeraAI (idempoten: reinstall bila sudah ada)
   Info ('Memasang Windows Service ' + $ServiceName + '...')
   if (Get-Service -Name $ServiceName -ErrorAction SilentlyContinue) {
     & nssm stop $ServiceName | Out-Null
     & nssm remove $ServiceName confirm | Out-Null
   }
   $nodeExe = $node.Source
-  & nssm install $ServiceName $nodeExe 'node_modules\next\dist\bin\next start -H 127.0.0.1 -p 3000' | Out-Null
+  & nssm install $ServiceName $nodeExe ('node_modules\next\dist\bin\next start -H 127.0.0.1 -p ' + $chosenPort) | Out-Null
   & nssm set $ServiceName AppDirectory $InstallPath | Out-Null
   & nssm set $ServiceName AppEnvironmentExtra ('SOERA_ADMIN_SECRET=' + $secret) ('SOERA_ADMIN_PASSWORD_HASH=' + $hash) ('SAPA_DATA_DIR=' + $InstallPath + '\data') ('SOERA_PUBLIC_URL=' + $PublicUrl) 'NODE_ENV=production' | Out-Null
   & nssm set $ServiceName AppStdout ($logDir + '\stdout.log') | Out-Null
@@ -155,10 +166,17 @@ try {
   & nssm set $ServiceName AppRestartDelay 5000 | Out-Null
   & nssm set $ServiceName Start SERVICE_AUTO_START | Out-Null
   & nssm start $ServiceName | Out-Null
-  Ok ('Service ' + $ServiceName + ' terpasang dan berjalan (auto-start, auto-restart 5 detik)')
+  Start-Sleep -Seconds 4
+  $svcStatus = (Get-Service -Name $ServiceName -ErrorAction SilentlyContinue).Status
+  if ($svcStatus -ne 'Running') {
+    Warn ('Service status: ' + $svcStatus + ' - 20 baris terakhir logs\stderr.log:')
+    Get-Content ($logDir + '\stderr.log') -Tail 20 -ErrorAction SilentlyContinue | ForEach-Object { Write-Host ('    ' + $_) }
+    Die 'Aplikasi gagal start - lihat log di atas.'
+  }
+  Ok ('Service ' + $ServiceName + ' berjalan di port ' + $chosenPort + ' (auto-start, auto-restart 5 detik)')
 
   # 7) Verifikasi kesehatan
-  & (Join-Path $PSScriptRoot 'Verify-SoeraAI.ps1') -BindHost $BindHost -Port $Port -ServiceName $ServiceName -PublicUrl $PublicUrl
+  & (Join-Path $PSScriptRoot 'Verify-SoeraAI.ps1') -BindHost $BindHost -Port $chosenPort -ServiceName $ServiceName -PublicUrl $PublicUrl
   $verifyExit = $LASTEXITCODE
 
   # 8) Backup terjadwal (opsional)
@@ -175,8 +193,8 @@ try {
   Write-Host '================ RINGKASAN INSTALASI ================' -ForegroundColor Magenta
   Write-Host ('Path      : ' + $InstallPath)
   Write-Host ('Service   : ' + $ServiceName + ' (nssm) - start otomatis saat boot')
-  Write-Host ('Bind      : http://{0}:{1} (loopback; publik via proxy/Tunnel)' -f $BindHost, $Port)
-  Write-Host ('Health    : http://{0}:{1}/api/health' -f $BindHost, $Port)
+  Write-Host ('Bind      : http://{0}:{1} (loopback; publik via proxy/Tunnel)' -f $BindHost, $chosenPort)
+  Write-Host ('Health    : http://{0}:{1}/api/health' -f $BindHost, $chosenPort)
   Write-Host ('Admin     : {0}/admin  (user: {1})' -f $PublicUrl, $AdminUser)
   if ($generated) {
     Write-Host ''
