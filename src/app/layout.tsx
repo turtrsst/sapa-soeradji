@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import { bp } from '@/lib/basePath';
 import Footer from '@/components/Footer';
 import CampaignTicker from '@/components/CampaignTicker';
+import MiniAssistant from '@/components/MiniAssistant';
 
 export const metadata: Metadata = {
   title: { default: 'SOERA AI — RSUP Dr. Soeradji Tirtonegoro Klaten', template: '%s | SOERA AI RST' },
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CampaignTicker />
         <main className="flex-1">{children}</main>
         <Footer />
+        <MiniAssistant />
       </body>
     </html>
   );
