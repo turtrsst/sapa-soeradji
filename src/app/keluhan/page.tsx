@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Icon from '@/components/Icon';
 import { KELUHAN_KATEGORI } from '@/lib/keluhan-constants';
+import { bp } from '@/lib/basePath';
 
 const PRIORITAS = [ ['rendah', 'Rendah'], ['normal', 'Normal'], ['tinggi', 'Tinggi — mendesak'] ] as const;
 
@@ -18,7 +19,7 @@ export default function KeluhanPage() {
     e.preventDefault();
     setSending(true); setCreated(null);
     try {
-      const res = await fetch('/api/keluhan', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
+      const res = await fetch(bp('/api/keluhan'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
       const data = await res.json();
       setCreated(data);
       if (res.ok) setForm({ name: '', phone: '', category: '', subject: '', description: '', priority: 'normal' });
@@ -29,7 +30,7 @@ export default function KeluhanPage() {
     e.preventDefault();
     setTracking(true); setTrackResult(null);
     try {
-      const res = await fetch(`/api/keluhan?ticket=${encodeURIComponent(track.ticket)}&phone=${encodeURIComponent(track.phone)}`);
+      const res = await fetch(bp(`/api/keluhan?ticket=${encodeURIComponent(track.ticket)}&phone=${encodeURIComponent(track.phone)}`));
       setTrackResult(await res.json());
     } catch { setTrackResult({ message: 'Gagal melacak tiket.' }); } finally { setTracking(false); }
   };

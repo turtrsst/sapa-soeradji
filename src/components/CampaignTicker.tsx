@@ -2,11 +2,12 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Icon from './Icon';
+import { bp } from '@/lib/basePath';
 
 export default function CampaignTicker() {
   const [items, setItems] = useState<string[]>([]);
   useEffect(() => {
-    fetch('/api/kampanye')
+    fetch(bp('/api/kampanye'))
       .then((r) => r.json())
       .then((d) => setItems((d.campaigns || []).map((c: any) => c.title).slice(0, 6)))
       .catch(() => setItems([]));

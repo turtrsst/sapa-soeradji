@@ -25,7 +25,7 @@ SOERA AI menjawab pertanyaan dan keluhan masyarakat secara cepat — **keluhan p
 
 ## Teknologi
 
-- **Next.js 14** (App Router, React 18, TypeScript, Tailwind CSS) — SSR + API routes, tanpa layanan eksternal.
+- **Next.js 15.5.29** (App Router, React 19, TypeScript, Tailwind CSS) — SSR + API routes, tanpa layanan eksternal.
 - **SQLite bawaan Node** (`node:sqlite`) — persistensi percakapan, tiket, campaign, konfigurasi. Tanpa dependensi native; folder data: `data/` (dapat diatur via `SAPA_DATA_DIR`).
 - **RAG offline** (retrieval berbasis kata kunci + intent detection) — `src/lib/rag.ts`.
 - **OpenAI-compatible streaming client** — `src/lib/llm.ts` (SSE), 100% kompatibel dengan Local API Server Jan dan endpoint OpenAI-compatible lainnya.
@@ -49,10 +49,14 @@ npm run dev        # http://localhost:3000
 ```bash
 npm ci
 npm run build
-npm start          # http://0.0.0.0:3000
+npm start          # default port 3000; gunakan -p untuk port lain
 ```
 
-Verifikasi: `curl http://localhost:3000/api/health`
+- Untuk **Windows Server + XAMPP** (topologi resmi RS): aplikasi berjalan di `C:\xampp\htdocs\soera-ai` sebagai **Windows Service (NSSM)** di 127.0.0.1:<port>, di-reverse-proxy oleh Apache (`ProxyPass`), **bukan** diekspos langsung. Lihat [`docs/PANDUAN-INSTALL-WINDOWS-SERVER.md`](docs/PANDUAN-INSTALL-WINDOWS-SERVER.md).
+- **Sub-path deploy**: bila disajikan di path seperti `/soera-ai/`, set `SOERA_BASE_PATH=/soera-ai` **sama persis saat build dan saat service berjalan** (lewat NSSM env). Nilai berbeda/kosong = seluruh URL 404.
+- Verifikasi otomatis di server: `.\scripts\Verify-SoeraAI.ps1 -Port <port> -BasePath '/soera-ai'`
+
+Verifikasi: `curl http://localhost:<port>/api/health`
 Jalankan pengujian basis pengetahuan & retrieval: `npm test`
 
 **Docker** (opsional, belum diuji di lingkungan pengembangan ini):
@@ -63,19 +67,30 @@ docker run -p 3000:3000 -v soera-data:/data soera-ai
 
 ## Konfigurasi (env opsional)
 
-| Variabel | Default | Keterangan |
-|---|---|---|
-| `ADMIN_USERNAME` | `admin` | Username panel admin |
-| `ADMIN_PASSWORD` | `admin123` | **Wajib diganti di produksi** |
-| `SOERA_ADMIN_SECRET` | (dev) | Rahasia penandatangan cookie admin — isi string acak panjang di produksi (`SAPA_ADMIN_SECRET` lama tetap dihormati) |
-| `SOERA_AI_DAILY_LIMIT` | `5` | Maks. pertanyaan bebas AI per pengguna/IP per hari (reset 00.00 WIB) |
-| `SOERA_RATE_CHAT_LIMIT` | `30` | Maks. request `/api/chat` per IP per window (429 bila lewat) |
-| `SOERA_RATE_CHAT_WINDOW_MS` | `300000` | Window rate limit chat (5 menit) |
-| `SOERA_RATE_LOGIN_LIMIT` | `5` | Maks. kegagalan login admin per IP per window (blokir 429) |
-| `SOERA_RATE_LOGIN_WINDOW_MS` | `600000` | Window throttle login (10 menit) |
-| `SOERA_RATE_PUBLIC_POST_LIMIT` | `10` | Maks. pengiriman publik (keluhan + home care) per IP per jam |
-| `SOERA_RATE_PUBLIC_POST_WINDOW_MS` | `3600000` | Window limit pengiriman publik (1 jam) |
-| `SAPA_DATA_DIR` | `./data` | Lokasi file SQLite |
+**Daftar lengkap variabel ada di [`.env.example`](.env.example)** — berisi **nama variabel dan placeholder kosong saja**. README ini sengaja **tidak mencantumkan nilai default kredensial/secret apa pun**; nilai rahasia diisi saat instalasi (file `.env.local` yang di-gitignore, atau environment NSSM `AppEnvironmentExtra` di server).
+
+Variabel keamanan (nilai diset saat instalasi, **jangan pernah di-commit**):
+
+| Variabel | Peran |
+|---|---|
+| `SOERA_ADMIN_SECRET` | Rahasia penandatangan cookie sesi admin (string acak panjang) |
+| `SOERA_ADMIN_PASSWORD_HASH` | Hash bcrypt password admin (diutamakan) |
+| `ADMIN_PASSWORD` / `ADMIN_USERNAME` | Fallback sederhana (dibandingkan timing-safe) — tidak disarankan di produksi |
+
+Variabel operasional (non-rahasia):
+
+| Variabel | Peran |
+|---|---|
+| `SOERA_AI_DAILY_LIMIT` | Kuota pertanyaan bebas AI per pengguna/hari |
+| `SOERA_RATE_CHAT_LIMIT` / `SOERA_RATE_CHAT_WINDOW_MS` | Rate limit `/api/chat` |
+| `SOERA_RATE_LOGIN_LIMIT` / `SOERA_RATE_LOGIN_WINDOW_MS` | Throttle login admin |
+| `SOERA_RATE_PUBLIC_POST_LIMIT` / `SOERA_RATE_PUBLIC_POST_WINDOW_MS` | Rate limit kiriman publik |
+| `SAPA_DATA_DIR` | Lokasi file SQLite (bukan di repo) |
+| `SOERA_PUBLIC_URL` | URL publik untuk `robots.txt` & `sitemap.xml` |
+| `SOERA_BASE_PATH` | Sub-path deploy (mis. `/soera-ai`); kosong = root; wajib sama saat build & start |
+| `NODE_ENV` | `production` di server |
+
+> **Aturan:** `.env` / `.env.local` tidak pernah di-commit (sudah di `.gitignore`). File `.env.example` hanya template tanpa isian rahasia. Password/secret produksi **hanya diketahui petugas yang berwenang**; rotate sesuai SOP.
 
 ## Mode Offline & Integrasi Jan (janhq/jan)
 
@@ -121,7 +136,9 @@ src/
     jadwal.ts          # ±55 baris jadwal poliklinik (update 12 Mei 2026)
     rag.ts             # Retrieval + intent detection
     offline.ts         # Penyusun jawaban deterministik (mode offline)
-    llm.ts             # Klien OpenAI-compatible streaming (Jan/Ollama dkk)
+    llm.ts             # Klien OpenAI-compatible streaming (Jan/Ollama dkk) + SYSTEM_PROMPT
+    agent.ts           # Agen tool-calling (pertanyaan bebas, kuota harian) — AGENT_SYSTEM
+    basePath.ts        # helper bp() untuk deploy sub-path (SOERA_BASE_PATH)
     db.ts              # SQLite (node:sqlite) + migrasi + seed kampanye/pengaturan
     settings.ts auth.ts llm settings, autentikasi cookie admin
 public/documents/      # SK Tarif Home Care (PDF asli, dapat diunduh dari aplikasi)
@@ -141,7 +158,7 @@ test/rag-test.mjs      # 32 pengujian basis pengetahuan & retrieval
 - **Rate limit in-memory** (fixed window): `/api/chat` 30 req/5 mnt/IP · login admin 5 gagal/10 mnt/IP (429 + `Retry-After`) · pengiriman publik (keluhan + home care + feedback + percakapan) 10/jam/IP. Limit dapat diubah via env di atas. Untuk multi-instance/produksi besar tambahkan limit di reverse proxy (Caddy/Nginx/Cloudflare).
 - **Security headers** di semua respons: CSP (default-src 'self'), `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy`, `Permissions-Policy`, HSTS.
 - **Percakapan pasien diisolasi per pengunjung** (cookie anonim httpOnly `soera_owner`, bukan akun) — tanpa cookie, tidak ada yang bisa membaca daftar/isi percakapan siapa pun; percakapan milik orang lain tidak bisa dibaca/dihapus/ditimpa (lihat UU PDP).
-- **Password admin** bisa memakai hash **bcrypt** (`SOERA_ADMIN_PASSWORD_HASH`, pola `node -e "console.log(require('bcryptjs').hashSync('pw', 12))"`); fallback plain (timing-safe compare); startup memperingatkan kredensial default (`src/instrumentation.ts`).
+- **Password admin** bisa memakai hash **bcrypt** (`SOERA_ADMIN_PASSWORD_HASH`, pola `node -e "console.log(require('bcryptjs').hashSync('password-kuat-anda', 12))"`); fallback plain (timing-safe compare); startup memperingatkan bila kredensial masih default/lemah (`src/instrumentation.ts`).
 - **`/api/health`**: publik hanya menampilkan status dasar; detail provider/baseUrl AI & peringatan keamanan hanya untuk admin (cookie).
 - **IP tidak disimpan**: subjek kuota AI di-hash SHA-256; cookie `HttpOnly; SameSite=Lax`; sesi 12 jam.
 - **Framework**: Next.js **15.5.29** + React 19 + `sharp` — `npm audit`: **0 vulnerabilities**. Markdown dirender via react-markdown + remark-gfm (tanpa HTML mentah → anti-XSS).
@@ -155,9 +172,8 @@ test/rag-test.mjs      # 32 pengujian basis pengetahuan & retrieval
 - [`docs/SOP-OPERASIONAL.md`](docs/SOP-OPERASIONAL.md) — SOP operasional: harian/mingguan/bulanan, rotasi password admin (bcrypt), alur tiket keluhan & Home Care, insiden & eskalasi, audit triwulan (UU PDP).
 - [`scripts/Install-SoeraAI.ps1`](scripts/Install-SoeraAI.ps1) — instalasi otomatis di Windows Server (clone → npm ci → build → Windows Service NSSM 24 jam → verifikasi; `-Update` untuk update; `-RegisterBackupTask` untuk backup harian).
 - [`scripts/Backup-SoeraAI.ps1`](scripts/Backup-SoeraAI.ps1) — backup SQLite harian + retensi 30 hari.
-- [`scripts/Verify-SoeraAI.ps1`](scripts/Verify-SoeraAI.ps1) — health-check otomatis (service, loopback port, /api/health, header keamanan, tolak password salah, robots.txt, URL publik).
-- [`scripts/Update-SoeraAI.ps1`](scripts/Update-SoeraAI.ps1) — update ke server: backup dulu → `git pull --ff-only origin/main` → build → restart NSSM → verifikasi; **rollback otomatis** bila gagal.
-- [`docs/DEPLOYMENT-PUBLIK.md`](docs/DEPLOYMENT-PUBLIK.md) — arsitektur & checklist publikasi SOERA AI di IP publik (HTTPS, firewall, reverse proxy, LLM lokal di server, keamanan & UU PDP).
+- [`scripts/Verify-SoeraAI.ps1`](scripts/Verify-SoeraAI.ps1) — health-check otomatis (service, port loopback — terdeteksi dari service, /api/health, header keamanan, tolak password salah, robots.txt, URL publik). Pakai `-Port`/`-BasePath` eksplisit bila perlu.
+- [`scripts/Update-SoeraAI.ps1`](scripts/Update-SoeraAI.ps1) — update di server: backup SQLite → fetch + fast-forward → `npm ci` → build (dengan `SOERA_BASE_PATH` yang terdeteksi dari registry NSSM / `-BasePath` eksplisit) → restart NSSM → verifikasi; **rollback otomatis** bila gagal; berhenti aman (service distart lagi) bila sumber sudah terbaru.
 - [`docs/AI-AGENT.md`](docs/AI-AGENT.md) — screening GitHub framework AI Agent (vercel/ai vs langchainjs/langgraph/LlamaIndex/privateGPT/RAGFlow) + arsitektur agen tool-calling & kuota 5/hari.
 
 ## Catatan Penting

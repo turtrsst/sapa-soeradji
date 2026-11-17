@@ -2,6 +2,7 @@
 import { useMemo, useState } from 'react';
 import Icon from '@/components/Icon';
 import { TARIF_SECTIONS, TARIF_META, searchTarif, formatRp } from '@/lib/tarif';
+import { bp } from '@/lib/basePath';
 
 export default function HomeCarePage() {
   const [tab, setTab] = useState<'tarif' | 'form'>('tarif');
@@ -21,7 +22,7 @@ export default function HomeCarePage() {
     e.preventDefault();
     setSending(true); setResult(null);
     try {
-      const res = await fetch('/api/homecare', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
+      const res = await fetch(bp('/api/homecare'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
       const data = await res.json();
       setResult(data);
       if (res.ok) setForm({ name: '', phone: '', address: '', service: '', schedule: '', notes: '' });

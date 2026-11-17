@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import Icon from './Icon';
+import { bp } from '@/lib/basePath';
 
 export default function Footer() {
   return (
@@ -8,7 +9,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-10 grid gap-8 md:grid-cols-4 text-sm">
         <div className="md:col-span-1">
           <div className="flex items-center gap-2">
-            <Image src="/images/soera-ai-logo.png" alt="SOERA AI" width={40} height={40} className="h-10 w-10 object-contain" />
+            <Image src={bp('/images/soera-ai-logo.png')} alt="SOERA AI" width={40} height={40} className="h-10 w-10 object-contain" />
             <div>
               <p className="font-extrabold text-white leading-tight">SOERA AI</p>
               <p className="text-[10px] uppercase tracking-widest text-gold-400 font-bold">RSUP Dr. Soeradji Tirtonegoro</p>

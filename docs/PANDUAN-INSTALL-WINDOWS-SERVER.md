@@ -5,8 +5,8 @@ Panduan operasional untuk memasang **SOERA AI** (aplikasi Next.js 15 + SQLite) p
 > **Arsitektur singkat**
 > ```
 > Pengunjung (internet)
->   → DNS domain (mis. soera.rsupsoeradji.id)
->   → [Opsi A] Cloudflare Tunnel  ── atau ── [Opsi B] Apache XAMPP (reverse proxy + HTTPS)
+>   → DNS domain (mis. sias.rsupsoeradji.id)
+>   → [Opsi A] Cloudflare Tunnel  ── atau ── [Opsi B] Apache XAMPP (vhost host sendiri, reverse proxy + HTTPS)  ── atau ── [Opsi C] sub-path di domain SIAS (sias.rsupsoeradji.id/soera-ai/)
 >   → Node.js 127.0.0.1:3000  (aplikasi SOERA AI, jalan sebagai Windows Service via NSSM)
 >   → SQLite di C:\xampp\htdocs\soera-ai\data\soera-ai.sqlite
 > ```
@@ -22,7 +22,7 @@ Estimasi waktu: 60–90 menit termasuk konfigurasi domain.
 
 - Windows Server 2019/2022 (atau Windows 10/11) — 4 GB RAM minimal, 8 GB disarankan (16 GB bila sekaligus menjalankan Ollama/Jan kecil)
 - XAMPP terpasang di `C:\xampp` (hanya "Apache" yang dipakai; MySQL tidak wajib)
-- Domain publik, mis. **`soera.rsupsoeradji.id`** (subdomain resmi RS) — atau domain lain milik RS
+- Domain publik, mis. **`sias.rsupsoeradji.id`** (subdomain resmi RS) — atau domain lain milik RS
 - Akses RDP/admin ke server + hak set DNS (atau tiket ke pengelola DNS rsupsoeradji.id)
 - Koneksi internet di server untuk unduh Node.js & `npm ci` (sekali saja)
 
@@ -61,7 +61,8 @@ Aplikasi membaca environment dari proses. Paling rapi: tanam langsung di Windows
 | `SOERA_ADMIN_SECRET` | `node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"` |
 | `SOERA_ADMIN_PASSWORD_HASH` | `node -e "console.log(require('bcryptjs').hashSync('PASSWORD-KUAT-ANDA', 12))"` (jalankan di folder `soera-ai`) |
 | `SAPA_DATA_DIR` | `C:\xampp\htdocs\soera-ai\data` |
-| `SOERA_PUBLIC_URL` | `https://soera.rsupsoeradji.id` |
+| `SOERA_PUBLIC_URL` | `https://sias.rsupsoeradji.id/soera-ai` |
+| `SOERA_BASE_PATH` | `/soera-ai` (hanya bila disajikan di sub-path — **wajib sama persis saat build & saat service berjalan**; installer menangani keduanya bila pakai `-BasePath`) |
 
 **Opsional:** `ADMIN_USERNAME` (default `admin`), `SOERA_AI_DAILY_LIMIT` (default 5), `SOERA_RATE_*` (lihat `.env.example`).
 
@@ -94,7 +95,7 @@ Aplikasi harus hidup terus — jangan andalkan "jendela PowerShell terbuka". Pak
    ```powershell
    nssm install SoeraAI "C:\Program Files\nodejs\node.exe" "node_modules\next\dist\bin\next start -H 127.0.0.1 -p 3000"
    nssm set SoeraAI AppDirectory "C:\xampp\htdocs\soera-ai"
-   nssm set SoeraAI AppEnvironmentExtra "SOERA_ADMIN_SECRET=ISI_SECRET_ANDA" "SOERA_ADMIN_PASSWORD_HASH=ISI_HASH_BCRYPT_ANDA" "SAPA_DATA_DIR=C:\xampp\htdocs\soera-ai\data" "SOERA_PUBLIC_URL=https://soera.rsupsoeradji.id" "NODE_ENV=production"
+   nssm set SoeraAI AppEnvironmentExtra "SOERA_ADMIN_SECRET=ISI_SECRET_ANDA" "SOERA_ADMIN_PASSWORD_HASH=ISI_HASH_BCRYPT_ANDA" "SAPA_DATA_DIR=C:\xampp\htdocs\soera-ai\data" "SOERA_PUBLIC_URL=https://sias.rsupsoeradji.id/soera-ai" "SOERA_BASE_PATH=/soera-ai" "NODE_ENV=production"
    nssm set SoeraAI AppStdout "C:\xampp\htdocs\soera-ai\logs\stdout.log"
    nssm set SoeraAI AppStderr "C:\xampp\htdocs\soera-ai\logs\stderr.log"
    nssm set SoeraAI AppRotateFiles 1
@@ -128,9 +129,9 @@ Server RS biasanya di balik NAT/IP privat. Tunnel outbound-only cocok: tidak per
 
 1. Pastikan `rsupsoeradji.id` (atau domain pilihan) dikelola di **Cloudflare** (nameserver diarahkan ke Cloudflare; atau pakai Cloudflare for SaaS).
 2. Cloudflare dashboard → **Zero Trust → Networks → Tunnels → Create a tunnel** → beri nama `soera-ai` → ikuti instruksi unduh/install `cloudflared` untuk Windows → jalankan sebagai service (`cloudflared service install <TOKEN>`).
-3. Di tunnel yang sama → **Public Hostname**: `soera.rsupsoeradji.id` → service `http://127.0.0.1:3000`. Simpan. DNS CNAME terbuat otomatis; sertifikat HTTPS otomatis.
+3. Di tunnel yang sama → **Public Hostname**: `sias.rsupsoeradji.id` → service `http://127.0.0.1:3000`. Simpan. DNS CNAME terbuat otomatis; sertifikat HTTPS otomatis.
 4. (Opsional, di Cloudflare) aktifkan **WAF managed rules** + **Rate limiting rule** chat (mis. 30 req/5 menit per IP) untuk defense-in-depth di atas limit aplikasi.
-5. Tambahkan ke `SOERA_PUBLIC_URL` nilai `https://soera.rsupsoeradji.id` (sudah di langkah 5).
+5. Tambahkan ke `SOERA_PUBLIC_URL` nilai `https://sias.rsupsoeradji.id` (sudah di langkah 5).
 
 ### Opsi B — Apache XAMPP sebagai reverse proxy + Let's Encrypt
 Cocok bila server punya **IP publik statis** dan bisa dibuka port 80/443.
@@ -147,7 +148,7 @@ Cocok bila server punya **IP publik statis** dan bisa dibuka port 80/443.
 2. Buat `C:\xampp\apache\conf\extra\soera-ai.conf`:
    ```apache
    <VirtualHost *:80>
-       ServerName soera.rsupsoeradji.id
+       ServerName sias.rsupsoeradji.id
        # Redirect paksa ke HTTPS (aktifkan setelah sertifikat terpasang)
        # RewriteEngine On
        # RewriteCond %{HTTPS} off
@@ -162,8 +163,45 @@ Cocok bila server punya **IP publik statis** dan bisa dibuka port 80/443.
    ```
    Di `httpd.conf` bagian bawah tambahkan: `Include conf/extra/soera-ai.conf`
 3. Restart Apache: XAMPP Control Panel → Stop/Start **Apache** (atau `httpd.exe -k restart`).
-4. Install sertifikat gratis: unduh **win-acme** (<https://www.win-acme.com/>), jalankan `wacs.exe` → “Create certificate (simple)” → pilih vhost `soera.rsupsoeradji.id` → win-acme membuat vhost 443 + renew otomatis.
+4. Install sertifikat gratis: unduh **win-acme** (<https://www.win-acme.com/>), jalankan `wacs.exe` → “Create certificate (simple)” → pilih vhost `sias.rsupsoeradji.id` → win-acme membuat vhost 443 + renew otomatis.
 5. Windows Firewall: inbound izinkan **TCP 80, 443**; **jangan** izinkan 3000 dari luar.
+
+### Opsi C — Sub-path di domain yang sudah ada: `sias.rsupsoeradji.id/soera-ai/`
+
+Pilihan paling sederhana bila `sias.rsupsoeradji.id` (Apache SIAS) memang sudah 24 jam online & dikelola SI: SOERA AI hidup di samping SIAS — **tanpa DNS baru, tanpa vhost baru, tanpa sertifikat baru** (HTTPS SIAS dipakai bersama).
+
+1. Pasang/build dengan base path (installer menangani build + environment service sekaligus):
+   ```powershell
+   cd C:\xampp\htdocs\soera-ai
+   git fetch origin main; git merge --ff-only origin/main
+   .\scripts\Install-SoeraAI.ps1 -PublicUrl "https://sias.rsupsoeradji.id/soera-ai" -BasePath "/soera-ai"
+   ```
+   Manual: `$env:SOERA_BASE_PATH='/soera-ai'; npm run build`, dan pastikan environment service memuat `SOERA_BASE_PATH=/soera-ai` (cek: `nssm get SoeraAI AppEnvironmentExtra`).
+   > **`SOERA_BASE_PATH` harus SAMA persis saat build dan saat service berjalan.** Salah satu beda → aplikasi 404 di semua rute atau aset `_next` 404.
+   > Port: bila 3000 dipakai SIAS, installer otomatis memilih 3100–3120 — ikuti baris `[SOERA] ... port ...` di output (contoh di bawah pakai 3100).
+2. Di vhost SIAS (`C:\xampp\apache\conf\extra\` yang memuat `<VirtualHost *:443>` untuk `sias.rsupsoeradji.id` — tanya pengelola SIAS), tambahkan di dalam `<VirtualHost>`:
+   ```apache
+   # === SOERA AI (sub-path, proxy ke Node loopback) ===
+   ProxyPass        "/soera-ai"  "http://127.0.0.1:3100/soera-ai"
+   ProxyPassReverse "/soera-ai"  "http://127.0.0.1:3100/soera-ai"
+   ProxyPass        "/soera-ai/" "http://127.0.0.1:3100/soera-ai/"
+   ProxyPassReverse "/soera-ai/" "http://127.0.0.1:3100/soera-ai/"
+   <Location "/soera-ai">
+       RequestHeader set X-Forwarded-Proto "https"
+   </Location>
+   ```
+   Prasyarat: `mod_proxy` & `mod_proxy_http` aktif (lihat Opsi B langkah 1). Tidak perlu mematikan/mengubah apapun milik SIAS — blok ini hanya menambah rute.
+3. Restart Apache, lalu uji:
+   ```powershell
+   Invoke-WebRequest https://sias.rsupsoeradji.id/soera-ai/api/health
+   ```
+4. **robots.txt / sitemap.xml**: crawler hanya membaca `/robots.txt` di root domain — `/soera-ai/robots.txt` **tidak efektif**. Minta pengelola SIAS menambahkan ke root `robots.txt` SIAS:
+   ```
+   Disallow: /soera-ai/admin
+   Disallow: /soera-ai/api/
+   ```
+   Sitemap tersedia di `https://sias.rsupsoeradji.id/soera-ai/sitemap.xml` (daftarkan manual ke Google Search Console bila perlu).
+5. Header keamanan aplikasi (nosniff, CSP, HSTS) tetap aktif dan same-origin — tidak bentrok dengan SIAS.
 
 ## 8. Backup database SQLite (harian)
 
@@ -181,7 +219,7 @@ Uji restore: hentikan service → salin file `.sqlite` kembali ke folder `data\`
 
 ## 9. Monitoring & beban
 
-- **Uptime**: daftarkan `https://soera.rsupsoeradji.id/api/health` di UptimeRobot / Better Stack / health-check bawaan RS (interval 5 menit, alert ke SI/Humas). Publik hanya melihat status dasar; detail provider AI & peringatan keamanan hanya untuk admin (login `/admin`).
+- **Uptime**: daftarkan `https://sias.rsupsoeradji.id/soera-ai/api/health` di UptimeRobot / Better Stack / health-check bawaan RS (interval 5 menit, alert ke SI/Humas). Publik hanya melihat status dasar; detail provider AI & peringatan keamanan hanya untuk admin (login `/admin`).
 - **Log aplikasi**: `C:\xampp\htdocs\soera-ai\logs\stdout.log` & `stderr.log` (rotasi otomatis NSSM).
 - **Beban**: `Get-Counter` CPU/memori; SQLite cocok untuk ribuan chat/hari pada 1 instance. Skalakan vertikal (RAM/SSD) bila perlu; multi-instance butuh migrasi DB + rate-limit terdistribusi (di luar cakupan).
 

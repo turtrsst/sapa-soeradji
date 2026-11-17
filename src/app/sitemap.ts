@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = (process.env.SOERA_PUBLIC_URL || 'https://soera.rsupsoeradji.id').replace(/\/$/, '');
+  const base = (process.env.SOERA_PUBLIC_URL || 'https://sias.rsupsoeradji.id/soera-ai').replace(/\/$/, '');
   const now = new Date();
   return [
     { url: `${base}/`, lastModified: now, changeFrequency: 'weekly', priority: 1.0 },

@@ -138,11 +138,13 @@ WantedBy=multi-user.target
 ### 3.3 Reverse proxy + HTTPS (Caddy — sertifikat otomatis Let's Encrypt)
 ```
 # /etc/caddy/Caddyfile — contoh subdomain; samakan dengan zona DNS RS
-soera.rsupsoeradji.id {
+sias.rsupsoeradji.id {
     reverse_proxy 127.0.0.1:3000
 }
 ```
 `sudo systemctl reload caddy` — selesai. HTTP otomatis redirect ke HTTPS.
+
+> Catatan sub-path: bila disajikan di bawah `/soera-ai/` (bukan host sendiri), aplikasi harus di-build & dijalankan dengan `SOERA_BASE_PATH=/soera-ai` — lihat **Panduan Instalasi Windows Server → Opsi C**. Tanpa itu semua rute/aset 404.
 
 ### 3.4 Aplikasi via systemd (`/etc/systemd/system/soera-ai.service`)
 ```ini
@@ -166,7 +168,7 @@ WantedBy=multi-user.target
 
 ## 4. DNS & firewall
 
-- Ajukan subdomain ke tim Sistem Informasi RS (satu zona dengan `sias.rsupsoeradji.id`), mis. **`soera.rsupsoeradji.id` → IP publik server**; atau minta IP publik sendiri dari ISP/RS dan arahkan A record.
+- Ajukan subdomain ke tim Sistem Informasi RS (satu zona dengan `sias.rsupsoeradji.id`), mis. **`sias.rsupsoeradji.id` → IP publik server**; atau minta IP publik sendiri dari ISP/RS dan arahkan A record.
 - Bila behind NAT: port-forward **443 + 80 saja** (jangan forward 3000/8080).
 - Contoh `ufw`:
   ```bash

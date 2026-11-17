@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Icon from '@/components/Icon';
+import { bp } from '@/lib/basePath';
 
 interface Campaign { id: number; title: string; summary: string; body: string; tag: string; location: string | null; start_date: string | null; end_date: string | null }
 
@@ -17,7 +18,7 @@ export default function KampanyePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/kampanye').then((r) => r.json()).then((d) => setCampaigns(d.campaigns || [])).finally(() => setLoading(false));
+    fetch(bp('/api/kampanye')).then((r) => r.json()).then((d) => setCampaigns(d.campaigns || [])).finally(() => setLoading(false));
   }, []);
 
   const shareText = (c: Campaign) => encodeURIComponent(`${c.title} — ${c.summary} Info: RSUP Dr. Soeradji Tirtonegoro Klaten, (0272) 321020 / rsupsoeradji.id`);
