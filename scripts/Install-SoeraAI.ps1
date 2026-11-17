@@ -105,15 +105,16 @@ try {
     $generated = $true
   }
   $env:SOERA_TMP_PW = $plainPass
-  Push-Location $InstallPath
-  # PowerShell 5.1 men-strip tanda kutip ganda di argumen native -> tulis JS ke file sementara
-  $tmpJs = Join-Path $env:TEMP 'soera-hash.js'
+  # Tulis JS sementara DI DALAM folder proyek agar require('bcryptjs') menemukan node_modules
+  $tmpJs = Join-Path $InstallPath '.soera-hash.tmp.js'
   [IO.File]::WriteAllText($tmpJs, 'console.log(require("bcryptjs").hashSync(process.env.SOERA_TMP_PW, 12));', [Text.Encoding]::ASCII)
-  $hashRaw = & node $tmpJs
-  Remove-Item $tmpJs -Force -ErrorAction SilentlyContinue
-  Pop-Location
-  Remove-Item Env:SOERA_TMP_PW -ErrorAction SilentlyContinue
-  if (-not $hashRaw) { Die 'Gagal membuat hash bcrypt password admin (node tidak menghasilkan output).' }
+  try {
+    $hashRaw = & node $tmpJs
+  } finally {
+    Remove-Item $tmpJs -Force -ErrorAction SilentlyContinue
+    Remove-Item Env:SOERA_TMP_PW -ErrorAction SilentlyContinue
+  }
+  if (-not $hashRaw) { Die 'Gagal membuat hash bcrypt password admin (node tidak menghasilkan output). Jalankan "npm ci" dulu.' }
   $hash = $hashRaw.Trim()
   if (-not $hash) { Die 'Gagal membuat hash bcrypt password admin.' }
 
