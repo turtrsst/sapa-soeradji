@@ -49,7 +49,13 @@ if ($BasePath) { $env:SOERA_BASE_PATH = $BasePath; Info ('Build dengan SOERA_BAS
 if (-not $PSBoundParameters.ContainsKey('Port')) {
   try {
     $svcParams = (& nssm get $ServiceName AppParameters) -join ' '
-    $pm = [regex]::Match($svcParams, '-p\s+(\d+)')
+    $pm = [regex]::Match($svcParams, '-p\s*(\d+)')
+    if (-not $pm.Success) {
+      try {
+        $reg = Get-ItemProperty -Path ('HKLM:\SYSTEM\CurrentControlSet\Services\' + $ServiceName + '\Parameters') -ErrorAction Stop
+        if ($reg.AppParameters) { $svcParams = ($svcParams + ' ' + $reg.AppParameters); $pm = [regex]::Match($svcParams, '-p\s*(\d+)') }
+      } catch {}
+    }
     if ($pm.Success) { $Port = [int]$pm.Groups[1].Value; Info ('Port terdeteksi dari service: ' + $Port) }
   } catch {}
   if ($Port -le 0) { $Port = 3100; Warn 'Tidak bisa deteksi port service - pakai 3100.' }
@@ -77,7 +83,21 @@ try {
   & git fetch origin $Branch; if ($LASTEXITCODE -ne 0) { throw 'git fetch gagal.' }
   & git merge --ff-only ('origin/' + $Branch); if ($LASTEXITCODE -ne 0) { throw 'Branch lokal dan origin/' + $Branch + ' tidak fast-forwardable - selesaikan divergensi manual.' }
   $newCommit = (& git rev-parse HEAD).Trim()
-  if ($newCommit -eq $oldCommit) { Ok ('Sudah versi terbaru (' + $newCommit + ').'); Pop-Location; exit 0 }
+  if ($newCommit -eq $oldCommit) {
+    if ($svcEarly -and $svcEarly.Status -ne 'Stopped') {
+      Warn 'Sudah versi terbaru, tetapi service dihentikan lebih-dulu oleh updater - membangun ulang + men-start service...'
+      & npm ci --no-audit --no-fund
+      if ($LASTEXITCODE -ne 0) { throw 'npm ci gagal.' }
+      & npm run build
+      if ($LASTEXITCODE -ne 0) { throw 'npm run build gagal.' }
+      & nssm start $ServiceName | Out-Null
+      Start-Sleep -Seconds 5
+      & (Join-Path $PSScriptRoot 'Verify-SoeraAI.ps1') -BindHost $BindHost -Port $Port -ServiceName $ServiceName -BasePath $BasePath
+      if ($LASTEXITCODE -ne 0) { throw 'Verifikasi setelah rebuild GAGAL - service sudah di-start; periksa log aplikasi.' }
+      Ok 'Aplikasi dibangun ulang dan berjalan.'
+    } else { Ok ('Sudah versi terbaru (' + $newCommit + ').') }
+    Pop-Location; exit 0
+  }
   Info ('Update: ' + $oldCommit + ' -> ' + $newCommit)
 
   # 4) Dependensi dan build (service sudah dihentikan di awal)
