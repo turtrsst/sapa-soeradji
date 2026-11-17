@@ -17,7 +17,7 @@ const DEFAULT_CONFIG: LlmConfig = {
   baseUrl: 'http://127.0.0.1:1337/v1',
   apiKey: '',
   model: 'qwen2.5-3b-instruct',
-  temperature: 0.4,
+  temperature: 0.5,
   maxTokens: 900,
   timeoutMs: 60000,
 };
