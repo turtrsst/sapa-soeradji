@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import Header from '@/components/Header';
+import { bp } from '@/lib/basePath';
 import Footer from '@/components/Footer';
 import CampaignTicker from '@/components/CampaignTicker';
 
@@ -8,8 +9,9 @@ export const metadata: Metadata = {
   title: { default: 'SOERA AI — RSUP Dr. Soeradji Tirtonegoro Klaten', template: '%s | SOERA AI RST' },
   description: 'SOERA AI (Soeradji Assistant Intelligent): chatbot & layanan digital RSUP Dr. Soeradji Tirtonegoro Klaten. Tanya jadwal dokter, keluhan, Home Care, kampanye kesehatan — online maupun offline.',
   applicationName: 'SOERA AI',
-  manifest: '/manifest.webmanifest',
-  icons: { icon: '/images/soera-ai-logo.png', apple: '/images/soera-ai-logo.png' },
+  metadataBase: new URL(process.env.SOERA_PUBLIC_URL || 'https://sias.rsupsoeradji.id/soera-ai'),
+  manifest: bp('/manifest.webmanifest'),
+  icons: { icon: bp('/images/soera-ai-logo.png'), apple: bp('/images/soera-ai-logo.png') },
   keywords: ['RSUP Dr Soeradji Tirtonegoro', 'SOERA AI', 'rumah sakit Klaten', 'jadwal dokter', 'home care', 'pendaftaran online RST'],
 };
 

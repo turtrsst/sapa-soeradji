@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import Icon from '@/components/Icon';
 import Markdown from '@/components/Markdown';
+import { bp } from '@/lib/basePath';
 
 interface ChatMsg {
   id?: number;
@@ -48,7 +49,7 @@ function ChatPageInner() {
 
   const refreshConversations = useCallback(async () => {
     try {
-      const r = await fetch('/api/conversations');
+      const r = await fetch(bp('/api/conversations'));
       const d = await r.json();
       setConversations(d.conversations || []);
     } catch {}
@@ -58,7 +59,7 @@ function ChatPageInner() {
     setActiveId(id);
     setSidebarOpen(false);
     try {
-      const r = await fetch(`/api/conversations/${id}`);
+      const r = await fetch(bp(`/api/conversations/${id}`));
       const d = await r.json();
       setMessages((d.messages || []).filter((m: any) => m.role !== 'system').map((m: any) => ({
         id: m.id, role: m.role, content: m.content,
@@ -90,7 +91,7 @@ function ChatPageInner() {
     const controller = new AbortController();
     abortRef.current = controller;
     try {
-      const res = await fetch('/api/chat', {
+      const res = await fetch(bp('/api/chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ conversationId: activeId, message: text }),
@@ -183,7 +184,7 @@ function ChatPageInner() {
   const deleteConversation = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     if (!confirm('Hapus percakapan ini?')) return;
-    await fetch(`/api/conversations/${id}`, { method: 'DELETE' });
+    await fetch(bp(`/api/conversations/${id}`), { method: 'DELETE' });
     if (activeId === id) newChat();
     refreshConversations();
   };
@@ -196,7 +197,7 @@ function ChatPageInner() {
 
   const sendFeedback = async (idx: number, messageId: number | undefined, rating: number) => {
     setFeedbackSent((f) => ({ ...f, [idx]: rating }));
-    fetch('/api/feedback', {
+    fetch(bp('/api/feedback'), {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ conversationId: activeId, messageId, rating }),
     }).catch(() => {});
@@ -242,7 +243,7 @@ function ChatPageInner() {
           {/* top bar */}
           <div className="flex items-center gap-2 px-3 sm:px-5 h-14 border-b border-rst-100 bg-white/70 backdrop-blur">
             <button onClick={() => setSidebarOpen(true)} className="md:hidden p-2 rounded-lg hover:bg-rst-50 text-rst-700" aria-label="Riwayat"><Icon name="menu" size={20} /></button>
-            <Image src="/images/soera-ai-logo.png" alt="SOERA AI" width={30} height={30} className="h-7 w-7 object-contain" />
+            <Image src={bp('/images/soera-ai-logo.png')} alt="SOERA AI" width={30} height={30} className="h-7 w-7 object-contain" />
             <div className="leading-tight min-w-0">
               <p className="text-[13px] font-extrabold text-rst-900 truncate">SOERA AI — Asisten RST</p>
               <p className="text-[10px] font-semibold text-rst-500 flex items-center gap-1">
@@ -258,7 +259,7 @@ function ChatPageInner() {
           <div ref={scrollRef} className="flex-1 overflow-y-auto chat-scroll px-3 sm:px-6 py-5">
             {isEmpty ? (
               <div className="max-w-2xl mx-auto text-center pt-6 sm:pt-12">
-                <Image src="/images/soera-ai-logo.png" alt="SOERA AI" width={92} height={92} className="mx-auto h-20 w-20 object-contain" />
+                <Image src={bp('/images/soera-ai-logo.png')} alt="SOERA AI" width={92} height={92} className="mx-auto h-20 w-20 object-contain" />
                 <h2 className="mt-4 text-2xl sm:text-3xl font-black text-rst-900 tracking-tight">Halo! Ada yang bisa <span className="text-rst-600">SOERA AI</span> bantu?</h2>
                 <p className="mt-2 text-sm text-rst-600">Asisten resmi RSUP Dr. Soeradji Tirtonegoro Klaten — keluhan Anda, jadwal dokter, pendaftaran, tarif layanan, hingga kampanye kesehatan.</p>
                 <div className="mt-6 grid sm:grid-cols-2 gap-2 text-left">
@@ -274,7 +275,7 @@ function ChatPageInner() {
                 {messages.map((m, i) => (
                   <div key={i} className={`flex gap-3 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
                     {m.role === 'assistant'
-                      ? <Image src="/images/soera-ai-logo.png" alt="SOERA AI" width={34} height={34} className="h-8 w-8 mt-1 rounded-full object-contain bg-white border border-rst-100 p-0.5 shrink-0" />
+                      ? <Image src={bp('/images/soera-ai-logo.png')} alt="SOERA AI" width={34} height={34} className="h-8 w-8 mt-1 rounded-full object-contain bg-white border border-rst-100 p-0.5 shrink-0" />
                       : <span className="h-8 w-8 mt-1 rounded-full bg-rst-700 text-white text-[11px] font-black flex items-center justify-center shrink-0">ANDA</span>}
                     <div className={`max-w-[85%] sm:max-w-[78%] rounded-2xl px-4 py-3 text-[14.5px] leading-relaxed shadow-sm ${m.role === 'user' ? 'bg-rst-700 text-white rounded-tr-md' : 'bg-white border border-rst-100 text-rst-900 rounded-tl-md'}`}>
                       {m.role === 'assistant' && !m.content && m.streaming ? (

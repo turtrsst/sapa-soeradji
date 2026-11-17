@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Icon from '@/components/Icon';
+import { bp } from '@/lib/basePath';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export default function AdminLoginPage() {
     e.preventDefault();
     setLoading(true); setError('');
     try {
-      const res = await fetch('/api/admin/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }) });
+      const res = await fetch(bp('/api/admin/login'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }) });
       const data = await res.json();
       if (res.ok) { router.push('/admin'); router.refresh(); }
       else setError(data?.error || 'Login gagal');
@@ -26,7 +27,7 @@ export default function AdminLoginPage() {
     <div className="min-h-[70vh] flex items-center justify-center px-4 py-14 bg-[radial-gradient(900px_400px_at_50%_-10%,rgba(31,127,120,0.25),transparent)]">
       <form onSubmit={submit} className="card w-full max-w-md p-6 sm:p-8">
         <div className="text-center">
-          <Image src="/images/soera-ai-logo.png" alt="SOERA AI" width={72} height={72} className="mx-auto h-16 w-16 object-contain" />
+          <Image src={bp('/images/soera-ai-logo.png')} alt="SOERA AI" width={72} height={72} className="mx-auto h-16 w-16 object-contain" />
           <h1 className="mt-3 text-xl font-black text-rst-900">Panel Admin SOERA AI</h1>
           <p className="mt-1 text-xs text-rst-500">Khusus petugas RSUP Dr. Soeradji Tirtonegoro — Keluhan · Home Care · Kampanye · Pengaturan AI</p>
         </div>

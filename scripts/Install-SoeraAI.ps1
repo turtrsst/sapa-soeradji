@@ -12,8 +12,8 @@
                   (backup dulu, git pull origin/main, build, restart, rollback otomatis).
 
   Contoh:
-    .\Install-SoeraAI.ps1 -PublicUrl "https://soera.rsupsoeradji.id"
-    .\Install-SoeraAI.ps1 -PublicUrl "https://soera.rsupsoeradji.id" -AdminPassword (Read-Host -AsSecureString "Password admin")
+    .\Install-SoeraAI.ps1 -PublicUrl "https://sias.rsupsoeradji.id/soera-ai" -BasePath '/soera-ai'
+    .\Install-SoeraAI.ps1 -PublicUrl "https://sias.rsupsoeradji.id" -AdminPassword (Read-Host -AsSecureString "Password admin")
     .\Install-SoeraAI.ps1 -Update
 
   CATATAN: belum diuji di semua varian Windows Server - uji di PC/VM staging dulu.
@@ -25,7 +25,8 @@ param(
   [string]$RepoUrl     = 'https://github.com/turtrsst/sapa-soeradji.git',
   [string]$BindHost    = '127.0.0.1',
   [int]$Port           = 3000,
-  [string]$PublicUrl   = 'https://soera.rsupsoeradji.id',
+  [string]$PublicUrl   = 'https://sias.rsupsoeradji.id/soera-ai',
+  [string]$BasePath    = '',
   [string]$ServiceName = 'SoeraAI',
   [string]$AdminUser   = 'admin',
   [SecureString]$AdminPassword,
@@ -43,6 +44,9 @@ function Info($m) { Write-Host ('[SOERA] ' + $m) -ForegroundColor Cyan }
 function Ok($m)   { Write-Host ('[OK] ' + $m) -ForegroundColor Green }
 function Warn($m) { Write-Host ('[!!] ' + $m) -ForegroundColor Yellow }
 function Die($m)  { Write-Host ('[GAGAL] ' + $m) -ForegroundColor Red; try { Stop-Transcript | Out-Null } catch {}; exit 1 }
+$BasePath = $BasePath.TrimEnd('/')
+if ($BasePath -and -not $BasePath.StartsWith('/')) { Die 'BasePath harus diawali / (mis. /soera-ai).' }
+if ($BasePath) { Info ('Mode sub-path: aplikasi disajikan di ' + $BasePath + ' (SOERA_BASE_PATH=' + $BasePath + ')') }
 
 try {
   Info ('=== SOERA AI - installer Windows Server (path: ' + $InstallPath + ') ===')
@@ -87,6 +91,7 @@ try {
   }
 
   Push-Location $InstallPath
+  if ($BasePath) { $env:SOERA_BASE_PATH = $BasePath } else { Remove-Item Env:SOERA_BASE_PATH -ErrorAction SilentlyContinue }
   Info 'npm ci (sekali, butuh internet)...'
   & npm ci --no-audit --no-fund; if ($LASTEXITCODE -ne 0) { Die 'npm ci gagal.' }
   Info 'npm run build...'
@@ -158,7 +163,9 @@ try {
   $nodeExe = $node.Source
   & nssm install $ServiceName $nodeExe ('node_modules\next\dist\bin\next start -H 127.0.0.1 -p ' + $chosenPort) | Out-Null
   & nssm set $ServiceName AppDirectory $InstallPath | Out-Null
-  & nssm set $ServiceName AppEnvironmentExtra ('SOERA_ADMIN_SECRET=' + $secret) ('SOERA_ADMIN_PASSWORD_HASH=' + $hash) ('SAPA_DATA_DIR=' + $InstallPath + '\data') ('SOERA_PUBLIC_URL=' + $PublicUrl) 'NODE_ENV=production' | Out-Null
+  $svcEnv = @(('SOERA_ADMIN_SECRET=' + $secret), ('SOERA_ADMIN_PASSWORD_HASH=' + $hash), ('SAPA_DATA_DIR=' + $InstallPath + '\data'), ('SOERA_PUBLIC_URL=' + $PublicUrl), 'NODE_ENV=production')
+  if ($BasePath) { $svcEnv += ('SOERA_BASE_PATH=' + $BasePath) }
+  & nssm set $ServiceName AppEnvironmentExtra $svcEnv | Out-Null
   & nssm set $ServiceName AppStdout ($logDir + '\stdout.log') | Out-Null
   & nssm set $ServiceName AppStderr ($logDir + '\stderr.log') | Out-Null
   & nssm set $ServiceName AppRotateFiles 1 | Out-Null
@@ -176,7 +183,7 @@ try {
   Ok ('Service ' + $ServiceName + ' berjalan di port ' + $chosenPort + ' (auto-start, auto-restart 5 detik)')
 
   # 7) Verifikasi kesehatan
-  & (Join-Path $PSScriptRoot 'Verify-SoeraAI.ps1') -BindHost $BindHost -Port $chosenPort -ServiceName $ServiceName -PublicUrl $PublicUrl
+  & (Join-Path $PSScriptRoot 'Verify-SoeraAI.ps1') -BindHost $BindHost -Port $chosenPort -ServiceName $ServiceName -PublicUrl $PublicUrl -BasePath $BasePath
   $verifyExit = $LASTEXITCODE
 
   # 8) Backup terjadwal (opsional)
@@ -194,7 +201,8 @@ try {
   Write-Host ('Path      : ' + $InstallPath)
   Write-Host ('Service   : ' + $ServiceName + ' (nssm) - start otomatis saat boot')
   Write-Host ('Bind      : http://{0}:{1} (loopback; publik via proxy/Tunnel)' -f $BindHost, $chosenPort)
-  Write-Host ('Health    : http://{0}:{1}/api/health' -f $BindHost, $chosenPort)
+  Write-Host ('Base path : {0}' -f $(if ($BasePath) { $BasePath } else { '/ (root)' }))
+  Write-Host ('Health    : http://{0}:{1}{2}/api/health' -f $BindHost, $chosenPort, $BasePath)
   Write-Host ('Admin     : {0}/admin  (user: {1})' -f $PublicUrl, $AdminUser)
   if ($generated) {
     Write-Host ''

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import Icon from '@/components/Icon';
+import { bp } from '@/lib/basePath';
 
 export const metadata = { title: 'Beranda' };
 
@@ -54,7 +55,7 @@ export default function LandingPage() {
           <div className="lg:col-span-5">
             <div className="rounded-3xl border border-white/15 bg-white/10 backdrop-blur-md p-4 sm:p-5 shadow-2xl">
               <div className="flex items-center gap-2 border-b border-white/10 pb-3">
-                <Image src="/images/soera-ai-logo.png" alt="SOERA AI" width={36} height={36} className="h-9 w-9 object-contain bg-white rounded-full p-0.5" />
+                <Image src={bp('/images/soera-ai-logo.png')} alt="SOERA AI" width={36} height={36} className="h-9 w-9 object-contain bg-white rounded-full p-0.5" />
                 <div className="leading-tight">
                   <p className="font-bold">SOERA AI</p>
                   <p className="text-[10px] text-emerald-300 flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400 inline-block" /> Online — siap membantu 24/7</p>

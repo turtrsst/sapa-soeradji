@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import Icon from './Icon';
 import { TARIF_META } from '@/lib/tarif';
 import { JADWAL_UPDATE } from '@/lib/jadwal';
+import { bp } from '@/lib/basePath';
 
 type Tab = 'ringkasan' | 'keluhan' | 'homecare' | 'kampanye' | 'ai';
 
@@ -36,21 +37,21 @@ export default function AdminDashboard() {
   const [testResult, setTestResult] = useState<any>(null);
   const [testing, setTesting] = useState(false);
 
-  const loadStats = useCallback(() => fetch('/api/admin/stats').then((r) => r.json()).then(setStats).catch(() => {}), []);
-  const loadTickets = useCallback((status = 'all') => fetch(`/api/admin/tickets?status=${status}`).then((r) => r.json()).then((d) => setTickets(d.tickets || [])).catch(() => {}), []);
-  const loadHomecare = useCallback(() => fetch('/api/admin/homecare').then((r) => r.json()).then((d) => setHomecare(d.requests || [])).catch(() => {}), []);
-  const loadCampaigns = useCallback(() => fetch('/api/admin/kampanye').then((r) => r.json()).then((d) => setCampaigns(d.campaigns || [])).catch(() => {}), []);
-  const loadSettings = useCallback(() => fetch('/api/admin/settings').then((r) => r.json()).then((d) => setLlm(d.config)).catch(() => {}), []);
+  const loadStats = useCallback(() => fetch(bp('/api/admin/stats')).then((r) => r.json()).then(setStats).catch(() => {}), []);
+  const loadTickets = useCallback((status = 'all') => fetch(bp(`/api/admin/tickets?status=${status}`)).then((r) => r.json()).then((d) => setTickets(d.tickets || [])).catch(() => {}), []);
+  const loadHomecare = useCallback(() => fetch(bp('/api/admin/homecare')).then((r) => r.json()).then((d) => setHomecare(d.requests || [])).catch(() => {}), []);
+  const loadCampaigns = useCallback(() => fetch(bp('/api/admin/kampanye')).then((r) => r.json()).then((d) => setCampaigns(d.campaigns || [])).catch(() => {}), []);
+  const loadSettings = useCallback(() => fetch(bp('/api/admin/settings')).then((r) => r.json()).then((d) => setLlm(d.config)).catch(() => {}), []);
 
   useEffect(() => { loadStats(); loadTickets(); loadHomecare(); loadCampaigns(); loadSettings(); }, [loadStats, loadTickets, loadHomecare, loadCampaigns, loadSettings]);
   useEffect(() => { loadTickets(ticketFilter); }, [ticketFilter, loadTickets]);
 
-  const logout = async () => { await fetch('/api/admin/logout', { method: 'POST' }); router.push('/admin/login'); router.refresh(); };
+  const logout = async () => { await fetch(bp('/api/admin/logout'), { method: 'POST' }); router.push('/admin/login'); router.refresh(); };
 
   const saveTicket = async (idOrNumber: string) => {
     const status = ticketStatus[idOrNumber];
     const response = ticketResponse[idOrNumber];
-    await fetch(`/api/admin/tickets/${encodeURIComponent(idOrNumber)}`, {
+    await fetch(bp(`/api/admin/tickets/${encodeURIComponent(idOrNumber)}`), {
       method: 'PATCH', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...(status ? { status } : {}), ...(response !== undefined ? { response } : {}) }),
     });
@@ -58,23 +59,23 @@ export default function AdminDashboard() {
   };
 
   const setHomecareStatus = async (id: string, status: string) => {
-    await fetch('/api/admin/homecare', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, status }) });
+    await fetch(bp('/api/admin/homecare'), { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, status }) });
     loadHomecare(); loadStats();
   };
 
   const toggleCampaign = async (id: number, active: boolean) => {
-    await fetch(`/api/admin/kampanye/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ active }) });
+    await fetch(bp(`/api/admin/kampanye/${id}`), { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ active }) });
     loadCampaigns();
   };
   const deleteCampaign = async (id: number) => {
     if (!confirm('Hapus kampanye ini?')) return;
-    await fetch(`/api/admin/kampanye/${id}`, { method: 'DELETE' });
+    await fetch(bp(`/api/admin/kampanye/${id}`), { method: 'DELETE' });
     loadCampaigns();
   };
   const addCampaign = async (e: React.FormEvent) => {
     e.preventDefault();
     setCampaignMsg('');
-    const res = await fetch('/api/admin/kampanye', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(campaignForm) });
+    const res = await fetch(bp('/api/admin/kampanye'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(campaignForm) });
     if (res.ok) {
       setCampaignForm({ title: '', summary: '', body: '', tag: 'Promosi Kesehatan', location: '', start_date: '', end_date: '' });
       setCampaignMsg('Kampanye tersimpan & langsung tampil di menu Kampanye.');
@@ -88,14 +89,14 @@ export default function AdminDashboard() {
   const saveLlm = async (e: React.FormEvent) => {
     e.preventDefault();
     setLlmSaved(''); setTestResult(null);
-    const res = await fetch('/api/admin/settings', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(llm) });
+    const res = await fetch(bp('/api/admin/settings'), { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(llm) });
     if (res.ok) { const d = await res.json(); setLlm(d.config); setLlmSaved('Pengaturan tersimpan.'); loadStats(); }
     else setLlmSaved('Gagal menyimpan.');
   };
   const testLlm = async () => {
     setTesting(true); setTestResult(null);
     try {
-      const res = await fetch('/api/admin/settings/test', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ baseUrl: llm?.baseUrl, apiKey: llm?.apiKey && !llm.apiKey.startsWith('••••') ? llm.apiKey : undefined }) });
+      const res = await fetch(bp('/api/admin/settings/test'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ baseUrl: llm?.baseUrl, apiKey: llm?.apiKey && !llm.apiKey.startsWith('••••') ? llm.apiKey : undefined }) });
       setTestResult(await res.json());
     } catch { setTestResult({ reachable: false, detail: 'Gagal memanggil endpoint uji.' }); } finally { setTesting(false); }
   };

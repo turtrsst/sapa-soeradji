@@ -19,7 +19,8 @@ param(
   [int]$Port           = 3000,
   [string]$Branch      = 'main',
   [string]$BackupRoot  = 'D:\backup-soera-ai',
-  [switch]$SkipBackup
+  [switch]$SkipBackup,
+  [string]$BasePath    = ''
 )
 $ErrorActionPreference = 'Stop'
 function Info($m) { Write-Host ('[UPDATE] ' + $m) -ForegroundColor Cyan }
@@ -27,6 +28,17 @@ function Ok($m)   { Write-Host ('[OK] ' + $m) -ForegroundColor Green }
 function Warn($m) { Write-Host ('[!!] ' + $m) -ForegroundColor Yellow }
 
 $oldCommit = $null
+# BasePath: bila tidak diberikan, baca dari environment service yang sedang berjalan
+# (build HARUS memakai nilai yang sama dengan saat install).
+$BasePath = $BasePath.TrimEnd('/')
+if (-not $BasePath) {
+  try {
+    $svcEnv = (& nssm get $ServiceName AppEnvironmentExtra) -join ' '
+    $m = [regex]::Match($svcEnv, 'SOERA_BASE_PATH=([^\s"]+)')
+    if ($m.Success) { $BasePath = $m.Groups[1].Value.TrimEnd('/'); Info ('BasePath terdeteksi dari service env: ' + $BasePath) }
+  } catch { Warn 'Tidak bisa membaca env service - build mode root.' }
+}
+if ($BasePath) { $env:SOERA_BASE_PATH = $BasePath; Info ('Build dengan SOERA_BASE_PATH=' + $BasePath) }
 try {
   if (-not (Test-Path (Join-Path $InstallPath '.git'))) { throw ($InstallPath + ' bukan repo git. Jalankan Install-SoeraAI.ps1 dulu.') }
   Push-Location $InstallPath
@@ -62,7 +74,7 @@ try {
   # 5) Restart service dan verifikasi
   if (Get-Service -Name $ServiceName -ErrorAction SilentlyContinue) { & nssm restart $ServiceName } else { Warn ('Service ' + $ServiceName + ' tidak ada - start manual.') }
   Info 'Menunggu aplikasi siap...'; Start-Sleep -Seconds 5
-  & (Join-Path $PSScriptRoot 'Verify-SoeraAI.ps1') -BindHost $BindHost -Port $Port -ServiceName $ServiceName
+  & (Join-Path $PSScriptRoot 'Verify-SoeraAI.ps1') -BindHost $BindHost -Port $Port -ServiceName $ServiceName -BasePath $BasePath
   if ($LASTEXITCODE -ne 0) { throw 'Verifikasi setelah update GAGAL.' }
 
   Ok ('UPDATE SUKSES -> versi ' + $newCommit)
@@ -78,7 +90,7 @@ try {
     & npm run build | Out-Null
     if (Get-Service -Name $ServiceName -ErrorAction SilentlyContinue) { & nssm restart $ServiceName }
     Start-Sleep -Seconds 5
-    & (Join-Path $PSScriptRoot 'Verify-SoeraAI.ps1') -BindHost $BindHost -Port $Port -ServiceName $ServiceName
+    & (Join-Path $PSScriptRoot 'Verify-SoeraAI.ps1') -BindHost $BindHost -Port $Port -ServiceName $ServiceName -BasePath $BasePath
     if ($LASTEXITCODE -eq 0) { Warn ('ROLLBACK BERHASIL - aplikasi kembali ke ' + $oldCommit + '.'); Pop-Location; exit 1 }
     Write-Host '[KRITIS] ROLLBACK JUGA GAGAL - aplikasi mungkin down. Pulihkan manual: git reset --hard <commit>; npm ci; npm run build; nssm restart SoeraAI. Restore data dari backup di ' $BackupRoot -ForegroundColor Red
     Pop-Location; exit 2

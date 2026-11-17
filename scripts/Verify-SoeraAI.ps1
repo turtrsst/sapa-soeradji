@@ -6,17 +6,21 @@
   endpoint admin menolak password salah, robots.txt benar.
 .EXAMPLE
   .\Verify-SoeraAI.ps1
-  .\Verify-SoeraAI.ps1 -PublicUrl 'https://soera.rsupsoeradji.id'
+  .\Verify-SoeraAI.ps1 -PublicUrl 'https://sias.rsupsoeradji.id/soera-ai' -BasePath '/soera-ai'
 #>
 [CmdletBinding()]
 param(
   [string]$BindHost    = '127.0.0.1',
   [int]$Port           = 3000,
   [string]$ServiceName = 'SoeraAI',
-  [string]$PublicUrl
+  [string]$PublicUrl,
+  [string]$BasePath    = ''
 )
 $ErrorActionPreference = 'Continue'
+$BasePath = $BasePath.TrimEnd('/')
+if ($BasePath -and -not $BasePath.StartsWith('/')) { throw 'BasePath harus diawali / (mis. /soera-ai).' }
 $base = 'http://{0}:{1}' -f $BindHost, $Port
+$app = $base + $BasePath
 $results = New-Object System.Collections.Generic.List[object]
 function Check($name, $pass, $detail) {
   $results.Add([pscustomobject]@{ Check = $name; Result = $(if ($pass) { 'PASS' } else { 'FAIL' }); Detail = $detail })
@@ -36,7 +40,7 @@ try {
 
 # 3) Health endpoint
 try {
-  $resp = Invoke-WebRequest -Uri ($base + '/api/health') -UseBasicParsing -TimeoutSec 10
+  $resp = Invoke-WebRequest -Uri ($app + '/api/health') -UseBasicParsing -TimeoutSec 10
   $json = $resp.Content | ConvertFrom-Json
   Check 'Health 200 dan status ok' ($resp.StatusCode -eq 200 -and $json.status -eq 'ok') ('HTTP ' + $resp.StatusCode)
   Check 'Health publik TIDAK membocorkan provider/baseUrl AI' ($null -eq $json.llm.baseUrl) $(if ($json.llm) { ($json.llm | ConvertTo-Json -Compress) } else { '' })
@@ -44,7 +48,7 @@ try {
 
 # 4) Header keamanan
 try {
-  $resp = Invoke-WebRequest -Uri ($base + '/') -UseBasicParsing -TimeoutSec 10
+  $resp = Invoke-WebRequest -Uri ($app + '/') -UseBasicParsing -TimeoutSec 10
   $h = $resp.Headers
   Check 'Header X-Content-Type-Options nosniff' ($h['X-Content-Type-Options'] -eq 'nosniff') $h['X-Content-Type-Options']
   Check 'Header Content-Security-Policy ada' ($null -ne $h['Content-Security-Policy']) ''
@@ -54,7 +58,7 @@ try {
 # 5) Login admin dengan password salah -> 401 atau 429
 try {
   $body = '{"username":"admin","password":"pasti-salah-123"}'
-  Invoke-WebRequest -Uri ($base + '/api/admin/login') -Method POST -ContentType 'application/json' -Body $body -UseBasicParsing -TimeoutSec 10 | Out-Null
+  Invoke-WebRequest -Uri ($app + '/api/admin/login') -Method POST -ContentType 'application/json' -Body $body -UseBasicParsing -TimeoutSec 10 | Out-Null
   Check 'Login admin password salah ditolak' $false 'justru diterima'
 } catch {
   $code = [int]$_.Exception.Response.StatusCode
@@ -63,7 +67,7 @@ try {
 
 # 6) robots.txt
 try {
-  $resp = Invoke-WebRequest -Uri ($base + '/robots.txt') -UseBasicParsing -TimeoutSec 10
+  $resp = Invoke-WebRequest -Uri ($app + '/robots.txt') -UseBasicParsing -TimeoutSec 10
   Check 'robots.txt ada dan melarang /admin' ($resp.Content -match 'Disallow:\s*/admin') ''
 } catch { Check 'robots.txt' $false $_.Exception.Message }
 
