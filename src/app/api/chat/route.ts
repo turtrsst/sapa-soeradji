@@ -119,7 +119,7 @@ export async function POST(req: Request) {
           send({ type: 'token', text: assistantText.slice(i, i + chunkSize) });
         }
         if (quotaExhausted) {
-          const note = `\n\n_⏳ Kuota pertanyaan bebas AI Anda hari ini (${AI_DAILY_LIMIT} pertanyaan) sudah habis — direset jam **00.00 WIB**. Pertanyaan layanan (jadwal dokter, tarif, pendaftaran, Home Care, kampanye) tetap bisa dijawab tanpa kuota. Untuk bantuan langsung: **(0272) 321020**._`;
+          const note = `\n\n_⏳ **Kuota pertanyaan AI di luar layanan RST Anda hari ini sudah habis** (maks ${AI_DAILY_LIMIT}/hari) — direset pukul **00.00 WIB**. Pertanyaan layanan (jadwal dokter, tarif, pendaftaran, Home Care, kampanye, kontak, keluhan) **tetap bisa dijawab tanpa kuota**. Bantuan langsung: **(0272) 321020** / WhatsApp **0816-9170-00**._`;
           assistantText += note;
           send({ type: 'token', text: note });
         } else if (llmFailedReason) {

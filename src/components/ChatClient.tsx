@@ -308,6 +308,15 @@ function ChatPageInner() {
 
           {/* composer */}
           <div className="border-t border-rst-100 bg-white px-3 sm:px-6 py-3">
+            {aiQuota && aiQuota.remaining <= 0 && (
+              <div role="alert" className="max-w-3xl mx-auto mb-2 rounded-xl border border-amber-300 bg-amber-50 px-3.5 py-2.5 text-[11px] leading-snug text-amber-900 flex items-start gap-2">
+                <span aria-hidden className="text-base leading-none mt-0.5">⏳</span>
+                <span>
+                  <strong>Kuota pertanyaan AI di luar layanan Soeradji hari ini sudah habis</strong> (sisa 0/{aiQuota.max} — kuota direset pukul <strong>00.00 WIB</strong>).<br />
+                  Pertanyaan <strong>layanan</strong> (jadwal dokter, tarif, pendaftaran, Home Care, kampanye, keluhan, kontak) <strong>tetap bisa dijawab tanpa kuota</strong>. Bantuan langsung: <a href="tel:0272321020" className="underline font-bold">(0272) 321020</a> / WhatsApp <a href="https://wa.me/62816917000" className="underline font-bold">0816-9170-00</a>.
+                </span>
+              </div>
+            )}
             <form onSubmit={(e) => { e.preventDefault(); sendMessage(input); }} className="max-w-3xl mx-auto">
               <div className="flex items-end gap-2 rounded-2xl border border-rst-200 bg-rst-50/40 focus-within:border-rst-500 focus-within:bg-white focus-within:ring-2 focus-within:ring-rst-100 transition p-2">
                 <textarea
@@ -328,7 +337,7 @@ function ChatPageInner() {
                 )}
               </div>
               <p className="mt-1.5 text-center text-[10px] text-rst-400">SOERA AI dapat keliru — periksa kembali info penting ke <a href="tel:0272321020" className="underline">(0272) 321020</a>. Bukan diagnosis medis.
-                {aiQuota && <span className="block mt-0.5 text-rst-500">Kuota AI bebas hari ini: <strong>sisa {aiQuota.remaining}/{aiQuota.max}</strong> · reset 00.00 WIB · pertanyaan layanan (jadwal/tarif/dll.) tetap tersedia</span>}
+                {aiQuota && (<span className={`block mt-0.5 ${aiQuota.remaining <= 0 ? 'text-amber-700 font-semibold' : 'text-rst-500'}`}>Kuota AI bebas hari ini: <strong>sisa {aiQuota.remaining}/{aiQuota.max}</strong> · reset 00.00 WIB · pertanyaan layanan (jadwal/tarif/dll.) tetap tersedia</span>)}
               </p>
             </form>
           </div>
