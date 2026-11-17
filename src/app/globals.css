@@ -73,3 +73,19 @@ body { background: #f4f8f7; color: #12312e; -webkit-font-smoothing: antialiased;
 .msg-md hr { border: none; border-top: 1px solid rgba(31,127,120,0.25); margin: 0.6rem 0; }
 .msg-md ol { padding-left: 1.25rem; margin: 0.25rem 0 0.6rem; list-style: decimal; }
 .msg-md blockquote { border-left: 3px solid #1f7f78; padding-left: 0.7rem; margin: 0.4rem 0; opacity: 0.9; }
+
+/* ===== Floating assistant (MiniAssistant) ===== */
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+@keyframes ring-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(15, 118, 110, 0.45); }
+  70% { box-shadow: 0 0 0 14px rgba(15, 118, 110, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(15, 118, 110, 0); }
+}
+.mini-avatar-float { animation: floaty 3.4s ease-in-out infinite; }
+.mini-avatar-ring { animation: ring-pulse 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .mini-avatar-float, .mini-avatar-ring { animation: none !important; }
+}
