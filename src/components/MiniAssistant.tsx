@@ -44,8 +44,12 @@ function Avatar({ size, className = '' }: { size: number; className?: string }) 
 
 export default function MiniAssistant() {
   const pathname = usePathname() || '/';
+  // usePathname() mengembalikan path TANPA basePath (mis. '/chat', bukan '/soera-ai/chat').
+  // Bikin tahan keduanya: strip awalan basePath bila ada, baru bandingkan.
+  const prefix = bp('/') === '/' ? '' : bp('/');
+  const rel = (prefix && pathname.startsWith(prefix)) ? (pathname.slice(prefix.length) || '/') : pathname;
   // Sembunyikan di admin & halaman chat penuh (sudah ada chatbot; tidak menimpa tombol kirim)
-  const hidden = pathname.startsWith(bp('/admin')) || pathname.startsWith(bp('/chat'));
+  const hidden = rel.startsWith('/admin') || rel.startsWith('/chat');
 
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<MiniMsg[]>([]);
