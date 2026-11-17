@@ -65,6 +65,9 @@ try {
   if ($newCommit -eq $oldCommit) { Ok ('Sudah versi terbaru (' + $newCommit + ').'); Pop-Location; exit 0 }
   Info ('Update: ' + $oldCommit + ' -> ' + $newCommit)
 
+  # Hentikan service dulu (DLL sharp terkunci selama service jalan -> npm ci EPERM)
+  if (Get-Service -Name $ServiceName -ErrorAction SilentlyContinue) { Info 'Menghentikan service sementara untuk update...'; & nssm stop $ServiceName | Out-Null; Start-Sleep -Seconds 2 }
+
   # 4) Dependensi dan build
   Info 'npm ci...'; & npm ci --no-audit --no-fund
   if ($LASTEXITCODE -ne 0) { throw 'npm ci gagal.' }
@@ -72,7 +75,8 @@ try {
   if ($LASTEXITCODE -ne 0) { throw 'npm run build gagal.' }
 
   # 5) Restart service dan verifikasi
-  if (Get-Service -Name $ServiceName -ErrorAction SilentlyContinue) { & nssm restart $ServiceName } else { Warn ('Service ' + $ServiceName + ' tidak ada - start manual.') }
+  $svcNow = Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
+  if ($svcNow) { if ($svcNow.Status -eq 'Running') { & nssm restart $ServiceName } else { & nssm start $ServiceName } } else { Warn ('Service ' + $ServiceName + ' tidak ada - start manual.') }
   Info 'Menunggu aplikasi siap...'; Start-Sleep -Seconds 5
   & (Join-Path $PSScriptRoot 'Verify-SoeraAI.ps1') -BindHost $BindHost -Port $Port -ServiceName $ServiceName -BasePath $BasePath
   if ($LASTEXITCODE -ne 0) { throw 'Verifikasi setelah update GAGAL.' }
@@ -88,7 +92,8 @@ try {
     & git reset --hard $oldCommit | Out-Null
     & npm ci --no-audit --no-fund | Out-Null
     & npm run build | Out-Null
-    if (Get-Service -Name $ServiceName -ErrorAction SilentlyContinue) { & nssm restart $ServiceName }
+    $svcRb = Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
+    if ($svcRb) { if ($svcRb.Status -eq 'Running') { & nssm restart $ServiceName } else { & nssm start $ServiceName } }
     Start-Sleep -Seconds 5
     & (Join-Path $PSScriptRoot 'Verify-SoeraAI.ps1') -BindHost $BindHost -Port $Port -ServiceName $ServiceName -BasePath $BasePath
     if ($LASTEXITCODE -eq 0) { Warn ('ROLLBACK BERHASIL - aplikasi kembali ke ' + $oldCommit + '.'); Pop-Location; exit 1 }

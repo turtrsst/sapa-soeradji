@@ -43,7 +43,15 @@ Start-Transcript -Path $transcript -Append | Out-Null
 function Info($m) { Write-Host ('[SOERA] ' + $m) -ForegroundColor Cyan }
 function Ok($m)   { Write-Host ('[OK] ' + $m) -ForegroundColor Green }
 function Warn($m) { Write-Host ('[!!] ' + $m) -ForegroundColor Yellow }
-function Die($m)  { Write-Host ('[GAGAL] ' + $m) -ForegroundColor Red; try { Stop-Transcript | Out-Null } catch {}; exit 1 }
+function Die($m)  {
+  Write-Host ('[GAGAL] ' + $m) -ForegroundColor Red
+  if ($script:svcStopped) {
+    Warn 'Mencoba men-start ulang service SoeraAI (build gagal, kembali ke versi sebelumnya)...'
+    try { & nssm start $ServiceName | Out-Null } catch { Warn ('Start ulang gagal: ' + $_.Exception.Message) }
+  }
+  try { Stop-Transcript | Out-Null } catch {}
+  exit 1
+}
 $BasePath = $BasePath.TrimEnd('/')
 if ($BasePath -and -not $BasePath.StartsWith('/')) { Die 'BasePath harus diawali / (mis. /soera-ai).' }
 if ($BasePath) { Info ('Mode sub-path: aplikasi disajikan di ' + $BasePath + ' (SOERA_BASE_PATH=' + $BasePath + ')') }
@@ -90,6 +98,15 @@ try {
     & git clone $RepoUrl $InstallPath; if ($LASTEXITCODE -ne 0) { Die 'git clone gagal.' }
   }
 
+  # Service sedang berjalan me-load DLL (sharp) -> npm ci tidak bisa unlink (EPERM).
+  # Hentikan dulu; dipasang ulang/start lagi di akhir (atau oleh Die bila gagal).
+  $svc = Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
+  if ($svc -and $svc.Status -ne 'Stopped') {
+    Info 'Menghentikan service SoeraAI sementara (build membutuhkan akses penuh ke node_modules)...'
+    & nssm stop $ServiceName | Out-Null
+    Start-Sleep -Seconds 2
+    $script:svcStopped = $true
+  }
   Push-Location $InstallPath
   if ($BasePath) { $env:SOERA_BASE_PATH = $BasePath } else { Remove-Item Env:SOERA_BASE_PATH -ErrorAction SilentlyContinue }
   Info 'npm ci (sekali, butuh internet)...'
