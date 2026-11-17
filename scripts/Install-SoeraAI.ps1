@@ -60,16 +60,10 @@ try {
 
   # 2) Kode sumber
   if ($Update) {
-    if (-not (Test-Path (Join-Path $InstallPath '.git'))) { Die "$InstallPath bukan repo git — jalankan tanpa -Update untuk instalasi fresh." }
-    Info "Mode UPDATE: git pull + npm ci + build + restart"
-    Push-Location $InstallPath
-    & git pull --ff-only; if ($LASTEXITCODE -ne 0) { Die "git pull gagal — selesaikan konflik manual." }
-    & npm ci --no-audit --no-fund; if ($LASTEXITCODE -ne 0) { Die "npm ci gagal." }
-    & npm run build; if ($LASTEXITCODE -ne 0) { Die "npm run build gagal." }
-    Pop-Location
-    if (Get-Command nssm -ErrorAction SilentlyContinue) { & nssm restart $ServiceName } else { Warn "NSSM tidak di PATH — restart manual diperlukan." }
-    & (Join-Path $PSScriptRoot 'Verify-SoeraAI.ps1') -BindHost $BindHost -Port $Port -ServiceName $ServiceName -PublicUrl $PublicUrl
-    Stop-Transcript | Out-Null; exit $LASTEXITCODE
+    Info "Mode UPDATE — mendelegasikan ke scripts/Update-SoeraAI.ps1 (backup otomatis + rollback)"
+    Stop-Transcript | Out-Null
+    & (Join-Path $PSScriptRoot 'Update-SoeraAI.ps1') -InstallPath $InstallPath -ServiceName $ServiceName -BindHost $BindHost -Port $Port -BackupRoot $BackupRoot
+    exit $LASTEXITCODE
   }
 
   if (Test-Path (Join-Path $InstallPath '.git')) {

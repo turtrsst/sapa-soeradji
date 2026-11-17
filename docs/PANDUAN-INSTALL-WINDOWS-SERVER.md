@@ -185,18 +185,52 @@ Uji restore: hentikan service → salin file `.sqlite` kembali ke folder `data\`
 - **Log aplikasi**: `C:\xampp\htdocs\soera-ai\logs\stdout.log` & `stderr.log` (rotasi otomatis NSSM).
 - **Beban**: `Get-Counter` CPU/memori; SQLite cocok untuk ribuan chat/hari pada 1 instance. Skalakan vertikal (RAM/SSD) bila perlu; multi-instance butuh migrasi DB + rate-limit terdistribusi (di luar cakupan).
 
-## 10. Update aplikasi (prosedur)
+## 10. Update aplikasi — cara pull terbaru ke server
+
+### 10.1 Repo & kredensial (sekali saja di server)
+
+Repo **publik** (`github.com/turtrsst/sapa-soeradji`) → **tidak perlu login**; `git fetch/pull` langsung jalan anonim. Yang dibutuhkan hanya Git terpasang (`git --version`). Branch produksi = **`main`** (hasil merge PR di GitHub) — server selalu pull dari `main`, bukan branch fitur.
+
+```powershell
+cd C:\xampp\htdocs\soera-ai
+git status          # harus bersih (nothing to commit) — data/*.sqlite & .env.local sudah di-.gitignore, aman
+git remote -v       # origin → https://github.com/turtrsst/sapa-soeradji.git
+```
+
+> Bila repo nanti dijadikan privat: buat **Fine-grained PAT** (Contents: Read-only) di GitHub → Settings → Developer settings, lalu `git config credential.helper manager` dan saat `git pull` pertama masukkan PAT sebagai password (tersimpan di Windows Credential Manager). Alternatif: deploy key SSH khusus server (read-only). JANGAN pakai password akun GitHub biasa.
+
+### 10.2 Cara otomatis (disarankan) — backup + pull + build + restart + rollback
+
+```powershell
+cd C:\xampp\htdocs\soera-ai
+.\scripts\Update-SoeraAI.ps1            # dari origin/main
+```
+Skrip ini: (1) memastikan tree bersih, (2) **backup SQLite dulu** ke `D:\backup-soera-ai\<tanggal>`, (3) `git fetch` + `merge --ff-only origin/main`, (4) `npm ci`, (5) `npm run build`, (6) `nssm restart SoeraAI` + health-check. **Bila build/verifikasi gagal → rollback otomatis** ke commit sebelumnya (reset --hard + rebuild + restart) dan melaporkan gagalnya. `Install-SoeraAI.ps1 -Update` kini hanya memanggil skrip ini.
+
+### 10.3 Cara manual (bila ingin langkah satu-satu)
 
 ```powershell
 nssm stop SoeraAI
 cd C:\xampp\htdocs\soera-ai
-git pull            # atau salin versi baru
-npm ci              # bila package-lock berubah
+.\scripts\Backup-SoeraAI.ps1                 # backup dulu!
+git fetch origin main
+git status                                   # pastikan bersih
+git merge --ff-only origin/main              # HANYA fast-forward; jika divergen → STOP, investigasi
+npm ci
 npm run build
 nssm start SoeraAI
-Invoke-WebRequest http://127.0.0.1:3000/api/health | Select-Object -ExpandProperty Content
+.\scripts\Verify-SoeraAI.ps1               # semua harus PASS
 ```
-Sebaiknya coba dulu di PC/staging. Komunikasikan ke Humas/SI sebelum update konten tarif/jadwal (dikurasi di repo).
+
+### 10.4 Aturan aman pull di server
+
+- Jangan pernah edit kode langsung di server (`git status` harus bersih; perubahan konten → lewat PR di GitHub)
+- Jangan `git pull` tanpa backup; jangan `--force`, jangan `reset --hard` kecuali sadar konsekuensinya
+- Update konten tarif/jadwal/kampanye = perubahan repo → PR → merge → pull di server (§10.2)
+- Setelah update: cek `stderr.log`, jalankan Verify, dan pantau `/api/health` 15 menit
+- Komunikasikan ke Humas/SI sebelum update yang menyentuh tarif/jadwal/branding
+
+Uji dulu alur ini di **PC staging** sebelum dipakai di server produksi.
 
 ## 11. AI opsional (setelah aplikasi stabil)
 
