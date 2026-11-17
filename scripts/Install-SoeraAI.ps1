@@ -125,9 +125,11 @@ try {
   # 5) NSSM (auto-download bila perlu)
   if (-not (Get-Command nssm -ErrorAction SilentlyContinue)) {
     Info 'NSSM belum ada - mengunduh nssm 2.24 (nssm.cc)...'
+    # PS 5.1 default: TLS 1.0 — nssm.cc hanya menerima TLS 1.2+
+    try { [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 } catch {}
     $zip = Join-Path $env:TEMP 'nssm-2.24.zip'
     try {
-      Invoke-WebRequest -Uri 'https://nssm.cc/release/nssm-2.24.zip' -OutFile $zip -UseBasicParsing
+      Invoke-WebRequest -Uri 'https://nssm.cc/release/nssm-2.24.zip' -OutFile $zip -UseBasicParsing -TimeoutSec 60
     } catch {
       Die 'Unduh NSSM gagal. Unduh manual dari https://nssm.cc/download, salin win64\nssm.exe ke C:\Windows\System32, lalu ulangi.'
     }
