@@ -152,6 +152,11 @@ test/rag-test.mjs      # 32 pengujian basis pengetahuan & retrieval
 - [`docs/PANDUAN-INSTALL-JAN.md`](docs/PANDUAN-INSTALL-JAN.md) — panduan langkah demi langkah memasang Jan (aplikasi AI lokal/offline OpenAI-compatible) di Windows/macOS/Linux dan menyambungkannya ke SOERA AI.
 - [`docs/PANDUAN-INSTALL-WINDOWS-SERVER.md`](docs/PANDUAN-INSTALL-WINDOWS-SERVER.md) — **panduan instalasi di Windows Server (XAMPP)**: menaruh aplikasi di `C:\xampp\htdocs\soera-ai`, NSSM (Windows Service 24 jam), reverse proxy Apache ke port 3000, domain publik + HTTPS (Cloudflare Tunnel / win-acme), backup SQLite, monitoring, prosedur update.
 - [`docs/DEPLOYMENT-PUBLIK.md`](docs/DEPLOYMENT-PUBLIK.md) — arsitektur publikasi IP publik (llama-server/Ollama/Jan, Caddy, firewall, UU PDP).
+- [`docs/SOP-OPERASIONAL.md`](docs/SOP-OPERASIONAL.md) — SOP operasional: harian/mingguan/bulanan, rotasi password admin (bcrypt), alur tiket keluhan & Home Care, insiden & eskalasi, audit triwulan (UU PDP).
+- [`scripts/Install-SoeraAI.ps1`](scripts/Install-SoeraAI.ps1) — instalasi otomatis di Windows Server (clone → npm ci → build → Windows Service NSSM 24 jam → verifikasi; `-Update` untuk update; `-RegisterBackupTask` untuk backup harian).
+- [`scripts/Backup-SoeraAI.ps1`](scripts/Backup-SoeraAI.ps1) — backup SQLite harian + retensi 30 hari.
+- [`scripts/Verify-SoeraAI.ps1`](scripts/Verify-SoeraAI.ps1) — health-check otomatis (service, loopback port, /api/health, header keamanan, tolak password salah, robots.txt, URL publik).
+- [`scripts/Update-SoeraAI.ps1`](scripts/Update-SoeraAI.ps1) — update ke server: backup dulu → `git pull --ff-only origin/main` → build → restart NSSM → verifikasi; **rollback otomatis** bila gagal.
 - [`docs/DEPLOYMENT-PUBLIK.md`](docs/DEPLOYMENT-PUBLIK.md) — arsitektur & checklist publikasi SOERA AI di IP publik (HTTPS, firewall, reverse proxy, LLM lokal di server, keamanan & UU PDP).
 - [`docs/AI-AGENT.md`](docs/AI-AGENT.md) — screening GitHub framework AI Agent (vercel/ai vs langchainjs/langgraph/LlamaIndex/privateGPT/RAGFlow) + arsitektur agen tool-calling & kuota 5/hari.
 
