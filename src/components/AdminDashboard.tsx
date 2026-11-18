@@ -96,7 +96,7 @@ export default function AdminDashboard() {
   const testLlm = async () => {
     setTesting(true); setTestResult(null);
     try {
-      const res = await fetch(bp('/api/admin/settings/test'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ baseUrl: llm?.baseUrl, apiKey: llm?.apiKey && !llm.apiKey.startsWith('••••') ? llm.apiKey : undefined }) });
+      const res = await fetch(bp('/api/admin/settings/test'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ baseUrl: llm?.baseUrl, model: llm?.model, timeoutMs: llm?.timeoutMs, apiKey: llm?.apiKey && !llm.apiKey.startsWith('••••') ? llm.apiKey : undefined }) });
       setTestResult(await res.json());
     } catch { setTestResult({ reachable: false, detail: 'Gagal memanggil endpoint uji.' }); } finally { setTesting(false); }
   };
@@ -333,7 +333,7 @@ export default function AdminDashboard() {
               <div className="sm:col-span-2"><label className="label">Model</label><input className="input font-mono text-xs" value={llm.model} onChange={(e) => setLlm({ ...llm, model: e.target.value })} placeholder="qwen2.5-3b-instruct" /></div>
             </div>
             <div className="grid sm:grid-cols-2 gap-3">
-              <div><label className="label">API Key {llm.hasApiKey && <span className="text-emerald-600 normal-case">(tersimpan: {llm.apiKey})</span>}</label><input className="input font-mono text-xs" type="password" value={llm.apiKey?.startsWith('••••') ? '' : llm.apiKey} onChange={(e) => setLlm({ ...llm, apiKey: e.target.value })} placeholder={llm.hasApiKey ? 'Isi untuk mengganti key' : 'Kosongkan bila endpoint tanpa key'} autoComplete="new-password" /></div>
+              <div><label className="label flex items-center gap-2 min-w-0">API Key {llm.hasApiKey && <span className="text-emerald-600 normal-case inline-flex max-w-[9.5rem] truncate whitespace-nowrap" title="Key tersimpan (hanya 4 digit terakhir ditampilkan)">(tersimpan: ••••{String(llm.apiKey || '').slice(-4)})</span>}</label><input className="input font-mono text-xs" type="password" value={llm.apiKey?.startsWith('••••') ? '' : llm.apiKey} onChange={(e) => setLlm({ ...llm, apiKey: e.target.value })} placeholder={llm.hasApiKey ? 'Isi untuk mengganti key' : 'Kosongkan bila endpoint tanpa key'} autoComplete="new-password" /></div>
               <div className="grid grid-cols-3 gap-2">
                 <div><label className="label">Temp</label><input type="number" step="0.1" min={0} max={2} className="input" value={llm.temperature} onChange={(e) => setLlm({ ...llm, temperature: e.target.value })} /></div>
                 <div><label className="label">Max Tok</label><input type="number" min={16} max={4096} className="input" value={llm.maxTokens} onChange={(e) => setLlm({ ...llm, maxTokens: e.target.value })} /></div>
@@ -348,8 +348,9 @@ export default function AdminDashboard() {
             {llmSaved && <p className="text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-xl px-3 py-2">{llmSaved}</p>}
             {testResult && (
               <div className={`rounded-xl border px-4 py-3 text-xs ${testResult.reachable ? 'border-emerald-300 bg-emerald-50 text-emerald-800' : 'border-red-300 bg-red-50 text-red-800'}`}>
-                <p className="font-extrabold">{testResult.reachable ? `✓ Endpoint merespons (HTTP ${testResult.status})` : '✗ Endpoint tidak merespons'}</p>
-                <p className="mt-1">Model termuat: <span className="font-mono">{testResult.model ?? '—'}</span>{testResult.detail ? ` · ${testResult.detail}` : ''}</p>
+                <p className="font-extrabold">{testResult.reachable ? `✓ Terhubung — model merespons (HTTP ${testResult.status})` : '✗ Gagal terhubung'}</p>
+                <p className="mt-1">Model: <span className="font-mono">{testResult.model ?? '—'}</span>{typeof testResult.latencyMs === 'number' ? ` · ${testResult.latencyMs} ms` : ''}{testResult.detail ? ` · ${testResult.detail}` : ''}</p>
+                {!testResult.reachable && <p className="mt-1 text-[10.5px]">HTTP 200 di tombol lama hanya berarti katalog bisa dibaca. Uji ini BENAR-BENAR mengirim 1 token ke chat/completions — error di atas adalah penyebab sebenarnya.</p>}
               </div>
             )}
           </form>

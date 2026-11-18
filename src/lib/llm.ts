@@ -106,24 +106,56 @@ export interface EndpointHealth {
   status?: number;
   model?: string | null;
   detail?: string;
+  latencyMs?: number;
 }
 
+/**
+ * Uji koneksi SUNGGUHAN: POST /chat/completions dengan max_tokens=1 memakai model yang
+ * dikonfigurasi. Bukan sekadar daftar /models (endpoint publik OpenRouter selalu HTTP 200
+ * dan entri pertamanya bukan model Anda). Membedakan: key salah (401), model tidak ada
+ * (404), kredit/limit habis (402/429), timeout, dan mencatat latency.
+ */
 export async function probeEndpoint(cfg?: LlmConfig): Promise<EndpointHealth> {
   const c = cfg ?? getLlmConfig();
   const base = (c.baseUrl || '').replace(/\/+$/, '');
+  const model = String(c.model || '').trim();
+  const started = Date.now();
+  if (!base) return { reachable: false, detail: 'Base URL kosong — isi endpoint OpenAI-compatible (mis. https://openrouter.ai/api/v1).' };
+  if (!model) return { reachable: false, detail: 'Model kosong — isi id persis model sesuai penyedia (mis. nvidia/nemotron-3.5-super-vl:free).' };
+  const timeout = Math.max(10000, Math.min(Number(c.timeoutMs) || 10000, 30000));
   const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), 8000);
+  const t = setTimeout(() => ctrl.abort(), timeout);
   try {
-    const res = await fetch(`${base}/models`, {
+    const res = await fetch(`${base}/chat/completions`, {
+      method: 'POST',
       signal: ctrl.signal,
-      headers: c.apiKey ? { Authorization: `Bearer ${c.apiKey}` } : {},
+      headers: { 'Content-Type': 'application/json', ...(c.apiKey ? { Authorization: `Bearer ${c.apiKey}` } : {}) },
+      body: JSON.stringify({ model, messages: [{ role: 'user', content: 'ping' }], max_tokens: 1, temperature: 0, stream: false }),
     });
     const text = await res.text();
-    let model: string | null = null;
-    try { model = JSON.parse(text)?.data?.[0]?.id ?? null; } catch {}
-    return { reachable: res.ok, status: res.status, model, detail: res.ok ? undefined : text.slice(0, 200) };
+    const latencyMs = Date.now() - started;
+    if (res.ok) {
+      let answered: string | null = null;
+      try { answered = JSON.parse(text)?.model ?? null; } catch {}
+      return { reachable: true, status: res.status, model: answered || model, latencyMs };
+    }
+    const excerpt = text.slice(0, 200).replace(/\s+/g, ' ').trim();
+    let hint: string;
+    switch (res.status) {
+      case 400: hint = 'Permintaan ditolak (400) — biasanya model id tidak valid/kompleks unsupported. Cek id MODEL.'; break;
+      case 401: hint = 'API key ditolak (401 Unauthorized) — periksa/rotasi key Anda.'; break;
+      case 402: hint = 'Kredit habis (402 Payment Required) — di OpenRouter, isi saldo dulu.'; break;
+      case 403: hint = 'Akses ditolak (403) — key tidak berhak memakai model ini.'; break;
+      case 404: hint = `Model "${model}" tidak ditemukan (404) — cocokkan id PERSIS dengan katalog penyedia (termasuk akhiran :free).`; break;
+      case 429: hint = 'Rate limit tercapai (429) — tunggu sebentar; model gratis punya batas harian ketat.'; break;
+      default: hint = res.status >= 500
+        ? `Penyedia bermasalah (HTTP ${res.status}) — coba lagi nanti.`
+        : `Ditolak (HTTP ${res.status}).`;
+    }
+    return { reachable: false, status: res.status, detail: `${hint}${excerpt ? ' — ' + excerpt : ''}`, latencyMs };
   } catch (err: any) {
-    return { reachable: false, detail: err?.name === 'AbortError' ? 'timeout' : String(err?.message || err) };
+    const latencyMs = Date.now() - started;
+    return { reachable: false, detail: err?.name === 'AbortError' ? `timeout (>${Math.round(timeout / 1000)} dtk) — endpoint lambat atau model tidak termuat` : String(err?.message || err), latencyMs };
   } finally {
     clearTimeout(t);
   }
