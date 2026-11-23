@@ -28,7 +28,10 @@ export default function LandingPage() {
         <div className="grid-overlay absolute inset-0" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 pt-14 pb-16 sm:pt-20 sm:pb-24 grid lg:grid-cols-12 gap-10 items-center">
           <div className="lg:col-span-7">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-gold-400">
+            <div className="inline-flex rounded-2xl bg-white px-4 py-3 shadow-[0_14px_40px_-16px_rgba(0,0,0,0.55)]">
+              <Image src={bp('/images/rs-soeradji-tirtonegoro-logo.png')} alt="Logo Kemenkes RS Soeradji Tirtonegoro" width={279} height={65} className="h-12 sm:h-14 w-auto object-contain" priority />
+            </div>
+            <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-gold-400">
               <Icon name="shield" size={14} /> RSUP Dr. Soeradji Tirtonegoro · RS Vertikal Kemenkes RI · Kelas A
             </div>
             <h1 className="mt-5 text-4xl sm:text-6xl font-black tracking-tight leading-[1.05]">
@@ -55,7 +58,7 @@ export default function LandingPage() {
           <div className="lg:col-span-5">
             <div className="rounded-3xl border border-white/15 bg-white/10 backdrop-blur-md p-4 sm:p-5 shadow-2xl">
               <div className="flex items-center gap-2 border-b border-white/10 pb-3">
-                <Image src={bp('/images/soera-ai-logo.png')} alt="SOERA AI" width={36} height={36} className="h-9 w-9 object-contain bg-white rounded-full p-0.5" />
+                <Image src={bp('/images/soera-ai-avatar.webp')} alt="SOERA AI" width={36} height={36} className="h-9 w-9 rounded-xl object-cover object-top bg-rst-900 border border-gold-400/50" />
                 <div className="leading-tight">
                   <p className="font-bold">SOERA AI</p>
                   <p className="text-[10px] text-emerald-300 flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400 inline-block" /> Asisten digital RST — siap membantu 24/7</p>

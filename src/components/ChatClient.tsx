@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import Icon from '@/components/Icon';
 import Markdown from '@/components/Markdown';
@@ -264,8 +265,8 @@ function ChatPageInner() {
   const greeting = timeGreeting();
 
   return (
-    <div className="mx-auto max-w-7xl px-0 sm:px-4 lg:px-6 py-0 sm:py-4">
-      <div className="flex h-[calc(100vh-64px-36px)] sm:h-[calc(100vh-64px-36px-2rem)] overflow-hidden border-0 sm:border border-rst-100 shadow-none sm:shadow-soft bg-white sm:rounded-3xl">
+    <div className="chat-full w-full overflow-hidden bg-[#04100f] text-rst-100">
+      <div className="flex h-full w-full overflow-hidden">
 
         {/* ===== SIDEBAR ===== */}
         <aside className={`${sidebarOpen ? 'absolute z-30 inset-y-0 left-0 w-[85%] max-w-xs' : 'hidden'} md:static md:block md:w-80 shrink-0 bg-gradient-to-b from-[#08211f] via-rst-950 to-[#04100f] text-rst-100 flex flex-col h-full`}>
@@ -319,6 +320,7 @@ function ChatPageInner() {
           {/* top bar */}
           <div className="flex items-center gap-2.5 px-3 sm:px-5 h-14 border-b border-rst-100 bg-white/80 backdrop-blur">
             <button onClick={() => setSidebarOpen(true)} className="md:hidden p-2 rounded-xl hover:bg-rst-50 text-rst-700" aria-label="Riwayat"><Icon name="menu" size={20} /></button>
+            <Link href="/" className="p-2 rounded-xl text-rst-700 hover:bg-rst-50 transition" aria-label="Kembali ke Beranda" title="Beranda"><Icon name="home" size={19} /></Link>
             <Image src={MUSE} alt="SOERA AI" width={34} height={34} className="h-8 w-8 rounded-xl object-cover object-top bg-rst-900 border border-gold-400/60" />
             <div className="leading-tight min-w-0">
               <p className="text-[13px] font-extrabold text-rst-900 truncate">SOERA AI <span className="font-semibold text-rst-400">· Asisten RST</span></p>

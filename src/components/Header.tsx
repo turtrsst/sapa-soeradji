@@ -39,7 +39,7 @@ export default function Header() {
       <div className="mx-auto max-w-7xl px-3 sm:px-4">
         <div className="flex h-16 items-center justify-between gap-3">
           <Link href="/" className="flex items-center gap-2.5 shrink-0">
-            <Image src={bp('/images/soera-ai-logo.png')} alt="Logo SOERA AI" width={44} height={44} className="h-11 w-11 object-contain" priority />
+            <Image src={bp('/images/rs-soeradji-tirtonegoro-logo.png')} alt="Logo Kemenkes RS Soeradji Tirtonegoro" width={186} height={44} className="h-10 sm:h-11 w-auto object-contain" priority />
             <span className="leading-tight">
               <span className="block text-[17px] font-extrabold tracking-tight text-rst-900">SOERA AI</span>
               <span className="hidden sm:block text-[9.5px] font-semibold uppercase tracking-[0.14em] text-rst-500 max-w-[240px]">Soeradji Assistant Intelligent</span>
