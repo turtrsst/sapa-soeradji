@@ -81,7 +81,7 @@ export async function POST(req: Request) {
       if (cfg.enabled && !quotaExhausted && isFreeForm) {
         // Agen AI (tool-calling) untuk pertanyaan bebas — Vercel AI SDK + endpoint OpenAI-compatible
         const contextBlock = [
-          `=== KONTEKS BASIS PENGETAHUAN RST (update ${JADWAL_UPDATE}) ===`,
+          `=== KONTEKS BASIS PENGETAHUAN RS Soeradji (update ${JADWAL_UPDATE}) ===`,
           ...hits.map((h, i) => `[Dokumen ${i + 1}] ${h.doc.title}\n${h.doc.body.slice(0, 1600)}\n(Sumber: ${h.doc.source})`),
           '=== AKHIR KONTEKS ===',
         ].filter(Boolean).join('\n\n');
@@ -124,7 +124,7 @@ export async function POST(req: Request) {
           send({ type: 'token', text: assistantText.slice(i, i + chunkSize) });
         }
         if (quotaExhausted) {
-          const note = `\n\n_⏳ **Kuota pertanyaan AI di luar layanan RST Anda hari ini sudah habis** (maks ${AI_DAILY_LIMIT}/hari) — direset pukul **00.00 WIB**. Pertanyaan layanan (jadwal dokter, tarif, pendaftaran, Home Care, kampanye, kontak, keluhan) **tetap bisa dijawab tanpa kuota**. Bantuan langsung: **(0272) 321020** / WhatsApp **0816-9170-00**._`;
+          const note = `\n\n_⏳ **Kuota pertanyaan AI di luar layanan RS Soeradji Anda hari ini sudah habis** (maks ${AI_DAILY_LIMIT}/hari) — direset pukul **00.00 WIB**. Pertanyaan layanan (jadwal dokter, tarif, pendaftaran, Home Care, kampanye, kontak, keluhan) **tetap bisa dijawab tanpa kuota**. Bantuan langsung: **(0272) 321020** / WhatsApp **0816-9170-00**._`;
           assistantText += note;
           send({ type: 'token', text: note });
         } else if (llmFailedReason) {

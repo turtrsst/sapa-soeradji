@@ -24,19 +24,19 @@ interface Conv { id: string; title: string; pinned: number; updated_at: number; 
 
 const SUGGESTIONS = [
   { icon: 'calendar', title: 'Jadwal Dokter', text: 'Jadwal dokter poli jantung Senin–Jumat' },
-  { icon: 'clipboard', title: 'Cara Daftar Online', text: 'Cara pendaftaran online RST lewat WhatsApp' },
+  { icon: 'clipboard', title: 'Cara Daftar Online', text: 'Cara pendaftaran online RS Soeradji lewat WhatsApp' },
   { icon: 'home', title: 'Tarif Home Care', text: 'Tarif visite dokter spesialis Home Care' },
   { icon: 'alert', title: 'Darurat / IGD', text: 'Nomor IGD & keadaan darurat' },
-  { icon: 'megaphone', title: 'Kampanye RST', text: 'Kampanye kesehatan terbaru dari RST' },
+  { icon: 'megaphone', title: 'Kampanye RS Soeradji', text: 'Kampanye kesehatan terbaru dari RS Soeradji' },
   { icon: 'inbox', title: 'Keluhan Pelayanan', text: 'Saya ingin menyampaikan keluhan pelayanan' },
 ] as const;
-const QUICK_CHIPS = ['Jadwal jantung Senin', 'Cara daftar online', 'Tarif Home Care', 'Kampanye RST'];
+const QUICK_CHIPS = ['Jadwal jantung Senin', 'Cara daftar online', 'Tarif Home Care', 'Kampanye RS Soeradji'];
 
 const TOOL_META: Record<string, { run: string; done: string }> = {
   cari_jadwal_dokter: { run: 'Mencari jadwal dokter…', done: 'Data jadwal ditemukan' },
   cari_tarif_layanan: { run: 'Mencari tarif layanan…', done: 'Data tarif ditemukan' },
-  cari_info_rst: { run: 'Membuka basis pengetahuan…', done: 'Dokumen RST ditemukan' },
-  daftar_kampanye_aktif: { run: 'Memuat kampanye RST…', done: 'Kampanye dimuat' },
+  cari_info_rst: { run: 'Membuka basis pengetahuan…', done: 'Dokumen RS Soeradji ditemukan' },
+  daftar_kampanye_aktif: { run: 'Memuat kampanye RS Soeradji…', done: 'Kampanye dimuat' },
 };
 
 function timeGreeting() {
@@ -278,7 +278,7 @@ function ChatPageInner() {
               </span>
               <span className="leading-tight">
                 <span className="block text-[15px] font-black tracking-tight text-rst-50">SOERA AI</span>
-                <span className="block text-[9px] font-bold uppercase tracking-[0.18em] text-gold-400/90">Asisten Resmi RST Klaten</span>
+                <span className="block text-[9px] font-bold uppercase tracking-[0.18em] text-gold-400/90">Asisten Resmi RS Soeradji Klaten</span>
               </span>
             </div>
             <button onClick={newChat} className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-gold-400 py-2.5 text-[13px] font-extrabold text-rst-950 shadow-[0_6px_24px_-8px_rgba(242,193,78,0.6)] transition hover:bg-gold-300 active:scale-[0.98]"><Icon name="plus" size={16} /> Percakapan Baru</button>
@@ -310,7 +310,7 @@ function ChatPageInner() {
           {/* footer */}
           <div className="p-4 border-t border-white/10 text-[10px] text-rst-300/85 leading-relaxed">
             <p className="flex items-center gap-1.5 font-bold text-rst-100"><Icon name="shield" size={12} className="text-gold-400" /> SOERA AI aman &amp; tercatat</p>
-            <p className="mt-1">Jawaban disusun dari basis pengetahuan resmi RST + AI. Darurat? Tetap ke IGD (0272) 321020 ext 200.</p>
+            <p className="mt-1">Jawaban disusun dari basis pengetahuan resmi RS Soeradji + AI. Darurat? Tetap ke IGD (0272) 321020 ext 200.</p>
           </div>
         </aside>
         {sidebarOpen && <div className="absolute inset-0 z-20 bg-black/60 backdrop-blur-[2px] md:hidden" onClick={() => setSidebarOpen(false)} />}
@@ -323,7 +323,7 @@ function ChatPageInner() {
             <Link href="/" className="p-2 rounded-xl text-rst-700 hover:bg-rst-50 transition" aria-label="Kembali ke Beranda" title="Beranda"><Icon name="home" size={19} /></Link>
             <Image src={MUSE} alt="SOERA AI" width={34} height={34} className="h-8 w-8 rounded-xl object-cover object-top bg-rst-900 border border-gold-400/60" />
             <div className="leading-tight min-w-0">
-              <p className="text-[13px] font-extrabold text-rst-900 truncate">SOERA AI <span className="font-semibold text-rst-400">· Asisten RST</span></p>
+              <p className="text-[13px] font-extrabold text-rst-900 truncate">SOERA AI <span className="font-semibold text-rst-400">· Asisten RS Soeradji</span></p>
               <p className="text-[9.5px] font-semibold text-rst-500 flex items-center gap-1.5">
                 {mode === 'llm' ? (<><span className="relative inline-flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" /><span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" /></span> AI sedang menjawab ({llmEnabled ? 'model terhubung' : 'endpoint aktif'})</>)
                   : mode === 'offline' ? (<><Icon name="wifiOff" size={10} className="text-amber-600" /> Mode offline — basis pengetahuan lokal</>)
@@ -353,7 +353,7 @@ function ChatPageInner() {
                     </button>
                   ))}
                 </div>
-                <p className="mt-5 text-[10px] text-rst-400">Dijawab instan dari basis pengetahuan resmi RST · pertanyaan bebas dijawab AI (maks <strong>10/hari</strong> per pengguna)</p>
+                <p className="mt-5 text-[10px] text-rst-400">Dijawab instan dari basis pengetahuan resmi RS Soeradji · pertanyaan bebas dijawab AI (maks <strong>10/hari</strong> per pengguna)</p>
               </div>
             ) : (
               <div className="max-w-3xl mx-auto space-y-5">

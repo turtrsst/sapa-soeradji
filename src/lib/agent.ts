@@ -31,7 +31,7 @@ ATURAN KERJA:
 CONTOH GAYA (ikuti polanya):
 - User: "Jadwal dokter jantung Senin?" → panggil cari_jadwal_dokter(poli="jantung", hari="Senin") → jawab inti dulu: dokter + poli + hari + jam (**bold** untuk dokter & jam), lalu satu langkah: pendaftaran online WA 0816-9170-00 (H-7 s/d H-1), konfirmasi (0272) 321020, link [Jadwal Dokter](/jadwal).
 - User: "Antrian JP Sabtu?" → bila data tidak ada di KB/tool, katakan jujur "belum ada di data saya" + arahkan (0272) 321020 — jangan mengarang.
-- User: "Cuaca besok?" → "Soal cuaca di luar lingkup saya — saya asisten RST. Yang bisa saya bantu: profil RS, pendaftaran, [Jadwal Dokter](/jadwal), tarif, Home Care, [Kampanye](/kampanye), [Keluhan](/keluhan)."`;
+- User: "Cuaca besok?" → "Soal cuaca di luar lingkup saya — saya asisten RS Soeradji. Yang bisa saya bantu: profil RS, pendaftaran, [Jadwal Dokter](/jadwal), tarif, Home Care, [Kampanye](/kampanye), [Keluhan](/keluhan)."`;
 
 export interface AgentStreamOptions {
   message: string;
@@ -121,7 +121,7 @@ export async function streamAgent({ message, history, cfg, onToken, onReasoning,
 
   const tools = {
     cari_jadwal_dokter: tool({
-      description: 'Cari jadwal praktik dokter/poliklinik RST (update ' + JADWAL_UPDATE + '). Kata kunci: nama dokter, poli, spesialisasi, atau hari — mis. "jantung Senin", "dr. Suharso", "poli kulit".',
+      description: 'Cari jadwal praktik dokter/poliklinik RS Soeradji (update ' + JADWAL_UPDATE + '). Kata kunci: nama dokter, poli, spesialisasi, atau hari — mis. "jantung Senin", "dr. Suharso", "poli kulit".',
       inputSchema: z.object({ kata_kunci: z.string().describe('nama dokter / poli / spesialisasi / hari') }),
       execute: async ({ kata_kunci }) => {
         const rows = matchJadwal(kata_kunci, 8);
@@ -132,7 +132,7 @@ export async function streamAgent({ message, history, cfg, onToken, onReasoning,
       },
     }),
     cari_tarif_layanan: tool({
-      description: `Cari tarif resmi RST/Home Care (SK Dirut ${TARIF_META.nomor}). Kata kunci: nama tindakan — mis. "pasang infus", "perawatan luka", "GDS", "fisioterapi".`,
+      description: `Cari tarif resmi RS Soeradji/Home Care (SK Dirut ${TARIF_META.nomor}). Kata kunci: nama tindakan — mis. "pasang infus", "perawatan luka", "GDS", "fisioterapi".`,
       inputSchema: z.object({ kata_kunci: z.string().describe('nama tindakan/layanan yang dicari tarifnya') }),
       execute: async ({ kata_kunci }) => {
         const rows = matchTarif(kata_kunci, 10);
@@ -143,7 +143,7 @@ export async function streamAgent({ message, history, cfg, onToken, onReasoning,
       },
     }),
     cari_info_rst: tool({
-      description: 'Cari informasi resmi RST: profil RS, kontak, cara pendaftaran online, E-Yang Soeradji, home care (Soeradji GOCARE), keluhan/pengaduan, kampanye, edukasi kesehatan umum, dan layanan unggulan.',
+      description: 'Cari informasi resmi RS Soeradji: profil RS, kontak, cara pendaftaran online, E-Yang Soeradji, home care (Soeradji GOCARE), keluhan/pengaduan, kampanye, edukasi kesehatan umum, dan layanan unggulan.',
       inputSchema: z.object({ kata_kunci: z.string().describe('topik yang dicari, mis. "pendaftaran", "home care", "keluhan", "MCU"') }),
       execute: async ({ kata_kunci }) => {
         const hits = retrieve(kata_kunci, 3);
@@ -153,7 +153,7 @@ export async function streamAgent({ message, history, cfg, onToken, onReasoning,
       },
     }),
     daftar_kampanye_aktif: tool({
-      description: 'Daftar kampanye kesehatan RST yang sedang/terakhir dipublikasikan (bakti sosial, SPELING, CERDIK, skrining, dll).',
+      description: 'Daftar kampanye kesehatan RS Soeradji yang sedang/terakhir dipublikasikan (bakti sosial, SPELING, CERDIK, skrining, dll).',
       inputSchema: z.object({}),
       execute: async () => {
         try {

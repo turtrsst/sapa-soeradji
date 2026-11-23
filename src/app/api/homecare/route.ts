@@ -25,5 +25,5 @@ export async function POST(req: Request) {
   const id = uid();
   db.prepare('INSERT INTO homecare_requests (id, name, phone, address, service, schedule, notes, status, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?)')
     .run(id, name.slice(0, 120), phone.slice(0, 40), address.slice(0, 500), service.slice(0, 200), schedule.slice(0, 120), notes.slice(0, 2000), 'baru', now, now);
-  return Response.json({ ok: true, id, message: 'Permintaan Home Care tercatat. Petugas RST akan segera menghubungi Anda untuk penjadwalan.' });
+  return Response.json({ ok: true, id, message: 'Permintaan Home Care tercatat. Petugas RS Soeradji akan segera menghubungi Anda untuk penjadwalan.' });
 }

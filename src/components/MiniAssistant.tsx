@@ -221,7 +221,7 @@ export default function MiniAssistant() {
           <div className="flex items-center gap-2.5 border-b border-rst-100 bg-[#0a2523] px-3.5 py-2.5 text-white">
             <Avatar size={44} />
             <div className="min-w-0 flex-1">
-              <p className="text-[13px] font-extrabold leading-tight tracking-tight">SOERA AI — Asisten RST</p>
+              <p className="text-[13px] font-extrabold leading-tight tracking-tight">SOERA AI — Asisten RS Soeradji</p>
               <p className="text-[9.5px] text-emerald-300/90 font-semibold leading-tight">Asisten digital resmi RSUP Dr. Soeradji Tirtonegoro</p>
             </div>
             <a href="tel:0272321020" title="Contact Center (0272) 321020" aria-label="Telepon Contact Center" className="p-2 rounded-lg text-emerald-200 hover:bg-white/10 transition">
@@ -294,7 +294,7 @@ export default function MiniAssistant() {
                 rows={1}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(input); } }}
-                placeholder="Tanya seputar RST…"
+                placeholder="Tanya seputar RS Soeradji…"
                 aria-label="Tulis pertanyaan"
                 className="max-h-28 flex-1 resize-none bg-transparent px-1.5 py-1.5 text-[13px] text-rst-900 placeholder-rst-400 outline-none"
                 disabled={busy}

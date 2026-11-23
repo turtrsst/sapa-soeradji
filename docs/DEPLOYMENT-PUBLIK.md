@@ -28,8 +28,8 @@ Browser pasien ──HTTPS(443)──> Reverse proxy (Caddy/Nginx)
 | Opsi | Kapan dipakai | Catatan |
 |---|---|---|
 | **A. llama-server di mesin yang sama** *(disarankan)* | Server publik sekaligus menjadi "mesin AI" | llama.cpp = engine di balik Jan; OpenAI-compatible `/v1/chat/completions`. Model GGUF yang sama bisa dipakai (mis. Qwen2.5-1.5B/3B **Q4_K_M**). CPU-only cukup untuk model kecil; RAM 8–16 GB nyaman. |
-| **B. Mesin/VM/GPU khusus di LAN RST** | RS punya GPU/workstation di datacenter | Web server publik → LLM hanya boleh diakses dari IP web server (firewall/UFW atau bind LAN + allowlist). |
-| **C. Tanpa LLM (mode Offline KB)** | Langsung go-live tanpa menunggu pengadaan | Chatbot menjawab dari basis pengetahuan resmi RST + edukasi kesehatan umum; pertanyaan di luar KB dijawab jujur + hotline. **Sudah berfungsi penuh hari ini.** |
+| **B. Mesin/VM/GPU khusus di LAN RS Soeradji** | RS punya GPU/workstation di datacenter | Web server publik → LLM hanya boleh diakses dari IP web server (firewall/UFW atau bind LAN + allowlist). |
+| **C. Tanpa LLM (mode Offline KB)** | Langsung go-live tanpa menunggu pengadaan | Chatbot menjawab dari basis pengetahuan resmi RS Soeradji + edukasi kesehatan umum; pertanyaan di luar KB dijawab jujur + hotline. **Sudah berfungsi penuh hari ini.** |
 | **D. PC petugas dengan Jan via LAN RS** | Demo / pilot saja | Jan = aplikasi desktop GUI; mesin harus menyala dengan sesi desktop aktif. **Tidak disarankan 24/7 publik**: tidur/reboot, update app, dan IP PC berubah (pakai DHCP reservation). |
 
 Opsi cloud (OpenAI/dll.) tetap tersedia di **/admin → Pengaturan AI** bila RS mengizinkan — dengan catatan privasi di §5.
@@ -58,7 +58,7 @@ Jika Anda **bisa RDP ke komputer server**, mesin itu bisa jadi host LLM (dan sek
 6. **Firewall**: hanya port 443 (+80) publik; 3000 & 8080 tetap loopback/LAN. RDP (3389) **hanya** dari IP admin/VPN — aktifkan NLA, ganti port bila perlu, matikan sleep, jadwalkan Windows Update di luar jam layanan.
 7. /admin → Pengaturan AI → Base URL `http://127.0.0.1:8080/v1` → Uji Koneksi → Simpan. Selesai.
 
-**Skenario B2 — SOERA AI di server Linux/VPS publik, LLM di mesin Windows RST** (LAN):
+**Skenario B2 — SOERA AI di server Linux/VPS publik, LLM di mesin Windows RS Soeradji** (LAN):
 1. Di mesin Windows: `llama-server.exe --host 0.0.0.0 --port 8080 --api-key "KEY-PANJANG"` sebagai service (langkah 5 B1).
 2. Windows Defender Firewall → inbound rule port 8080 **hanya** dari IP server aplikasi; jangan pernah port-forward 8080 ke internet.
 3. Jika server aplikasi **di luar LAN RS** (VPS): jangan buka 8080 telanjang — pakai **Tailscale/WireGuard** (kedua mesin join tailnet; Base URL `http://100.x.y.z:8080/v1`) atau reverse SSH tunnel dari mesin Windows ke VPS. Ini satu-satunya cara aman menembus NAT RS.
@@ -202,4 +202,4 @@ Deploy apa adanya dengan AI **nonaktif** — mode Offline KB menjawab dari basis
 
 - `Dockerfile` tersedia di repo tetapi **belum diuji** (tidak ada Docker di lingkungan pengembangan); gunakan systemd/PM2 bila ragu.
 - Estimasi resource opsi A: model 1.5B Q4_K_M ≈ 1.1 GB file + ~2–3 GB RAM runtime; 3B ≈ 2 GB file + ~4–5 GB RAM; tambah swap & monitoring OOM.
-- Langkah Caddy/systemd di atas adalah konfigurasi standar, tetapi sesuaikan dengan infrastruktur & kebijakan keamanan RST (konsultasi tim SI/IT RS sebelum publik).
+- Langkah Caddy/systemd di atas adalah konfigurasi standar, tetapi sesuaikan dengan infrastruktur & kebijakan keamanan RS Soeradji (konsultasi tim SI/IT RS sebelum publik).

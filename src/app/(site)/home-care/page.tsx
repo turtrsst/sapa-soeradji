@@ -43,7 +43,7 @@ export default function HomeCarePage() {
         <div className="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-gold-400/10 blur-3xl" />
         <div className="relative flex flex-col lg:flex-row lg:items-center gap-5">
           <div className="flex-1">
-            <span className="chip bg-gold-400 text-rst-950 !font-black mb-2">RESMI · SIAS RST</span>
+            <span className="chip bg-gold-400 text-rst-950 !font-black mb-2">RESMI · SIAS RS Soeradji</span>
             <h2 className="text-xl sm:text-2xl font-black tracking-tight">Soeradji <span className="text-gold-400">GOCARE</span> — Pesan Homecare Online</h2>
             <p className="mt-1.5 text-xs sm:text-sm text-rst-100/90 leading-relaxed">Sistem pemesanan homecare resmi RSUP Dr. Soeradji Tirtonegoro. Ketik atau ucapkan kebutuhan Anda sekali — misalnya <em>“perawatan luka untuk ibu, besok pagi di Klaten”</em> — asisten <strong>Sora</strong> menyusun &amp; mengirim pesanan otomatis: layanan, pasien, tanggal, dan alamat.</p>
             <ul className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px] sm:text-[11px] font-semibold text-gold-200/90">
@@ -68,7 +68,7 @@ export default function HomeCarePage() {
       <div className="mt-5 card p-4 sm:p-5 flex flex-col md:flex-row md:items-center gap-4">
         <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gold-400/20 text-gold-600"><Icon name="doc" size={24} /></span>
         <div className="text-xs text-rst-700 leading-relaxed flex-1">
-          <p className="text-sm font-extrabold text-rst-900">Dasar Tarif: SK Direktur Utama RST No. {TARIF_META.nomor}</p>
+          <p className="text-sm font-extrabold text-rst-900">Dasar Tarif: SK Direktur Utama RS Soeradji No. {TARIF_META.nomor}</p>
           <p className="mt-0.5">Tanggal {TARIF_META.tanggal} · mencabut SK No. HK.02.03/D.XXVI/24514/2023 · ditandatangani {TARIF_META.penandatangan}.</p>
           <p className="mt-1 font-semibold text-rst-800">Catatan SK: {TARIF_META.catatan}</p>
         </div>
