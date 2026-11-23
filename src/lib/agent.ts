@@ -42,6 +42,8 @@ export interface AgentStreamOptions {
   onReasoning?: (t: string) => void;
   /** Kartu generative (jadwal/tarif/kampanye/info) — dikirim sebagai event SSE "card". */
   onCard?: (card: CardPayload) => void;
+  /** Fases eksekusi tool — untuk chip "Executing…" di UI. */
+  onTool?: (evt: { phase: 'start' | 'result'; tool: string }) => void;
 }
 
 export interface AgentStreamResult {
@@ -112,7 +114,7 @@ function resolvePool(cfg: LlmConfig): string[] {
   return single && !single.startsWith('••••') ? [single] : ['']; // [''] = endpoint lokal tanpa key
 }
 
-export async function streamAgent({ message, history, cfg, onToken, onReasoning, onCard }: AgentStreamOptions): Promise<AgentStreamResult> {
+export async function streamAgent({ message, history, cfg, onToken, onReasoning, onCard, onTool }: AgentStreamOptions): Promise<AgentStreamResult> {
   const baseUrl = (cfg.baseUrl || 'http://localhost:8080/v1').replace(/\/+$/, '');
   const isGemini = /generativelanguage\.googleapis\.com/i.test(baseUrl);
   const pool = resolvePool(cfg);
@@ -205,6 +207,10 @@ export async function streamAgent({ message, history, cfg, onToken, onReasoning,
         } else if (part?.type === 'reasoning-delta') {
           const text: string = part.text ?? part.delta ?? '';
           if (text) onReasoning?.(text);
+        } else if (part?.type === 'tool-call') {
+          onTool?.({ phase: 'start', tool: String(part.toolName ?? 'tool') });
+        } else if (part?.type === 'tool-result') {
+          onTool?.({ phase: 'result', tool: String(part.toolName ?? 'tool') });
         } else if (part?.type === 'error') {
           lastReason = reasonOf(part.error);
         }

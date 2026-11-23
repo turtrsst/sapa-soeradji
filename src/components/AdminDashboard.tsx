@@ -426,7 +426,7 @@ export default function AdminDashboard() {
                 ].map((s, i) => <li key={i} className="flex gap-2"><span className="font-black text-rst-400">{i + 1}.</span>{s}</li>)}
               </ol>
               <p className="mt-3 text-[10px] text-rst-500">Catatan: Jan adalah aplikasi desktop (GUI) — butuh sesi desktop yang berjalan; untuk server produksi 24/7 gunakan Ollama sebagai service (lihat docs/DEPLOYMENT-PUBLIK.md §2C). Tanpa AI sekalipun, jawaban dasar tetap tersedia dari basis pengetahuan lokal (jadwal, tarif, kontak, pendaftaran, dll).</p>
-              <p className="mt-2 text-[10px] text-rst-500">Kuota AI publik: <strong>pertanyaan bebas</strong> (di luar template) dibatasi <strong>5/pengguna/hari</strong>, reset 00.00 WIB — pengguna di-hash anonim (IP tidak disimpan). Pertanyaan layanan (jadwal/tarif/home care/kampanye/pendaftaran) tidak dikenakan kuota.</p>
+              <p className="mt-2 text-[10px] text-rst-500">Kuota AI publik: <strong>pertanyaan bebas</strong> (di luar template) dibatasi <strong>10/pengguna/hari</strong>, reset 00.00 WIB — pengguna di-hash anonim (IP tidak disimpan). Pertanyaan layanan (jadwal/tarif/home care/kampanye/pendaftaran) tidak dikenakan kuota.</p>
             </div>
             <div className="card p-5">
               <p className="font-extrabold text-rst-900 flex items-center gap-2"><Icon name="info" size={15} className="text-rst-500" /> Perilaku jawaban</p>

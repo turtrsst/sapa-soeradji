@@ -96,3 +96,45 @@ body { background: #f4f8f7; color: #12312e; -webkit-font-smoothing: antialiased;
 details.genui-thinking > summary { list-style: none; }
 details.genui-thinking > summary::-webkit-details-marker { display: none; }
 details.genui-thinking[open] > summary { color: #0f5c52; }
+
+/* === Chat v1.3 — Muse & Momo-inspired telemetry === */
+@keyframes muse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(242, 193, 78, 0.55), 0 0 26px 2px rgba(242, 193, 78, 0.45); }
+  50% { box-shadow: 0 0 0 7px rgba(242, 193, 78, 0.16), 0 0 46px 7px rgba(242, 193, 78, 0.5); }
+}
+.muse-live { animation: muse-glow 1.6s ease-in-out infinite; }
+.muse-aura { background: radial-gradient(circle at 50% 42%, rgba(242, 193, 78, 0.32), transparent 66%); }
+.muse-hero-ring { box-shadow: 0 0 0 4px rgba(242,193,78,0.5), 0 18px 50px -12px rgba(242,193,78,0.45), 0 8px 40px -8px rgba(15,118,110,0.4); }
+
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+.shimmer-text {
+  background: linear-gradient(110deg, #7d968f 15%, #f2c14e 34%, #1f7f78 50%, #f2c14e 66%, #7d968f 85%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: shimmer 2.1s linear infinite;
+}
+.skeleton-line { position: relative; overflow: hidden; background: rgba(31,127,120,0.10); border-radius: 0.5rem; height: 0.68rem; }
+.skeleton-line::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(110deg, transparent 18%, rgba(255,255,255,0.85) 50%, transparent 82%);
+  background-size: 200% 100%; animation: shimmer 1.4s linear infinite;
+}
+
+@keyframes caret-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+.stream-caret { display: inline-block; width: 0.52em; height: 1.02em; border-radius: 0.15em; background: #f2c14e; margin-left: 0.18em; vertical-align: -0.14em; animation: caret-blink 0.85s steps(1) infinite; }
+
+.tool-step { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.66rem; font-weight: 800; letter-spacing: 0.02em; border-radius: 0.75rem; padding: 0.34rem 0.6rem; border: 1px solid; }
+.tool-step.run { color: #8a6d12; border-color: rgba(242, 193, 78, 0.75); background: #fffbe8; }
+.tool-step.done { color: #0f5c52; border-color: rgba(31, 127, 120, 0.35); background: #effaf6; }
+@keyframes tool-spin { to { transform: rotate(360deg); } }
+.tool-spinner { width: 0.66rem; height: 0.66rem; border-radius: 9999px; border: 2px solid rgba(138,109,18,0.3); border-top-color: #8a6d12; animation: tool-spin 0.7s linear infinite; display: inline-block; }
+
+details.thinking-panel { border: 1px solid rgba(242, 193, 78, 0.45); background: linear-gradient(120deg, #fffdf3 0%, #f7fbfa 60%, #fffdf3 100%); border-radius: 1rem; padding: 0.55rem 0.75rem; margin-bottom: 0.5rem; }
+details.thinking-panel > summary { list-style: none; display: flex; align-items: center; gap: 0.45rem; cursor: pointer; user-select: none; font-size: 0.66rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #8a6d12; }
+details.thinking-panel > summary::-webkit-details-marker { display: none; }
+
+@keyframes msg-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.msg-in { animation: msg-in 0.3s ease both; }
+@media (prefers-reduced-motion: reduce) {
+  .muse-live, .skeleton-line::after, .shimmer-text, .stream-caret, .tool-spinner, .msg-in { animation: none !important; }
+}

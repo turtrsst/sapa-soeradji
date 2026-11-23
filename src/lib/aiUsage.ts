@@ -5,7 +5,7 @@
 import crypto from 'node:crypto';
 import { getDb } from './db';
 
-export const AI_DAILY_LIMIT = Math.max(1, Number(process.env.SOERA_AI_DAILY_LIMIT ?? 5) || 5);
+export const AI_DAILY_LIMIT = Math.max(1, Number(process.env.SOERA_AI_DAILY_LIMIT ?? 10) || 10);
 
 /** Kunci tanggal di zona Asia/Jakarta (UTC+7) — kuota direset setiap 00.00 WIB. */
 export function dayKeyJakarta(d: Date = new Date()): string {
