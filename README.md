@@ -131,7 +131,7 @@ src/
   app/                 # App Router: pages + API routes (chat SSE, admin, …)
   components/          # ChatClient, Header, Footer, Markdown, AdminDashboard, Icon
   lib/
-    kb.ts              # Basis pengetahuan RST (19 dokumen, bersumber)
+    kb.ts              # Basis pengetahuan RST (38 dokumen, bersumber)
     tarif.ts           # Digitalisasi SK HK.02.03/D.XXVI/5441/2024 (semua item tarif)
     jadwal.ts          # ±55 baris jadwal poliklinik (update 12 Mei 2026)
     rag.ts             # Retrieval + intent detection
