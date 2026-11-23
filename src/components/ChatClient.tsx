@@ -4,14 +4,18 @@ import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import Icon from '@/components/Icon';
 import Markdown from '@/components/Markdown';
+import ChatCard from '@/components/ChatCard';
 import { bp } from '@/lib/basePath';
+import type { CardPayload } from '@/lib/genui';
 
 interface ChatMsg {
   id?: number;
   role: 'user' | 'assistant';
   content: string;
-  meta?: { intent?: string; mode?: string; sources?: { title: string; source: string }[]; latencyMs?: number };
+  meta?: { intent?: string; mode?: string; sources?: { title: string; source: string }[]; latencyMs?: number; cards?: CardPayload[] };
   streaming?: boolean;
+  reasoning?: string;
+  cards?: CardPayload[];
 }
 interface Conv { id: string; title: string; pinned: number; updated_at: number; message_count: number; last_message?: string | null }
 
@@ -64,6 +68,7 @@ function ChatPageInner() {
       setMessages((d.messages || []).filter((m: any) => m.role !== 'system').map((m: any) => ({
         id: m.id, role: m.role, content: m.content,
         meta: m.meta ? safeParse(m.meta) : undefined,
+        cards: m.meta ? (safeParse(m.meta)?.cards as CardPayload[] | undefined) : undefined,
       })));
       setMode('');
       scrollToBottom();
@@ -125,6 +130,21 @@ function ChatPageInner() {
                 if (last?.role === 'assistant') last.meta = { ...(last.meta || {}), intent: evt.intent, sources: evt.sources || [] };
                 return copy;
               });
+            } else if (evt.type === 'reasoning') {
+              setMessages((prev) => {
+                const copy = [...prev];
+                const last = copy[copy.length - 1];
+                if (last?.role === 'assistant') last.reasoning = ((last.reasoning || '') + evt.text).slice(-6000);
+                return copy;
+              });
+            } else if (evt.type === 'card' && evt.card) {
+              setMessages((prev) => {
+                const copy = [...prev];
+                const last = copy[copy.length - 1];
+                if (last?.role === 'assistant') last.cards = [...(last.cards || []), evt.card as CardPayload];
+                return copy;
+              });
+              scrollToBottom();
             } else if (evt.type === 'token') {
               setMessages((prev) => {
                 const copy = [...prev];
@@ -278,7 +298,20 @@ function ChatPageInner() {
                       ? <Image src={bp('/images/soera-ai-logo.png')} alt="SOERA AI" width={34} height={34} className="h-8 w-8 mt-1 rounded-full object-contain bg-white border border-rst-100 p-0.5 shrink-0" />
                       : <span className="h-8 w-8 mt-1 rounded-full bg-rst-700 text-white text-[11px] font-black flex items-center justify-center shrink-0">ANDA</span>}
                     <div className={`max-w-[85%] sm:max-w-[78%] rounded-2xl px-4 py-3 text-[14.5px] leading-relaxed shadow-sm ${m.role === 'user' ? 'bg-rst-700 text-white rounded-tr-md' : 'bg-white border border-rst-100 text-rst-900 rounded-tl-md'}`}>
-                      {m.role === 'assistant' && !m.content && m.streaming ? (
+                      {m.role === 'assistant' && m.reasoning?.trim() && (
+                        <details className="genui-thinking mb-2 rounded-xl border border-rst-100 bg-rst-50/60 px-3 py-2" open={!!m.streaming}>
+                          <summary className="flex cursor-pointer select-none items-center gap-1.5 text-[10.5px] font-extrabold uppercase tracking-wide text-rst-500">
+                            <Icon name="sparkle" size={12} className="text-gold-500" />
+                            {m.streaming ? 'Sedang berpikir…' : 'Proses berpikir'}
+                            <span className="ml-auto text-[9px] font-bold normal-case text-rst-400">{m.streaming ? 'live' : 'klik untuk buka/tutup'}</span>
+                          </summary>
+                          <div className="mt-1.5 max-h-44 overflow-y-auto whitespace-pre-wrap text-[11px] italic leading-snug text-rst-500">{m.reasoning}</div>
+                        </details>
+                      )}
+                      {m.role === 'assistant' && !!m.cards?.length && (
+                        <div className="genui-cards">{m.cards.map((c, ci) => <ChatCard key={ci} card={c} />)}</div>
+                      )}
+                      {m.role === 'assistant' && !m.content && m.streaming && !m.reasoning ? (
                         <span className="dot-typing text-rst-400 text-lg leading-none"><span>●</span> <span>●</span> <span>●</span></span>
                       ) : (
                         <Markdown text={m.content} />

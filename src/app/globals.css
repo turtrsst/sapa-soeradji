@@ -89,3 +89,10 @@ body { background: #f4f8f7; color: #12312e; -webkit-font-smoothing: antialiased;
 @media (prefers-reduced-motion: reduce) {
   .mini-avatar-float, .mini-avatar-ring { animation: none !important; }
 }
+
+/* === Generative UI cards & panel thinking (SOERA AI v1.2) === */
+@keyframes genui-in { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
+.genui-card { animation: genui-in .35s ease both; }
+details.genui-thinking > summary { list-style: none; }
+details.genui-thinking > summary::-webkit-details-marker { display: none; }
+details.genui-thinking[open] > summary { color: #0f5c52; }

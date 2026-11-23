@@ -11,6 +11,8 @@ import { retrieve, matchJadwal, matchTarif, formatJadwalLines, formatTarifLines 
 import { TARIF_META } from './tarif';
 import { JADWAL_UPDATE } from './jadwal';
 import { getDb } from './db';
+import { isKeyCoolingDown, isFailoverReason, keyHint, markKeyCooldown } from './keyPool';
+import { buildJadwalCard, buildTarifCard, buildKampanyeCard, buildInfoCard, type CardPayload } from './genui';
 
 export const AGENT_SYSTEM = `Anda adalah SOERA AI (Soeradji Assistant Intelligent) — asisten AI resmi RSUP Dr. Soeradji Tirtonegoro Klaten (RS vertikal Kementerian Kesehatan RI, Kelas A, BLU).
 
@@ -36,18 +38,84 @@ export interface AgentStreamOptions {
   history: { role: 'user' | 'assistant'; content: string }[];
   cfg: LlmConfig;
   onToken: (t: string) => void;
+  /** Token reasoning/thinking (Gemini/model reasoning) — ditampilkan sebagai panel "Sedang berpikir…". */
+  onReasoning?: (t: string) => void;
+  /** Kartu generative (jadwal/tarif/kampanye/info) — dikirim sebagai event SSE "card". */
+  onCard?: (card: CardPayload) => void;
 }
 
 export interface AgentStreamResult {
   ok: boolean;
   reason?: string;
   tokens: number;
+  /** Hint key (••••+last4) yang berhasil — hanya untuk log/UI admin, bukan key mentah. */
+  keyHint?: string;
 }
 
-export async function streamAgent({ message, history, cfg, onToken }: AgentStreamOptions): Promise<AgentStreamResult> {
+/**
+ * Tap ke stream SSE mentah untuk menyalin delta reasoning (`reasoning_content` ala DeepSeek/Gemini
+ * OpenAI-compat, `reasoning` ala OpenRouter, atau `reasoning_details[]`) ke callback.
+ * @ai-sdk/openai tidak meneruskan field ini, jadi kita sadap di layer jaringan — passthrough
+ * byte-per-byte tanpa mengubah respons yang diterima AI SDK.
+ */
+function tapReasoningStream(response: Response, onReasoning?: (t: string) => void): Response {
+  if (!onReasoning || !response.body) return response;
+  const decoder = new TextDecoder();
+  let buffer = '';
+  const emit = (line: string) => {
+    const t = line.trim();
+    if (!t.startsWith('data:')) return;
+    const data = t.slice(5).trim();
+    if (!data || data === '[DONE]') return;
+    try {
+      const j = JSON.parse(data);
+      const d = j?.choices?.[0]?.delta ?? {};
+      let r = '';
+      if (typeof d.reasoning_content === 'string') r += d.reasoning_content;
+      if (typeof d.reasoning === 'string') r += d.reasoning;
+      if (Array.isArray(d.reasoning_details)) for (const it of d.reasoning_details) if (typeof it?.text === 'string') r += it.text;
+      if (r) onReasoning(r);
+    } catch { /* frame non-JSON */ }
+  };
+  const transform = new TransformStream<Uint8Array, Uint8Array>({
+    transform(chunk, controller) {
+      buffer += decoder.decode(chunk, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() ?? '';
+      for (const line of lines) emit(line);
+      controller.enqueue(chunk);
+    },
+    flush() { if (buffer) emit(buffer); },
+  });
+  return new Response(response.body.pipeThrough(transform), {
+    status: response.status,
+    statusText: response.statusText,
+    headers: response.headers,
+  });
+}
+
+function errStatus(e: any): number | undefined {
+  const s = e?.statusCode ?? e?.status ?? e?.response?.status;
+  const n = Number(s);
+  return Number.isFinite(n) && n >= 100 && n < 600 ? n : undefined;
+}
+function reasonOf(e: any, fallback = 'error agen'): string {
+  const m = e?.message || String(e || fallback);
+  const st = errStatus(e);
+  return st ? `HTTP ${st} — ${m}` : m;
+}
+
+function resolvePool(cfg: LlmConfig): string[] {
+  const pool = (cfg.apiKeys ?? []).map((k) => String(k || '').trim()).filter(Boolean);
+  if (pool.length) return [...new Set(pool)];
+  const single = String(cfg.apiKey || '').trim();
+  return single && !single.startsWith('••••') ? [single] : ['']; // [''] = endpoint lokal tanpa key
+}
+
+export async function streamAgent({ message, history, cfg, onToken, onReasoning, onCard }: AgentStreamOptions): Promise<AgentStreamResult> {
   const baseUrl = (cfg.baseUrl || 'http://localhost:8080/v1').replace(/\/+$/, '');
-  const openai = createOpenAI({ baseURL: baseUrl, apiKey: cfg.apiKey || 'soera-local' });
-  const model = openai.chat(cfg.model || 'model-lokal');
+  const isGemini = /generativelanguage\.googleapis\.com/i.test(baseUrl);
+  const pool = resolvePool(cfg);
 
   const tools = {
     cari_jadwal_dokter: tool({
@@ -55,6 +123,7 @@ export async function streamAgent({ message, history, cfg, onToken }: AgentStrea
       inputSchema: z.object({ kata_kunci: z.string().describe('nama dokter / poli / spesialisasi / hari') }),
       execute: async ({ kata_kunci }) => {
         const rows = matchJadwal(kata_kunci, 8);
+        if (rows.length) onCard?.(buildJadwalCard(rows));
         return rows.length
           ? `Jadwal (update ${JADWAL_UPDATE}, dapat berubah — konfirmasi (0272) 321020):\n${formatJadwalLines(rows)}\nPendaftaran online: WA 0816-9170-00 (H-7 s/d H-1).\nDetail & cetak: [halaman Jadwal Dokter](/jadwal).`
           : 'Tidak ada jadwal yang cocok untuk kata kunci itu. Sarankan konfirmasi (0272) 321020 atau lihat [halaman Jadwal Dokter](/jadwal).';
@@ -65,6 +134,7 @@ export async function streamAgent({ message, history, cfg, onToken }: AgentStrea
       inputSchema: z.object({ kata_kunci: z.string().describe('nama tindakan/layanan yang dicari tarifnya') }),
       execute: async ({ kata_kunci }) => {
         const rows = matchTarif(kata_kunci, 10);
+        if (rows.length) onCard?.(buildTarifCard(rows));
         return rows.length
           ? `Tarif (SK ${TARIF_META.nomor}, ${TARIF_META.tanggal}):\n${formatTarifLines(rows)}\n${TARIF_META.catatan}\nTabel lengkap (±80 item) & unduh SK: [halaman Home Care](/home-care). Pesan online: [Soeradji GOCARE](https://sias.rsupsoeradji.id/homecare/).`
           : 'Tidak ada tarif cocok. Sarankan lihat [halaman Home Care](/home-care) atau hubungi (0272) 321020.';
@@ -76,6 +146,7 @@ export async function streamAgent({ message, history, cfg, onToken }: AgentStrea
       execute: async ({ kata_kunci }) => {
         const hits = retrieve(kata_kunci, 3);
         if (!hits.length) return 'Tidak ada dokumen basis pengetahuan yang cocok.';
+        onCard?.(buildInfoCard(hits));
         return hits.map((h) => `[${h.doc.title} | Sumber: ${h.doc.source}]\n${h.doc.body.slice(0, 900)}`).join('\n\n');
       },
     }),
@@ -87,7 +158,8 @@ export async function streamAgent({ message, history, cfg, onToken }: AgentStrea
           const rows = getDb().prepare(
             'SELECT title, summary, location, start_date, end_date FROM campaigns WHERE active = 1 ORDER BY created_at DESC LIMIT 6'
           ).all() as { title: string; summary: string; location: string | null; start_date: string | null; end_date: string | null }[];
-          if (!rows.length) return 'Belum ada kampanye aktif. Lihat [menu Kampanye](/kampanye) untuk arsip.';
+          if (rows.length) onCard?.(buildKampanyeCard(rows));
+        if (!rows.length) return 'Belum ada kampanye aktif. Lihat [menu Kampanye](/kampanye) untuk arsip.';
           return rows.map((r) => `- ${r.title}: ${r.summary}${r.location ? ` (Tempat: ${r.location})` : ''}${r.start_date ? ` (Mulai: ${r.start_date}${r.end_date ? ` s/d ${r.end_date}` : ''})` : ''}`).join('\n') + '\nSemua kampanye: [menu Kampanye](/kampanye).';
         } catch {
           return 'Data kampanye tidak tersedia saat ini.';
@@ -96,26 +168,60 @@ export async function streamAgent({ message, history, cfg, onToken }: AgentStrea
     }),
   };
 
-  let tokens = 0;
-  try {
-    const result = streamText({
-      model,
-      system: AGENT_SYSTEM,
-      messages: [...history, { role: 'user' as const, content: message }],
-      tools,
-      stopWhen: stepCountIs(5),
-      temperature: cfg.temperature ?? 0.4,
-      maxOutputTokens: Math.min(4096, Math.max(64, cfg.maxTokens ?? 900)),
-      abortSignal: AbortSignal.timeout(Math.max(5000, cfg.timeoutMs || 60000)),
-      onError: ({ error }) => { console.error('[soera-agent]', error); },
-    });
-    for await (const part of result.textStream) {
-      if (part) { tokens++; onToken(part); }
+  // Fallback antar key di pool: percobaan berurutan #1..#N.
+  // Pindah key HANYA bila gagal SEBELUM token pertama terkirim (aman: tidak ada teks dobel di klien).
+  let tokensTotal = 0;
+  let lastReason = '';
+  let triedRealKey = 0;
+  for (const key of pool) {
+    if (key && isKeyCoolingDown(key)) continue;
+    if (key) triedRealKey++;
+    const tapFetch: typeof fetch = async (input: any, init?: any) => tapReasoningStream(await fetch(input, init), onReasoning);
+    const openai = createOpenAI({ baseURL: baseUrl, apiKey: key || 'soera-local', fetch: tapFetch });
+    const model = openai.chat(cfg.model || 'model-lokal');
+    let tokens = 0;
+    const attempt: Record<string, any> = {
+      // Gemini: kirim effort thinking (tidak bisa dimatikan di Gemini 3.x; 'low' paling hemat).
+      ...(isGemini ? { reasoning: (cfg.thinkingEffort ?? 'low') as any } : {}),
+    };
+    try {
+      const result = streamText({
+        model,
+        system: AGENT_SYSTEM,
+        messages: [...history, { role: 'user' as const, content: message }],
+        tools,
+        stopWhen: stepCountIs(5),
+        temperature: cfg.temperature ?? 0.4,
+        maxOutputTokens: Math.min(4096, Math.max(64, cfg.maxTokens ?? 900)),
+        abortSignal: AbortSignal.timeout(Math.max(5000, cfg.timeoutMs || 60000)),
+        onError: ({ error }) => { console.error('[soera-agent]', error); },
+        ...attempt,
+      });
+      for await (const rawPart of result.fullStream) {
+        const part: any = rawPart;
+        if (part?.type === 'text-delta') {
+          const text: string = part.text ?? part.delta ?? '';
+          if (text) { tokens++; tokensTotal++; onToken(text); }
+        } else if (part?.type === 'reasoning-delta') {
+          const text: string = part.text ?? part.delta ?? '';
+          if (text) onReasoning?.(text);
+        } else if (part?.type === 'error') {
+          lastReason = reasonOf(part.error);
+        }
+      }
+      if (tokens > 0) return { ok: true, tokens, keyHint: keyHint(key) };
+      if (!lastReason) lastReason = 'Endpoint tidak mengembalikan teks';
+    } catch (err: any) {
+      lastReason = err?.name === 'TimeoutError' || err?.name === 'AbortError' ? 'timeout' : reasonOf(err);
     }
-    if (tokens === 0) return { ok: false, reason: 'Agent tidak mengembalikan teks', tokens: 0 };
-    return { ok: true, tokens };
-  } catch (err: any) {
-    const reason = err?.name === 'TimeoutError' || err?.name === 'AbortError' ? 'timeout' : (err?.message || String(err));
-    return { ok: false, reason, tokens };
+    if (key && isFailoverReason(lastReason)) markKeyCooldown(key);
+    if (tokens > 0) return { ok: true, tokens: tokensTotal, keyHint: keyHint(key) }; // sebagian teks terlanjur terkirim — jangan ulangi
+    // gagal total pada key ini → coba key berikutnya (bila ada & alasannya memungkinkan pindah)
+    if (pool.length > 1 && !isFailoverReason(lastReason)) break; // 400/404 deterministik — key lain tak membantu
   }
+  return {
+    ok: false,
+    reason: pool.length > 1 && triedRealKey > 1 ? `${lastReason} (semua ${triedRealKey} key dicoba)` : lastReason,
+    tokens: tokensTotal,
+  };
 }
