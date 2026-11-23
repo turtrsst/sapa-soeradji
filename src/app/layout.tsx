@@ -1,10 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import Header from '@/components/Header';
 import { bp } from '@/lib/basePath';
-import Footer from '@/components/Footer';
-import CampaignTicker from '@/components/CampaignTicker';
-import MiniAssistant from '@/components/MiniAssistant';
 
 export const metadata: Metadata = {
   title: { default: 'SOERA AI — RSUP Dr. Soeradji Tirtonegoro Klaten', template: '%s | SOERA AI RST' },
@@ -25,13 +21,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id">
-      <body className="min-h-screen flex flex-col">
-        <Header />
-        <CampaignTicker />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <MiniAssistant />
-      </body>
+      <body className="min-h-screen flex flex-col bg-[#f4f8f7] text-[#12312e]">{children}</body>
     </html>
   );
 }

@@ -138,3 +138,6 @@ details.thinking-panel > summary::-webkit-details-marker { display: none; }
 @media (prefers-reduced-motion: reduce) {
   .muse-live, .skeleton-line::after, .shimmer-text, .stream-caret, .tool-spinner, .msg-in { animation: none !important; }
 }
+
+/* === Full-screen /chat app shell === */
+.chat-full { height: 100vh; height: 100dvh; }
