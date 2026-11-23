@@ -12,14 +12,14 @@ ok('17:00:00Z → tanggal WIB sudah besok', dayKeyJakarta(new Date('2026-11-12T1
 ok('00:30:00Z → tanggal WIB pagi hari yang sama', dayKeyJakarta(new Date('2026-11-12T00:30:00Z')) === '2026-11-12');
 
 // Aritmetika sisa kuota
-ok('0 terpakai → sisa 5', quotaRemaining(0, 5) === 5);
+ok('0 terpakai → sisa 10', quotaRemaining(0, 10) === 10);
 ok('4 terpakai → sisa 1', quotaRemaining(4, 5) === 1);
 ok('5 terpakai → sisa 0', quotaRemaining(5, 5) === 0);
 ok('7 terpakai → sisa 0 (tidak negatif)', quotaRemaining(7, 5) === 0);
 ok('custom max 10, 3 terpakai → sisa 7', quotaRemaining(3, 10) === 7);
 
 // Batas default
-ok('limit default = 5 pertanyaan bebas AI per hari', AI_DAILY_LIMIT === 5);
+ok('limit default = 10 pertanyaan bebas AI per hari', AI_DAILY_LIMIT === 10);
 
 console.log(`\n${passed} lolos, ${failed} gagal`);
 process.exit(failed ? 1 : 0);

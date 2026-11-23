@@ -55,7 +55,7 @@ export async function POST(req: Request) {
   const sources = hits.map((h) => ({ title: h.doc.title, source: h.doc.source }));
   const started = Date.now();
 
-  // Pertanyaan BEBAS (intent general) dijawab agen AI — dibatasi 5/pengguna/hari (reset 00.00 WIB).
+  // Pertanyaan BEBAS (intent general) dijawab agen AI — dibatasi 10/pengguna/hari (reset 00.00 WIB).
   // Pertanyaan LAYANAN (jadwal/tarif/home care/pendaftaran/kampanye/dll.) tanpa kuota.
   // Intent 'vitally_unknown' = pertanyaan bebas (di luar template) — dilayani agen AI bila AI aktif
   const isFreeForm = intent === 'vitally_unknown';
@@ -99,6 +99,7 @@ export async function POST(req: Request) {
           cfg,
           onToken: (tok) => { assistantText += tok; send({ type: 'token', text: tok }); },
           onReasoning: (t) => { const rt = t.slice(0, 2000); send({ type: 'reasoning', text: rt }); },
+          onTool: (evt) => { send({ type: 'tool', phase: evt.phase, tool: evt.tool }); },
           onCard: (card) => { cards.push(card); send({ type: 'card', card }); },
         });
         if (r.ok && assistantText.trim()) {

@@ -81,7 +81,7 @@ Variabel operasional (non-rahasia):
 
 | Variabel | Peran |
 |---|---|
-| `SOERA_AI_DAILY_LIMIT` | Kuota pertanyaan bebas AI per pengguna/hari |
+| `SOERA_AI_DAILY_LIMIT` | Kuota pertanyaan bebas AI per pengguna/hari (default: **10**) |
 | `SOERA_RATE_CHAT_LIMIT` / `SOERA_RATE_CHAT_WINDOW_MS` | Rate limit `/api/chat` |
 | `SOERA_RATE_LOGIN_LIMIT` / `SOERA_RATE_LOGIN_WINDOW_MS` | Throttle login admin |
 | `SOERA_RATE_PUBLIC_POST_LIMIT` / `SOERA_RATE_PUBLIC_POST_WINDOW_MS` | Rate limit kiriman publik |
@@ -184,7 +184,7 @@ Selain mode offline (Jan/Ollama), SOERA AI bisa menempel ke endpoint **OpenAI-co
 - [`scripts/Backup-SoeraAI.ps1`](scripts/Backup-SoeraAI.ps1) — backup SQLite harian + retensi 30 hari.
 - [`scripts/Verify-SoeraAI.ps1`](scripts/Verify-SoeraAI.ps1) — health-check otomatis (service, port loopback — terdeteksi dari service, /api/health, header keamanan, tolak password salah, robots.txt, URL publik). Pakai `-Port`/`-BasePath` eksplisit bila perlu.
 - [`scripts/Update-SoeraAI.ps1`](scripts/Update-SoeraAI.ps1) — update di server: backup SQLite → fetch + fast-forward → `npm ci` → build (dengan `SOERA_BASE_PATH` yang terdeteksi dari registry NSSM / `-BasePath` eksplisit) → restart NSSM → verifikasi; **rollback otomatis** bila gagal; berhenti aman (service distart lagi) bila sumber sudah terbaru.
-- [`docs/AI-AGENT.md`](docs/AI-AGENT.md) — screening GitHub framework AI Agent (vercel/ai vs langchainjs/langgraph/LlamaIndex/privateGPT/RAGFlow) + arsitektur agen tool-calling & kuota 5/hari.
+- [`docs/AI-AGENT.md`](docs/AI-AGENT.md) — screening GitHub framework AI Agent (vercel/ai vs langchainjs/langgraph/LlamaIndex/privateGPT/RAGFlow) + arsitektur agen tool-calling & kuota 10/hari.
 
 ## Catatan Penting
 
