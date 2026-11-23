@@ -2,6 +2,7 @@ import { getDb, uid } from '@/lib/db';
 import { AI_DAILY_LIMIT, aiSubject, consumeAiQuota, refundAiQuota } from '@/lib/aiUsage';
 import { RATE_CHAT_LIMIT, RATE_CHAT_WINDOW, rateLimit, rateLimitKey, rateLimitHeaders } from '@/lib/rateLimit';
 import { streamAgent } from '@/lib/agent';
+import type { CardPayload } from '@/lib/genui';
 import { SYSTEM_PROMPT, type ChatMessage } from '@/lib/llm';
 import { getLlmConfig } from '@/lib/settings';
 import { ensureOwnerKey, ownerCookieHeader } from '@/lib/owner';
@@ -73,6 +74,7 @@ export async function POST(req: Request) {
       send({ type: 'meta', conversationId, title, intent, sources, llmEnabled: cfg.enabled, aiQuota: isFreeForm && cfg.enabled ? quota : undefined });
 
       let assistantText = '';
+      const cards: CardPayload[] = [];
       let mode: 'llm' | 'offline' = 'offline';
       let llmFailedReason = '';
 
@@ -96,6 +98,8 @@ export async function POST(req: Request) {
           history: messages.slice(1, -1) as { role: 'user' | 'assistant'; content: string }[],
           cfg,
           onToken: (tok) => { assistantText += tok; send({ type: 'token', text: tok }); },
+          onReasoning: (t) => { const rt = t.slice(0, 2000); send({ type: 'reasoning', text: rt }); },
+          onCard: (card) => { cards.push(card); send({ type: 'card', card }); },
         });
         if (r.ok && assistantText.trim()) {
           mode = 'llm';
@@ -130,8 +134,10 @@ export async function POST(req: Request) {
       }
 
       const latency = Date.now() - started;
+      const metaPayload: Record<string, unknown> = { intent, mode, latencyMs: latency, sources };
+      if (cards.length) metaPayload.cards = cards;
       const inserted = db.prepare('INSERT INTO messages (conversation_id, role, content, meta, created_at) VALUES (?,?,?,?,?)')
-        .run(conversationId, 'assistant', assistantText, JSON.stringify({ intent, mode, latencyMs: latency, sources }), Date.now());
+        .run(conversationId, 'assistant', assistantText, JSON.stringify(metaPayload), Date.now());
       db.prepare('UPDATE conversations SET updated_at = ? WHERE id = ?').run(Date.now(), conversationId);
       db.prepare('INSERT INTO chat_logs (intent, mode, created_at) VALUES (?,?,?)').run(intent, mode, Date.now());
 

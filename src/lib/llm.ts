@@ -3,6 +3,7 @@
 //  • llama.cpp llama-server, Ollama (/v1), LM Studio, vLLM
 //  • Cloud: OpenAI, Kimi/Moonshot, OpenRouter, dll (selama OpenAI-compatible)
 import { getLlmConfig, type LlmConfig } from './settings';
+import { isKeyCoolingDown, isFailoverReason, keyHint, markKeyCooldown } from './keyPool';
 
 export interface ChatMessage { role: 'system' | 'user' | 'assistant'; content: string }
 
@@ -107,21 +108,15 @@ export interface EndpointHealth {
   model?: string | null;
   detail?: string;
   latencyMs?: number;
+  /** Hint key yang BERHASIL (••••+last4) — tidak pernah key mentah. */
+  keyHint?: string;
+  /** Semua key yang dicoba selama pengujian (hint). */
+  keysTried?: string[];
 }
 
-/**
- * Uji koneksi SUNGGUHAN: POST /chat/completions dengan max_tokens=1 memakai model yang
- * dikonfigurasi. Bukan sekadar daftar /models (endpoint publik OpenRouter selalu HTTP 200
- * dan entri pertamanya bukan model Anda). Membedakan: key salah (401), model tidak ada
- * (404), kredit/limit habis (402/429), timeout, dan mencatat latency.
- */
-export async function probeEndpoint(cfg?: LlmConfig): Promise<EndpointHealth> {
-  const c = cfg ?? getLlmConfig();
-  const base = (c.baseUrl || '').replace(/\/+$/, '');
-  const model = String(c.model || '').trim();
+/** Uji 1 key terhadap model yang dikonfigurasi: POST /chat/completions max_tokens=1. */
+async function probeWithKey(c: LlmConfig, base: string, model: string, key: string): Promise<EndpointHealth> {
   const started = Date.now();
-  if (!base) return { reachable: false, detail: 'Base URL kosong — isi endpoint OpenAI-compatible (mis. https://openrouter.ai/api/v1).' };
-  if (!model) return { reachable: false, detail: 'Model kosong — isi id persis model sesuai penyedia (mis. nvidia/nemotron-3.5-super-vl:free).' };
   const timeout = Math.max(10000, Math.min(Number(c.timeoutMs) || 10000, 30000));
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), timeout);
@@ -129,7 +124,7 @@ export async function probeEndpoint(cfg?: LlmConfig): Promise<EndpointHealth> {
     const res = await fetch(`${base}/chat/completions`, {
       method: 'POST',
       signal: ctrl.signal,
-      headers: { 'Content-Type': 'application/json', ...(c.apiKey ? { Authorization: `Bearer ${c.apiKey}` } : {}) },
+      headers: { 'Content-Type': 'application/json', ...(key ? { Authorization: `Bearer ${key}` } : {}) },
       body: JSON.stringify({ model, messages: [{ role: 'user', content: 'ping' }], max_tokens: 1, temperature: 0, stream: false }),
     });
     const text = await res.text();
@@ -137,17 +132,17 @@ export async function probeEndpoint(cfg?: LlmConfig): Promise<EndpointHealth> {
     if (res.ok) {
       let answered: string | null = null;
       try { answered = JSON.parse(text)?.model ?? null; } catch {}
-      return { reachable: true, status: res.status, model: answered || model, latencyMs };
+      return { reachable: true, status: res.status, model: answered || model, latencyMs, keyHint: keyHint(key) };
     }
     const excerpt = text.slice(0, 200).replace(/\s+/g, ' ').trim();
     let hint: string;
     switch (res.status) {
       case 400: hint = 'Permintaan ditolak (400) — biasanya model id tidak valid/kompleks unsupported. Cek id MODEL.'; break;
       case 401: hint = 'API key ditolak (401 Unauthorized) — periksa/rotasi key Anda.'; break;
-      case 402: hint = 'Kredit habis (402 Payment Required) — di OpenRouter, isi saldo dulu.'; break;
+      case 402: hint = 'Kredit habis (402 Payment Required) — di OpenRouter/Gemini, isi saldo dulu.'; break;
       case 403: hint = 'Akses ditolak (403) — key tidak berhak memakai model ini.'; break;
       case 404: hint = `Model "${model}" tidak ditemukan (404) — cocokkan id PERSIS dengan katalog penyedia (termasuk akhiran :free).`; break;
-      case 429: hint = 'Rate limit tercapai (429) — tunggu sebentar; model gratis punya batas harian ketat.'; break;
+      case 429: hint = 'Rate limit tercapai (429) — key lain di pool akan dicoba otomatis; model gratis punya batas harian ketat.'; break;
       default: hint = res.status >= 500
         ? `Penyedia bermasalah (HTTP ${res.status}) — coba lagi nanti.`
         : `Ditolak (HTTP ${res.status}).`;
@@ -159,4 +154,31 @@ export async function probeEndpoint(cfg?: LlmConfig): Promise<EndpointHealth> {
   } finally {
     clearTimeout(t);
   }
+}
+
+/**
+ * Uji koneksi SUNGGUHAN: POST /chat/completions max_tokens=1 memakai model terkonfigurasi.
+ * Bila POOL berisi banyak key: coba berurutan — key yang gagal (401/402/403/429/5xx/timeout)
+ * di-cooldown 5 menit lalu key berikutnya dicoba. 400/404 tidak pindah key (deterministik).
+ */
+export async function probeEndpoint(cfg?: LlmConfig): Promise<EndpointHealth> {
+  const c = cfg ?? getLlmConfig();
+  const base = (c.baseUrl || '').replace(/\/+$/, '');
+  const model = String(c.model || '').trim();
+  if (!base) return { reachable: false, detail: 'Base URL kosong — isi endpoint OpenAI-compatible (mis. https://openrouter.ai/api/v1).' };
+  if (!model) return { reachable: false, detail: 'Model kosong — isi id persis model sesuai penyedia (mis. gemini-3.8-flash / nvidia/nemotron-3.5-super-vl:free).' };
+  const pool = (c.apiKeys ?? []).map((k) => String(k).trim()).filter(Boolean);
+  const keys = pool.length ? pool : [String(c.apiKey || '').trim()];
+  const keysTried: string[] = [];
+  let last: EndpointHealth = { reachable: false, detail: 'Tidak ada hasil — coba lagi.' };
+  for (const key of keys) {
+    if (key && isKeyCoolingDown(key)) continue;
+    keysTried.push(keyHint(key));
+    last = await probeWithKey(c, base, model, key);
+    if (last.reachable) return { ...last, keysTried };
+    const reason = `${last.status ? `HTTP ${last.status}` : ''} ${last.detail || ''}`.trim();
+    if (key && isFailoverReason(reason)) markKeyCooldown(key);
+    else break; // 400/404: deterministik — key berikutnya tidak akan membantu
+  }
+  return { ...last, keysTried };
 }

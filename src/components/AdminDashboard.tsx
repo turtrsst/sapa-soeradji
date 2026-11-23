@@ -16,8 +16,11 @@ const PROVIDER_PRESETS: { name: string; baseUrl: string; model: string; note: st
   { name: 'LM Studio (lokal)', baseUrl: 'http://localhost:1234/v1', model: 'local-model', note: 'Aktifkan "Local Server" di LM Studio.' },
   { name: 'OpenAI (cloud)', baseUrl: 'https://api.openai.com/v1', model: 'gpt-4o-mini', note: 'Butuh API key OpenAI & koneksi internet.' },
   { name: 'Kimi/Moonshot (cloud)', baseUrl: 'https://api.moonshot.cn/v1', model: 'moonshot-v1-8k', note: 'Butuh API key Moonshot & koneksi internet.' },
-  { name: 'OpenRouter (cloud)', baseUrl: 'https://openrouter.ai/api/v1', model: 'openai/gpt-4o-mini', note: 'Butuh API key OpenRouter & koneksi internet.' },
+  { name: 'OpenRouter (cloud)', baseUrl: 'https://openrouter.ai/api/v1', model: 'nvidia/nemotron-3.5-super-vl:free', note: 'Butuh API key OpenRouter & koneksi internet. Model :free gratis (rate limit ketat; pilih yang mendukung tool calling).' },
+  { name: 'Google Gemini (cloud — free tier tersedia)', baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai/', model: 'gemini-3.8-flash', note: 'API key dari Google AI Studio (aistudio.google.com/apikey). free tier: kuota harian terbatas & konten bisa dipakai Google untuk peningkatan produk — JANGAN untuk data pasien; gunakan paid tier + DPA, atau Ollama lokal. Thinking effort bisa diatur di bawah.' },
+  { name: 'Groq (cloud — free tier tersedia)', baseUrl: 'https://api.groq.com/openai/v1', model: 'llama-3.3-70b-versatile', note: 'API key dari console.groq.com. Free tier cepat, kuota terbatas — bukan untuk data pasien (UU PDP). Cocok prototipe/pilot.' },
 ];
+const isCloudUrl = (u?: string) => /(generativelanguage\.googleapis\.com|api\.openai\.com|api\.moonshot\.cn|openrouter\.ai|api\.groq\.com)/i.test(u || '');
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -36,6 +39,7 @@ export default function AdminDashboard() {
   const [llmSaved, setLlmSaved] = useState('');
   const [testResult, setTestResult] = useState<any>(null);
   const [testing, setTesting] = useState(false);
+  const [newKey, setNewKey] = useState('');
 
   const loadStats = useCallback(() => fetch(bp('/api/admin/stats')).then((r) => r.json()).then(setStats).catch(() => {}), []);
   const loadTickets = useCallback((status = 'all') => fetch(bp(`/api/admin/tickets?status=${status}`)).then((r) => r.json()).then((d) => setTickets(d.tickets || [])).catch(() => {}), []);
@@ -96,17 +100,33 @@ export default function AdminDashboard() {
   const testLlm = async () => {
     setTesting(true); setTestResult(null);
     try {
-      const res = await fetch(bp('/api/admin/settings/test'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ baseUrl: llm?.baseUrl, model: llm?.model, timeoutMs: llm?.timeoutMs, apiKey: llm?.apiKey && !llm.apiKey.startsWith('••••') ? llm.apiKey : undefined }) });
+      // Uji memakai POOL key tersimpan di server — key mentah tidak perlu (dan tidak boleh) dikirim dari klien.
+      const res = await fetch(bp('/api/admin/settings/test'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ baseUrl: llm?.baseUrl, model: llm?.model, timeoutMs: llm?.timeoutMs }) });
       setTestResult(await res.json());
     } catch { setTestResult({ reachable: false, detail: 'Gagal memanggil endpoint uji.' }); } finally { setTesting(false); }
   };
+  const postSettings = async (payload: any) => {
+    try {
+      const res = await fetch(bp('/api/admin/settings'), { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      if (res.ok) { const d = await res.json(); setLlm(d.config); }
+      return res.ok;
+    } catch { return false; }
+  };
+  const addKeyToPool = async () => {
+    const k = newKey.trim();
+    if (!k) return;
+    const ok = await postSettings({ apiKeysToAdd: [k] });
+    if (ok) setNewKey('');
+  };
+  const removeKeyAt = (idx: number) => postSettings({ apiKeyIndexesToRemove: [idx] });
+  const clearAllKeys = async () => { if (confirm('Hapus SEMUA API key tersimpan di server?')) await postSettings({ clearApiKeys: true }); };
 
   const TABS: { id: Tab; label: string; icon: any }[] = [
     { id: 'ringkasan', label: 'Ringkasan', icon: 'activity' },
     { id: 'keluhan', label: 'Keluhan', icon: 'inbox' },
     { id: 'homecare', label: 'Home Care', icon: 'home' },
     { id: 'kampanye', label: 'Kampanye', icon: 'megaphone' },
-    { id: 'ai', label: 'Pengaturan AI (Offline)', icon: 'settings' },
+    { id: 'ai', label: 'Pengaturan AI (Lokal & Online)', icon: 'settings' },
   ];
 
   return (
@@ -333,7 +353,26 @@ export default function AdminDashboard() {
               <div className="sm:col-span-2"><label className="label">Model</label><input className="input font-mono text-xs" value={llm.model} onChange={(e) => setLlm({ ...llm, model: e.target.value })} placeholder="qwen2.5-3b-instruct" /></div>
             </div>
             <div className="grid sm:grid-cols-2 gap-3">
-              <div><label className="label flex items-center gap-2 min-w-0">API Key {llm.hasApiKey && <span className="text-emerald-600 normal-case inline-flex max-w-[9.5rem] truncate whitespace-nowrap" title="Key tersimpan (hanya 4 digit terakhir ditampilkan)">(tersimpan: ••••{String(llm.apiKey || '').slice(-4)})</span>}</label><input className="input font-mono text-xs" type="password" value={llm.apiKey?.startsWith('••••') ? '' : llm.apiKey} onChange={(e) => setLlm({ ...llm, apiKey: e.target.value })} placeholder={llm.hasApiKey ? 'Isi untuk mengganti key' : 'Kosongkan bila endpoint tanpa key'} autoComplete="new-password" /></div>
+              <div className="sm:col-span-2">
+              <label className="label flex items-center gap-2 min-w-0">API Key <span className="normal-case font-semibold text-rst-400">— pool fallback</span> {llm.apiKeyCount > 0 && <span className="text-emerald-600 normal-case inline-flex">({llm.apiKeyCount} tersimpan)</span>}</label>
+              <div className="space-y-1.5 rounded-2xl border border-rst-100 bg-rst-50/40 p-2.5">
+                {(llm.apiKeys || []).map((hint: string, i: number) => (
+                  <div key={i} className="flex items-center gap-2 rounded-xl border border-rst-100 bg-white px-3 py-1.5">
+                    <Icon name="check" size={12} className="text-emerald-600 shrink-0" />
+                    <span className="font-mono text-xs text-rst-800">{hint}</span>
+                    <span className="text-[9px] font-extrabold uppercase tracking-wide text-rst-400">#{i + 1}{i === 0 && ' · prioritas'}</span>
+                    <button type="button" onClick={() => removeKeyAt(i)} className="ml-auto p-1.5 rounded-lg text-rst-400 hover:text-red-600 hover:bg-red-50 transition" aria-label={`Hapus key ${i + 1}`}><Icon name="trash" size={13} /></button>
+                  </div>
+                ))}
+                {!llm.apiKeyCount && <p className="text-[10.5px] text-rst-400 px-1 py-1">Belum ada key — untuk endpoint lokal (Ollama/Jan) key boleh kosong; untuk cloud (Gemini/OpenRouter/Groq) minimal 1 key.</p>}
+                <div className="flex gap-2">
+                  <input className="input font-mono text-xs flex-1" type="password" value={newKey} onChange={(e) => setNewKey(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addKeyToPool(); } }} placeholder="Tempel API key baru…" autoComplete="new-password" aria-label="API key baru" />
+                  <button type="button" onClick={addKeyToPool} className="btn btn-outline !px-3 text-xs" aria-label="Tambah key ke pool"><Icon name="plus" size={14} /> Tambah</button>
+                </div>
+                <p className="text-[9.5px] leading-snug text-rst-500 px-1">Fallback otomatis: key dicoba berurutan #1 → #N; bila gagal (401/402/403/429/5xx/timeout), key berikutnya dicoba dengan cooldown 5 menit. Perubahan pool langsung tersimpan (langsung aktif). Key tidak pernah ditampilkan penuh.</p>
+                {llm.apiKeyCount > 0 && <button type="button" onClick={clearAllKeys} className="text-[10px] font-bold text-red-600 hover:underline px-1">Hapus semua key</button>}
+              </div>
+            </div>
               <div className="grid grid-cols-3 gap-2">
                 <div><label className="label">Temp</label><input type="number" step="0.1" min={0} max={2} className="input" value={llm.temperature} onChange={(e) => setLlm({ ...llm, temperature: e.target.value })} /></div>
                 <div><label className="label">Max Tok</label><input type="number" min={16} max={4096} className="input" value={llm.maxTokens} onChange={(e) => setLlm({ ...llm, maxTokens: e.target.value })} /></div>
@@ -341,6 +380,20 @@ export default function AdminDashboard() {
               </div>
             </div>
 
+            {isCloudUrl(llm.baseUrl) && (
+              <div role="alert" className="rounded-xl border border-amber-300 bg-amber-50 px-3.5 py-2.5 text-[10.5px] leading-snug text-amber-900">
+                <strong>⚠️ Provider cloud terdeteksi.</strong> Pertanyaan bebas pasien akan dikirim ke server pihak ketiga. Sesuai kebijakan RST &amp; UU PDP 27/2022: gunakan hanya untuk <strong>pilot/dummy</strong> atau paket <strong>paid + DPA</strong> — bukan data pasien riil di free tier. Untuk produksi, gunakan <strong>Ollama lokal di server RS</strong>.
+              </div>
+            )}
+            <div>
+              <label className="label">Thinking effort <span className="normal-case text-rst-400 font-semibold">— khusus Google Gemini (Gemini 3.x selalu berpikir; tidak bisa dimatikan)</span></label>
+              <select className="input" value={llm.thinkingEffort || 'low'} onChange={(e) => setLlm({ ...llm, thinkingEffort: e.target.value })}>
+                <option value="low">Low — cepat &amp; hemat (disarankan)</option>
+                <option value="medium">Medium — lebih teliti, lebih lambat</option>
+                <option value="high">High — paling dalam, paling lambat &amp; paling banyak token</option>
+              </select>
+              <p className="mt-1 text-[9.5px] text-rst-500">Diabaikan oleh penyedia non-Gemini. Panel “Sedang berpikir…” di /chat menampilkan reasoning yang dipancarkan model (bukan jawaban final).</p>
+            </div>
             <div className="flex flex-wrap gap-2">
               <button type="submit" className="btn btn-primary !py-2.5 text-xs"><Icon name="check" size={15} /> Simpan Pengaturan</button>
               <button type="button" onClick={testLlm} disabled={testing} className="btn btn-outline !py-2.5 text-xs">{testing ? 'Menguji…' : 'Uji Koneksi Sekarang'} <Icon name="bolt" size={14} /></button>
@@ -349,8 +402,9 @@ export default function AdminDashboard() {
             {testResult && (
               <div className={`rounded-xl border px-4 py-3 text-xs ${testResult.reachable ? 'border-emerald-300 bg-emerald-50 text-emerald-800' : 'border-red-300 bg-red-50 text-red-800'}`}>
                 <p className="font-extrabold">{testResult.reachable ? `✓ Terhubung — model merespons (HTTP ${testResult.status})` : '✗ Gagal terhubung'}</p>
-                <p className="mt-1">Model: <span className="font-mono">{testResult.model ?? '—'}</span>{typeof testResult.latencyMs === 'number' ? ` · ${testResult.latencyMs} ms` : ''}{testResult.detail ? ` · ${testResult.detail}` : ''}</p>
-                {!testResult.reachable && <p className="mt-1 text-[10.5px]">HTTP 200 di tombol lama hanya berarti katalog bisa dibaca. Uji ini BENAR-BENAR mengirim 1 token ke chat/completions — error di atas adalah penyebab sebenarnya.</p>}
+                <p className="mt-1">Model: <span className="font-mono">{testResult.model ?? '—'}</span>{typeof testResult.latencyMs === 'number' ? ` · ${testResult.latencyMs} ms` : ''}{testResult.reachable && testResult.keyHint ? ` · key ${testResult.keyHint}` : ''}{Array.isArray(testResult.keysTried) && testResult.keysTried.length > 1 ? ` · dicoba: ${testResult.keysTried.join(' → ')}` : ''}</p>
+                {testResult.detail && <p className="mt-1">{testResult.detail}</p>}
+                {!testResult.reachable && <p className="mt-1 text-[10.5px]">Uji ini BENAR-BENAR mengirim 1 token ke chat/completions dengan pool key tersimpan. Error di atas adalah penyebab sebenarnya — soal key, model, atau limit.</p>}
               </div>
             )}
           </form>
@@ -368,7 +422,7 @@ export default function AdminDashboard() {
                   'Settings → Local API Server → pilih model → Start Server (log: "JAN API listening at http://127.0.0.1:1337").',
                   'Bila SOERA AI di mesin lain: set Host 0.0.0.0 di Local API Server + catat IP PC tersebut (LAN RS).',
                   'Isi Base URL: http://127.0.0.1:1337/v1 (satu mesin) atau http://<IP-PC>:1337/v1 (LAN). Model: model id dari `GET /v1/models` (mis. qwen2.5-3b-instruct); API key bebas (mis. jan).',
-                  'Klik "Uji Koneksi Sekarang" — bila ✓, aktifkan toggle mesin AI dan Simpan. Semua tanya-jawab kini 100% offline di server RS.',
+                  'Klik "Uji Koneksi Sekarang" — bila ✓, aktifkan toggle mesin AI dan Simpan. Dengan pool beberapa key, gangguan/kuota satu key otomatis dialihkan ke key berikutnya.',
                 ].map((s, i) => <li key={i} className="flex gap-2"><span className="font-black text-rst-400">{i + 1}.</span>{s}</li>)}
               </ol>
               <p className="mt-3 text-[10px] text-rst-500">Catatan: Jan adalah aplikasi desktop (GUI) — butuh sesi desktop yang berjalan; untuk server produksi 24/7 gunakan Ollama sebagai service (lihat docs/DEPLOYMENT-PUBLIK.md §2C). Tanpa AI sekalipun, jawaban dasar tetap tersedia dari basis pengetahuan lokal (jadwal, tarif, kontak, pendaftaran, dll).</p>

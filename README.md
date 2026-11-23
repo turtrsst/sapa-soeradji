@@ -153,6 +153,16 @@ test/rag-test.mjs      # 32 pengujian basis pengetahuan & retrieval
 - **Jadwal dokter**: diolah dari situs resmi & direktori jadwal publik (update **12 Mei 2026**); **jadwal dapat berubah sewaktu-waktu** — selalu konfirmasi ke (0272) 321020.
 - Kampanye: berita/kegiatan resmi RST (bakti sosial & khitanan massal Nov 2026, SPELING Gantiwarno) serta program Kemenkes (CERDIK, GERMAS, DOTS).
 
+## Mode Online: Provider Cloud, Multi-Key Fallback & Thinking
+
+Selain mode offline (Jan/Ollama), SOERA AI bisa menempel ke endpoint **OpenAI-compatible cloud**: Google Gemini (`https://generativelanguage.googleapis.com/v1beta/openai/`, free tier tersedia), Groq (`https://api.groq.com/openai/v1`), OpenRouter, OpenAI, Kimi/Moonshot — pilih preset di **Admin → Pengaturan AI**.
+
+- **Pool API key (fallback otomatis)**: di Pengaturan AI Anda bisa menyimpan **beberapa key** (maks 8). Key dicoba berurutan #1 → #N; bila key gagal dengan alasan yang bisa dipindah (401/402/403/429/5xx/timeout/jaringan), key berikutnya dicoba otomatis dengan cooldown 5 menit. Key disimpan server-side (SQLite lokal RS), tidak pernah ditampilkan penuh (hanya hint 4 digit terakhir), tidak pernah dikirim ke browser setelah tersimpan.
+- **Thinking (reasoning)**: model yang memancarkan token berpikir (Gemini 3.x via `reasoning_effort`; default `low`, bisa diatur low/medium/high) ditampilkan di /chat sebagai panel **"Sedang berpikir…"** yang bisa dibuka/tutup. Panel otomatis tertutup setelah jawaban selesai.
+- **Kartu Generative UI**: saat agen memanggil tool data RS, aliran chat menyisipkan kartu interaktif: **Jadwal Dokter**, **Tarif Layanan** (SK resmi), **Kampanye RST**, **Dokumen Basis Pengetahuan** — selalu dari data KB/SQLite lokal (tidak mengarang).
+- **Uji Koneksi jujur**: tombol di Admin mengirim 1 token nyata ke `chat/completions` (bukan sekadar `GET /models`); bila pool berisi >1 key, uji melewati key-key bermasalah dan melaporkan key mana yang berhasil.
+- **Privasi (UU PDP 27/2022)**: provider cloud terutama free tier **tidak boleh dipakai untuk data pasien riil** (konten bisa dipakai Google/penyedia untuk peningkatan produk). Cloud hanya untuk pilot/dummy, atau paket paid + DPA. Produksi yang disarankan tetap **Ollama lokal di server RS**. Penentuan ini tampil sebagai peringatan otomatis di Pengaturan AI begitu Base URL cloud diisi.
+
 ## Keamanan (hardening bawaan)
 
 - **Rate limit in-memory** (fixed window): `/api/chat` 30 req/5 mnt/IP · login admin 5 gagal/10 mnt/IP (429 + `Retry-After`) · pengiriman publik (keluhan + home care + feedback + percakapan) 10/jam/IP. Limit dapat diubah via env di atas. Untuk multi-instance/produksi besar tambahkan limit di reverse proxy (Caddy/Nginx/Cloudflare).
