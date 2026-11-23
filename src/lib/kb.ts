@@ -99,35 +99,194 @@ SPGDT (Sistem Penanggulangan Gawat Darurat Terpadu) RST dapat dihubungi di ext 2
   {
     id: 'layanan-unggulan',
     title: 'Layanan Unggulan RST',
-    tags: ['layanan unggulan', 'unggulan', 'pci', 'kardiologi', 'jantung', 'bedah digestif', 'laparoskopi', 'evla', 'vaskuler', 'orthopedi', 'hip', 'knee', 'bedah saraf', 'hematologi', 'onkologi', 'kanker', 'darah'],
+    tags: ['layanan unggulan', 'unggulan', 'pci', 'kardiologi', 'jantung', 'bedah digestif', 'laparoskopi', 'evla', 'vaskuler', 'orthopedi', 'hip', 'knee', 'spine', 'tulang belakang', 'neurointervensi', 'radiologi intervensi', 'onkologi', 'kanker', 'darah', 'hematologi'],
     updated: '2026-11',
-    source: 'rsupsoeradji.id (Layanan Unggulan)',
-    body: `Layanan unggulan RSUP Dr. Soeradji Tirtonegoro Klaten:
-1. Kardiologi Intervensi — PCI (Percutaneous Coronary Intervention) dan Rotablator untuk penyakit jantung koroner.
-2. Bedah Digestif — Digestive Laparoscopic Surgery (bedah minimal invasif saluran cerna).
-3. Bedah Vaskuler & Endovaskuler — EVLA (Endovenous Laser Ablation) untuk varises/penyakit pembuluh vena.
-4. Orthopedi — Hip & Knee (sendi pinggul dan lutut), termasuk layanan spine (tulang belakang).
-5. Bedah Saraf.
-6. Hematologi Onkologi Medik — penatalaksanaan kelainan darah paripurna, bertaraf level Asia.
-7. Bedah Jantung Anak (poli bedah jantung anak).
-8. Penatalaksanaan Kelainan Darah Paripurna — fokus utama rumah sakit (trombofilia, thalassemia, hemofilia, leukemia, dll).
-9. Layanan kanker & kemoterapi, hemodialisa, serta pelayanan darah (Unit Pengelola Darah/UTD) terintegrasi.
+    source: 'rssoeradji.go.id/layanan-unggulan + rsupsoeradji.id',
+    body: `Website resmi RST menampilkan empat layanan unggulan utama:
+1. Kardiologi Intervensi — PCI (Percutaneous Coronary Intervention) Rotablator, Ablasi SA Node, Ablasi AV Node (kateterisasi jantung).
+2. Bedah Digestif — Digestive Laparoscopic Surgery dan Digestive Bariatric Surgery (bedah minimal invasif saluran cerna / obesitas).
+3. Bedah Vaskuler & Endovaskuler — EVLA (Endovenous Laser Ablation) untuk varises dan EVAR/FEVAR untuk aneurisma aorta.
+4. Orthopedi — Hip & Knee, BESS (biportal endoscopic spine surgery) untuk saraf terjepit, arthroscopy, sport injury/pain intervention.
 
-Layanan dilakukan oleh dokter spesialis dan subspesialis dengan fasilitas penunjang modern (laboratorium, radiologi/pencitraan, kateterisasi jantung, kamar bedah sentral, ICU/NICU/PICU, rehabilitasi medik).`,
+Portal resmi RST juga memuat halaman layanan spesialistik lain (bukan hanya empat di atas): Layanan Tulang Belakang/Spine, Layanan Hip & Knee, Layanan Gangguan Pendengaran Terpadu (THT), Klinik Kebidanan & Penyakit Kandungan, Pelayanan Endoscopy Saluran Cerna/ERCP, Layanan Unggulan Neurointervensi, Layanan Unggulan Radiologi Intervensi, Layanan Unggulan Onkologi/Kanker, serta Layanan Eksekutif/MCU. Lihat dokumen KB terpisah di SOERA AI untuk tiap layanan.
+
+Fokus rumah sakit juga mencakup penatalaksanaan kelainan darah paripurna, hemodialisa, serta pelayanan darah (Unit Pengelola Darah). Layanan dilakukan dokter spesialis/subspesialis dengan fasilitas penunjang (laboratorium, radiologi/pencitraan, kateterisasi jantung, kamar bedah sentral, ICU/NICU/PICU/ICCU, rehabilitasi medik).`,
+  },
+  {
+    id: 'layanan-orthopedi-spine-hip-knee',
+    title: 'Layanan Orthopedi — Hip, Knee, Spine & Artroskopi',
+    tags: ['orthopedi', 'ortopedi', 'hip', 'knee', 'pinggul', 'lutut', 'spine', 'tulang belakang', 'hnp', 'saraf terjepit', 'arthroscopy', 'artroskopi', 'sport injury', 'pain intervention', 'tkr', 'thr', 'bess'],
+    updated: '2026-11',
+    source: 'rsupsoeradji.id/pelayanan-hip-and-knee + /pelayanan-tulang-belakang + rssoeradji.go.id/node/5',
+    body: `Layanan Orthopedi RST dibagi menjadi layanan Hip & Knee dan Spine/Tulang Belakang.
+
+Hip & Knee:
+- Total Hip Replacement (THR) dan Total Knee Replacement (TKR) — penggantian sendi panggul/lutut yang rusak dengan sendi protesis untuk mengurangi nyeri dan mengembalikan mobilitas.
+- Arthroscopic Surgery — prosedur minimal invasif dengan kamera kecil (sayatan < 1 cm) untuk mendiagnosis dan menangani masalah sendi.
+- Sport Injury dan Pain Intervention — penanganan cedera olahraga dan nyeri tulang, termasuk nyeri tulang belakang.
+
+Spine / Tulang Belakang:
+- Uniportal/Biportal Endoscopic Spine Surgery (BESS) — tindakan minimal invasif untuk saraf terjepit (HNP, stenosis kanal, osteofit, hipertrofi jaringan) dengan irisan sekitar 0,5–0,8 cm.
+- Pain Management / Pain Intervention — manajemen nyeri tulang belakang, termasuk radiofrequency dan laser.
+- Minimal Invasive Spine Surgery untuk kasus HNP, canal stenosis, scoliosis, dan trauma.
+
+Dokter (sesuai halaman resmi): Sholahuddin Rhatomy, Sp.OT(K) Hip & Knee; I Dewa Nyoman Suci Anindya M, Sp.OT; Prahesta Adi Wibowo, Sp.OT(K) Spine; Sudaryanto, Sp.OT. Pendaftaran: WhatsApp 0816-9170-00 (H-7 s/d H-1) atau loket/Contact Center (0272) 321020.`,
+  },
+  {
+    id: 'layanan-tht-gangguan-pendengaran',
+    title: 'Layanan Gangguan Pendengaran Terpadu (THT)',
+    tags: ['tht', 'tht-kl', 'pendengaran', 'tuli', 'audiometri', 'timpanometri', 'oae', 'bera', 'abr', 'assr', 'alat bantu dengar', 'hearing aid', 'telinga'],
+    updated: '2026-11',
+    source: 'rsupsoeradji.id/pelayanan-gangguan-pendengaran-terpadu',
+    body: `Layanan Gangguan Pendengaran Terpadu RST memiliki alat pemeriksaan pendengaran yang disebut sangat lengkap di Karesidenan Surakarta.
+
+Produk layanan pemeriksaan:
+1. Audiometri — mendeteksi kemampuan mendengar pasien dewasa.
+2. Timpanometri — memeriksa fungsi telinga tengah dengan Tympanometer.
+3. Tes OAE (Otoacoustic Emission) — skrining pendengaran, terutama bayi/anak.
+4. Tes BERA (Brainstem Evoked Response Audiometry / ABR) — mengetahui ambang pendengaran anak-anak atau orang yang tidak bisa diauditometri biasa; pasien tenang/tertidur.
+5. Tes ASSR (Auditory Steady State Response) — ABR yang menghasilkan ambang batas pendengaran per frekuensi lebih spesifik.
+6. Fitting Alat Bantu Dengar — pemilihan dan penyesuaian alat bantu dengar sesuai gangguan pendengaran.
+
+Biaya dapat melalui BPJS, asuransi lain, atau umum. Pendaftaran rawat jalan/konsultasi klinik THT: WhatsApp 0858-6768-1978; informasi umum: (0272) 321020. Jadwal praktik dokter THT-KL dapat berubah — konfirmasi sebelum datang.`,
+  },
+  {
+    id: 'layanan-obgyn',
+    title: 'Klinik Kebidanan dan Penyakit Kandungan (Obgyn)',
+    tags: ['obgyn', 'kandungan', 'kebidanan', 'fetomaternal', 'fertilitas', 'onkologi ginekologi', 'usg 4d', 'kolposkopi', 'leep', 'kb', 'mow', 'mop', 'hamil', 'program hamil'],
+    updated: '2026-11',
+    source: 'rsupsoeradji.id/klinik-obsgyn-dan-penyakit-kandungan/',
+    body: `Pelayanan Klinik Obstetri dan Ginekologi RST:
+
+1. Layanan Fetomaternal — penanganan ibu hamil risiko tinggi dan kelainan kongenital; USG 4D.
+2. Layanan Fertilitas — program hamil bagi pasangan; USG.
+3. Layanan Onkologi Ginekologi — penanganan keganasan organ reproduksi wanita (kanker ovarium, kanker serviks/leher rahim, kanker endometrium); USG 4D, kolposkopi, LEEP, cryoterapi, kemoterapi.
+4. Layanan Obstetri Ginekologi — USG 3D/4D, Pap smear, IVA test.
+5. Layanan Keluarga Berencana (KB) — pemakaian alat kontrasepsi (pil, susuk, suntik) serta MOW/MOP.
+
+Untuk pendaftaran: WhatsApp 0816-9170-00 (H-7 s/d H-1) atau loket/Contact Center (0272) 321020. Jadwal dokter Obgyn dapat berubah — konfirmasi sebelum berkunjung.`,
+  },
+  {
+    id: 'layanan-endoscopy-saluran-cerna',
+    title: 'Pelayanan Endoscopy Saluran Cerna / ERCP',
+    tags: ['endoscopy', 'endoskopi', 'gastroskopi', 'kolonoskopi', 'colonoscopy', 'ercp', 'polipektomi', 'ligasi varises', 'peg', 'pej', 'saluran cerna', 'hati', 'pankreas'],
+    updated: '2026-11',
+    source: 'rsupsoeradji.id/pelayanan-endoscopy-saluran-cerna/',
+    body: `RST memulai layanan endoscopy saluran cerna pada 2011; saat itu tersedia satu set gastroscopy dan colonoscopy (rata-rata sekitar 20 EGD dan 8 colonoscopy per bulan). Pada 2015 ditambah set ERCP side-view dan pelatihan advance sehingga endoskopi bisa terapeutik, bukan hanya diagnostik.
+
+Layanan diagnostik:
+- Esophago Gastro Duodenoscopy (EGD) / gastroskopi — saluran cerna atas.
+- Colonoscopy — usus besar.
+
+Layanan terapeutik:
+- Polipektomi, dilatasi striktur/stenosis dengan stent, pemasangan stent saluran cerna, evakuasi benda asing.
+- Penanganan perdarahan saluran cerna (ligasi varises, injeksi/skleroterapi, koagulasi, binding).
+- PEG (Percutaneous Endoscopic Gastrostomy) / PEJ — pemasangan tube untuk makan/drainase.
+- ERCP — pemeriksaan dan terapi saluran empedu & pankreas: sfingterotomi endoskopik, pemasangan/dilatasi stent bilier, drain nasobilier, tata laksana koledokolitiasis dan stenosis papiller.
+
+Indikasi & jenis tindakan diputuskan dokter spesialis; informasi dan pendaftaran: Contact Center (0272) 321020 atau WhatsApp 0816-9170-00.`,
+  },
+  {
+    id: 'layanan-kardiologi-intervensi',
+    title: 'Layanan Kardiologi Intervensi',
+    tags: ['kardiologi', 'intervensi', 'pci', 'rotablator', 'ablasi', 'sa node', 'av node', 'jantung koroner', 'kateterisasi', 'aritmia', 'stent'],
+    updated: '2026-11',
+    source: 'rssoeradji.go.id/node/26 + rsupsoeradji.id/unggulan/layanan-unggulan-kardiologi-intervensi/',
+    body: `Layanan Kardiologi Intervensi RST:
+
+1. PCI (Percutaneous Coronary Intervention) Rotablator — prosedur membuka sumbatan pembuluh darah koroner dengan perangkat Rotablator untuk menghancurkan plak keras. Manfaat: membuka sumbatan, mengurangi angina/sesak, menurunkan risiko serangan jantung, alternatif kurang invasif dari bypass. Diagnosis meliputi EKG, ekokardiogram, treadmill/stres tes, angiografi koroner, CT/MRI sesuai indikasi.
+2. Ablasi SA Node — prosedur menghancurkan simpul SA abnormal pada takikardia/fibrilasi atrium yang tidak respons obat.
+3. Ablasi AV Node — modulasi penghantar sinyal listrik AV node pada aritmia tertentu (mis. TSV, fibrilasi atrium, flutter, blok AV tertentu, WPW) sesuai evaluasi dokter.
+
+Dokter spesialis (halaman resmi): Hari Yusti Laksono, Sp.JP(K); Rendi Asmara, Sp.JP; Furqon Satria Adi Pradana, Sp.JP, FIHA; Hendra Purnasidha B, M.Sc, Sp.A(K). Pendaftaran: WhatsApp 0816-9170-00 atau Contact Center (0272) 321020; IGD untuk nyeri dada hebat.`,
+  },
+  {
+    id: 'layanan-neurointervensi',
+    title: 'Layanan Neurointervensi',
+    tags: ['neurointervensi', 'neuro', 'strok', 'stroke', 'cas', 'carotid', 'dsa', 'coiling', 'flow diverter', 'avm', 'aneurisma', 'otak'],
+    updated: '2026-11',
+    source: 'rsupsoeradji.id/unggulan/layanan-unggulan-neurointervensi/',
+    body: `Layanan Neurointervensi RST — tindakan minimal invasif untuk pembuluh darah otak dan pembuluh leher:
+
+1. Carotid Artery Stenting (CAS) — pemasangan stent untuk stenosis arteri karotis (penyempitan pembuluh darah leher ke otak), terutama stenosis bermakna/gejala neurologis, untuk mengurangi risiko stroke.
+2. Neurointervensi DSA (Digital Subtraction Angiography) — pencitraan digital pembuluh darah otak/leher untuk diagnosis dan terapi (stroke/TIA, stenosis/oklusi, AVM, tumor otak/leher).
+3. Embolisasi AVM — menutup Arteriovenous Malformation otak dengan bahan embolisasi melalui kateter untuk mencegah perdarahan.
+4. Coiling — pemasangan koil untuk aneurisma/AVM/fistula arteriovenosa yang berisiko perdarahan.
+5. Flow Diverter — perangkat untuk aneurisma otak besar/kompleks yang tidak dapat diatasi dengan coiling/kliping.
+
+Ini tindakan spesialistik risiko tinggi — keputusan tindakan hanya oleh tim dokter setelah pemeriksaan lengkap. Informasi: Contact Center (0272) 321020 / poli Bedah Saraf / IGD untuk gejala stroke akut.`,
+  },
+  {
+    id: 'layanan-radiologi-intervensi',
+    title: 'Layanan Radiologi Intervensi',
+    tags: ['radiologi', 'intervensi', 'tace', 'taci', 'dsa', 'rekanalisasi tuba', 'kanker', 'kemoembolisasi', 'angiografi'],
+    updated: '2026-11',
+    source: 'rsupsoeradji.id/unggulan/layanan-unggulan-radiologi-intervensi/',
+    body: `Layanan Radiologi Intervensi RST:
+
+1. Rekanalisasi Tuba — memperbaiki/mengganti saluran tuba fallopi yang rusak/tersumbat; pilihan tindakan: terbuka (abdominal), laparoskopi, mikroskopik. Tujuan: menangani infertilitas, nyeri panggul, mencegah kehamilan ektopik.
+2. TACI (Trans Arterial Chemo Infusion) — penyuntikan obat anti-kanker langsung ke tumor melalui arteri menuju tumor untuk mengecilkan tumor/menghentikan pertumbuhan.
+3. TACE (Transcatheter Arterial Chemoembolization) — kemoterapi + embolisasi langsung ke tumor melalui arteri (umum pada kanker hati/tumor tertentu) untuk mengurangi ukuran dan gejala tumor.
+4. DSA (Digital Subtraction Angiography) — pencitraan X-ray digital pembuluh darah untuk diagnosis/terapi pembuluh darah, tumor, stroke, dan penyakit jantung/pembuluh darah.
+
+Dokter spesialis (halaman resmi): Bramadi Nugroho, Sp.Rad(K). Informasi dan pendaftaran: Contact Center (0272) 321020 atau WhatsApp 0816-9170-00.`,
+  },
+  {
+    id: 'layanan-onkologi',
+    title: 'Layanan Onkologi / Kanker (Bedah Onkologi & Tim Multidisiplin)',
+    tags: ['onkologi', 'kanker', 'bedah onkologi', 'kemoterapi', 'kanker payudara', 'kanker usus', 'kanker serviks', 'tumor', 'terapi kanker', 'paliatif'],
+    updated: '2026-11',
+    source: 'rsupsoeradji.id/unggulan/ + /rawat-jalan/klinik-bedah-onkologi/',
+    body: `Layanan Onkologi RST meliputi penegakan diagnosis dan pemberian terapi kanker, terutama kanker padat (mis. kanker payudara, kanker usus/kolorektal, kanker leher rahim/serviks).
+
+Klinik Bedah Onkologi menangani:
+1. Kasus tumor/kanker kepala-leher, payudara, jaringan lunak, dan kulit.
+2. Kemoterapi / terapi hormonal.
+3. Terapi nyeri kanker.
+4. Terapi paliatif pasien kanker.
+
+Penanganan kanker idealnya melibatkan tim multidisiplin: bedah onkologi, hematologi-onkologi medik, patologi anatomi, radiologi diagnostik/intervensi, dan spesialisasi lain sesuai lokasi tumor. RST juga mengembangkan pelayanan kanker terpadu (termasuk penguatan fasilitas/onkologi). 
+
+Untuk konsultasi awal: Contact Center (0272) 321020 atau WhatsApp 0816-9170-00; bawa hasil pemeriksaan (PA/radiologi/lab) dan ringkasan medis sebelumnya.`,
+  },
+  {
+    id: 'tarif-pelayanan-rst',
+    title: 'SK Tarif Pelayanan RST 2023 (Ringkasan Terverifikasi)',
+    tags: ['tarif', 'biaya', 'harga', 'registrasi', 'igd', 'dokter spesialis', 'akomodasi', 'rawat inap', 'vip', 'kelas 3', 'icu', 'nicu', 'picu', 'iccu', 'stroke'],
+    updated: '2026-11',
+    source: 'rsupsoeradji.id/fasilitas-dan-layanan/tarif-pelayanan (SK Dirut HK.02.03/III.3.1/12637/2023)',
+    body: `Dasar tarif pelayanan RST: Keputusan Direktur Utama Nomor HK.02.03/III.3.1/12637/2023 tentang Tarif Pelayanan RSUP Dr. Soeradji Tirtonegoro. Catatan resmi: tarif akomodasi berlaku untuk pasien masuk/dirawat mulai 1 Juli 2023; pasien masuk sebelumnya memakai tarif 2019 (SK HK.02.03/II.1/13604/2019).
+
+Ringkasan item yang jelas terbaca dari halaman resmi:
+- Registrasi/pendaftaran poli reguler (dengan/tanpa rujukan): Rp5.000
+- Biaya Sistem Informasi RS: Rp10.000
+- Registrasi IGD: Rp10.000
+- Pemeriksaan dokter spesialis Poli Reguler: Rp100.000
+- Pemeriksaan dokter spesialis IGD: Rp100.000
+- Pemeriksaan dokter spesialis konsultan Poli Reguler: Rp120.000
+- Pemeriksaan dokter umum/gigi Reguler: Rp50.000
+- Pemeriksaan dokter umum/gigi IGD: Rp50.000
+- Pemeriksaan psikologi Poli Reguler: Rp50.000
+- Konsultasi antar dokter spesialis Poli Reguler: Rp100.000; konsultan Poli Reguler: Rp120.000; antar klinik: Rp5.000
+- Konsultasi psikologi Poli Reguler/VIP: Rp50.000
+
+Akomodasi (jelas terbaca): VIP IRNA Dahlia Rp965.000/hari; VIP Lily Rp765.000/hari; Kelas III (Aster/Mawar/Edelweis/Teratai/Melati I–IV): Rp115.000/hari; IRI/NICU/PICU/ICCU semua kelas: Rp415.000/hari; Unit Stroke semua kelas: Rp315.000/hari; Rawat inap sementara: Rp165.000/hari; Ruang persalinan: Rp165.000/hari.
+
+PENTING: daftar Kelas I–II dan beberapa item lain pada halaman sumber tidak terbaca lengkap/konsisten saat digitalisasi, jadi TIDAK dicantumkan di SOERA AI. Untuk angka pasti (pendaftaran, tindakan, obat/BMHP, kelas rawat), konfirmasi ke kasir/IRM atau Contact Center (0272) 321020. Tarif dapat berubah mengikuti SK Direktur terbaru.`,
   },
   {
     id: 'mcu',
     title: 'Medical Check Up (MCU) dan Poli Eksekutif',
     tags: ['mcu', 'medical check up', 'check up', 'executive', 'eksekutif', 'paket', 'screening', 'skrining', 'kesehatan berkala'],
     updated: '2026-11',
-    source: 'rsupsoeradji.id (Poli Eksekutif & MCU)',
-    body: `RST menyediakan Paket Medical Check Up (lihat dokumen resmi di situs RS: "paket medical check up.pdf", diperbarui Juni 2026) dan Layanan Eksekutif:
-- Poliklinik Eksekutif: fasilitas eksklusif, waktu fleksibel, pendampingan medis penuh.
-- MCU Eksekutif: waktu tunggu lebih singkat dengan sistem layanan prioritas.
-- Paket konsultasi jantung eksekutif: konsultasi jantung fokus, nyaman, profesional.
-- Paket tindak lanjut perawatan jantung.
+    source: 'rssoeradji.go.id/node/31-34 (Layanan Eksekutif)',
+    body: `Layanan Eksekutif RST terdiri dari empat layanan resmi:
+1. Poliklinik Eksekutif — fasilitas eksklusif, waktu fleksibel, pendampingan medis profesional.
+2. Medical Check Up Eksekutif — konsultasi dokter spesialis, laboratorium lengkap, laporan hasil sesuai jadwal; sistem layanan prioritas dengan waktu tunggu lebih singkat.
+3. Konsultasi Jantung Eksekutif — konsultasi jantung fokus, nyaman, dan profesional.
+4. Paket Tindak Lanjut Perawatan Jantung — ideal untuk pemeriksaan rutin dan tindak lanjut perawatan jantung.
 
-Informasi paket & biaya MCU: hubungi Contact Center (0272) 321020 atau WhatsApp 0816-9170-00, atau datang ke loket Informasi/IRM. Tarif tindakan mengacu pada Peraturan Menteri Kesehatan/tarif BLU RST yang berlaku.`,
+Halaman MCU umum di situs resmi saat ini menampilkan "Data Belum Tersedia", jadi jangan mengandalkan daftar paket/tarif yang tidak resmi. Untuk paket, jadwal, dan biaya terkini, hubungi Contact Center (0272) 321020 atau WhatsApp 0816-9170-00, atau datang ke loket Informasi/IRM. Harga tindakan mengacu pada tarif BLU RST / SK Direktur yang berlaku.`,
   },
   {
     id: 'home-care',
