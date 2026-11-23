@@ -98,7 +98,21 @@ function migrate(db: DatabaseSync) {
     PRIMARY KEY (subject, day)
   );
   `);
+  migrateBrandText(db);
   seedDefaults(db);
+}
+
+function migrateBrandText(db: DatabaseSync) {
+  // Ganti penyebutan singkatan lama "RST" pada konten kampanye bawaan yang sudah
+  // tersimpan di database produksi. Tidak menyentuh percakapan/keluhan pengguna.
+  try {
+    db.prepare(`UPDATE campaigns SET
+      title = REPLACE(title, 'RST', 'RS Soeradji'),
+      summary = REPLACE(summary, 'RST', 'RS Soeradji'),
+      body = REPLACE(body, 'RST', 'RS Soeradji'),
+      location = REPLACE(location, 'RST', 'RS Soeradji')
+      WHERE title LIKE '%RST%' OR summary LIKE '%RST%' OR body LIKE '%RST%' OR location LIKE '%RST%'`).run();
+  } catch { /* jangan gagalkan startup karena migrasi teks */ }
 }
 
 function seedDefaults(db: DatabaseSync) {
@@ -107,12 +121,12 @@ function seedDefaults(db: DatabaseSync) {
   if (c.n === 0) {
     const ins = db.prepare('INSERT INTO campaigns (title, summary, body, tag, location, start_date, end_date, active, created_at) VALUES (?,?,?,?,?,?,?,?,?)');
     const seeds: [string, string, string, string, string | null, string | null, string | null][] = [
-      ['Bakti Sosial & Khitanan Massal RST 2026', '99 anak turut serta pada bakti sosial dan khitanan massal RSUP Dr. Soeradji Tirtonegoro.', 'RSUP Dr. Soeradji Tirtonegoro menggelar Bakti Sosial dan Khitanan Massal yang diikuti 99 anak dari berbagai kecamatan di Kabupaten Klaten. Kegiatan meliputi pemeriksaan kesehatan pra-khitan, tindakan khitanan, dan edukasi kesehatan pasca tindakan. Pantau kanal resmi RST untuk kegiatan berikutnya atau hubungi (0272) 321020 untuk informasi pendaftaran.', 'Bakti Sosial', 'RSUP Dr. Soeradji Tirtonegoro Klaten', '2026-11-09', null],
-      ['SPELING — Spesialis Keliling ke Kecamatan', 'Dokter spesialis RST turun langsung melayani masyarakat di kecamatan, dimulai dari Gantiwarno (110 pasien terlayani).', 'SPELING (Spesialis Keliling) membawa layanan dokter spesialis RST ke kecamatan-kecamatan Kabupaten Klaten: konsultasi dokter spesialis, pemeriksaan dasar, dan edukasi kesehatan, bekerja sama dengan puskesmas setempat. Jadwal diumumkan lewat kanal resmi RST dan puskesmas; konfirmasi ke (0272) 321020.', 'SPELING', 'Kecamatan Gantiwarno & kecamatan lain di Klaten', null, null],
-      ['CERDIK — Cek Kesehatan Berkala', 'Ajak keluarga menerapkan CERDIK: Cek kesehatan, Enyahkan asap rokok, Rajin olahraga, Diet seimbang, Istirahat cukup, Kelola stres.', 'Penyakit tidak menular (hipertensi, diabetes, stroke, jantung koroner) adalah penyebab kematian utama di Indonesia. RST mengajak masyarakat rutin memeriksakan tekanan darah, gula darah, kolesterol, dan IMT — minimal 1 kali setahun. Layanan skrining tersedia di MCU RST dan pada kegiatan SPELING/bakti sosial.', 'Promosi Kesehatan', 'Seluruh wilayah Klaten', null, null],
-      ['Berhenti Merokok — Konsultasi di RST', 'Klinik berhenti merokok membantu Anda lepas dari ketergantungan nikotin dengan pendampingan dokter.', 'Rokok meningkatkan risiko PPOK, kanker paru, dan penyakit jantung. RST menyediakan konsultasi berhenti merokok (terapi perilaku + farmakoterapi bila perlu). Tanyakan di poli Penyakit Dalam/Paru atau hubungi (0272) 321020.', 'Promosi Kesehatan', 'RSUP Dr. Soeradji Tirtonegoro Klaten', null, null],
-      ['STOP GRATIFIKASI — Layanan RST Tanpa Imbalan', 'Jangan beri dan jangan terima gratifikasi. Layanan RST transparan tanpa pungutan liar.', 'RST berkomitmen pada integritas: tidak ada biaya di luar tarif resmi. Minta kuitansi setiap pembayaran. Laporkan indikasi gratifikasi/pungli ke hotline pengaduan 0851-7957-7302 atau (0272) 321020.', 'Integritas', 'RSUP Dr. Soeradji Tirtonegoro Klaten', null, null],
-      ['Deteksi Dini TB di TB DOTS RST', 'Batuk > 2 minggu? Periksa dahak GRATIS di poli TB DOTS RST.', 'Tuberkulosis masih menjadi masalah kesehatan nasional. Gejala: batuk lebih dari 2 minggu, demam hilang timbul, keringat malam, berat badan turun. Obat TB GRATIS di program nasional (DOTS). Periksa ke poli Paru/TB DOTS RST — dr. Zakiah Novianti, Sp.P (Selasa & Jumat 09.00–13.00).', 'Promosi Kesehatan', 'Poli Paru / TB DOTS RST', null, null],
+      ['Bakti Sosial & Khitanan Massal RS Soeradji 2026', '99 anak turut serta pada bakti sosial dan khitanan massal RSUP Dr. Soeradji Tirtonegoro.', 'RSUP Dr. Soeradji Tirtonegoro menggelar Bakti Sosial dan Khitanan Massal yang diikuti 99 anak dari berbagai kecamatan di Kabupaten Klaten. Kegiatan meliputi pemeriksaan kesehatan pra-khitan, tindakan khitanan, dan edukasi kesehatan pasca tindakan. Pantau kanal resmi RS Soeradji untuk kegiatan berikutnya atau hubungi (0272) 321020 untuk informasi pendaftaran.', 'Bakti Sosial', 'RSUP Dr. Soeradji Tirtonegoro Klaten', '2026-11-09', null],
+      ['SPELING — Spesialis Keliling ke Kecamatan', 'Dokter spesialis RS Soeradji turun langsung melayani masyarakat di kecamatan, dimulai dari Gantiwarno (110 pasien terlayani).', 'SPELING (Spesialis Keliling) membawa layanan dokter spesialis RS Soeradji ke kecamatan-kecamatan Kabupaten Klaten: konsultasi dokter spesialis, pemeriksaan dasar, dan edukasi kesehatan, bekerja sama dengan puskesmas setempat. Jadwal diumumkan lewat kanal resmi RS Soeradji dan puskesmas; konfirmasi ke (0272) 321020.', 'SPELING', 'Kecamatan Gantiwarno & kecamatan lain di Klaten', null, null],
+      ['CERDIK — Cek Kesehatan Berkala', 'Ajak keluarga menerapkan CERDIK: Cek kesehatan, Enyahkan asap rokok, Rajin olahraga, Diet seimbang, Istirahat cukup, Kelola stres.', 'Penyakit tidak menular (hipertensi, diabetes, stroke, jantung koroner) adalah penyebab kematian utama di Indonesia. RS Soeradji mengajak masyarakat rutin memeriksakan tekanan darah, gula darah, kolesterol, dan IMT — minimal 1 kali setahun. Layanan skrining tersedia di MCU RS Soeradji dan pada kegiatan SPELING/bakti sosial.', 'Promosi Kesehatan', 'Seluruh wilayah Klaten', null, null],
+      ['Berhenti Merokok — Konsultasi di RS Soeradji', 'Klinik berhenti merokok membantu Anda lepas dari ketergantungan nikotin dengan pendampingan dokter.', 'Rokok meningkatkan risiko PPOK, kanker paru, dan penyakit jantung. RS Soeradji menyediakan konsultasi berhenti merokok (terapi perilaku + farmakoterapi bila perlu). Tanyakan di poli Penyakit Dalam/Paru atau hubungi (0272) 321020.', 'Promosi Kesehatan', 'RSUP Dr. Soeradji Tirtonegoro Klaten', null, null],
+      ['STOP GRATIFIKASI — Layanan RS Soeradji Tanpa Imbalan', 'Jangan beri dan jangan terima gratifikasi. Layanan RS Soeradji transparan tanpa pungutan liar.', 'RS Soeradji berkomitmen pada integritas: tidak ada biaya di luar tarif resmi. Minta kuitansi setiap pembayaran. Laporkan indikasi gratifikasi/pungli ke hotline pengaduan 0851-7957-7302 atau (0272) 321020.', 'Integritas', 'RSUP Dr. Soeradji Tirtonegoro Klaten', null, null],
+      ['Deteksi Dini TB di TB DOTS RS Soeradji', 'Batuk > 2 minggu? Periksa dahak GRATIS di poli TB DOTS RS Soeradji.', 'Tuberkulosis masih menjadi masalah kesehatan nasional. Gejala: batuk lebih dari 2 minggu, demam hilang timbul, keringat malam, berat badan turun. Obat TB GRATIS di program nasional (DOTS). Periksa ke poli Paru/TB DOTS RS Soeradji — dr. Zakiah Novianti, Sp.P (Selasa & Jumat 09.00–13.00).', 'Promosi Kesehatan', 'Poli Paru / TB DOTS RS Soeradji', null, null],
     ];
     for (const s of seeds) ins.run(...s, 1, now);
   }

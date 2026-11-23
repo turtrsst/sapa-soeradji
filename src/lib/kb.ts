@@ -17,11 +17,11 @@ export const KB_DOCS: KbDoc[] = [
     tags: ['profil', 'tentang', 'rsc', 'rsup', 'rst', 'rumah sakit', 'kelas a', 'sejarah', 'vertikal', 'kemenkes', 'akreditasi', 'soeradji', 'tirtonegoro'],
     updated: '2026-11',
     source: 'rsupsoeradji.id / rssoeradji.go.id',
-    body: `RSUP Dr. Soeradji Tirtonegoro Klaten (sering disebut RST / RS Soeradji) adalah Rumah Sakit Umum Pusat Kelas A milik Pemerintah Republik Indonesia di bawah Kementerian Kesehatan RI (RS vertikal), berbentuk Badan Layanan Umum (BLU). Alamat: Jalan KRT Dr. Soeradji Tirtonegoro No. 1, Kelurahan/Desa Tegalyoso, Kecamatan Klaten Selatan, Kabupaten Klaten, Jawa Tengah 57424.
+    body: `RSUP Dr. Soeradji Tirtonegoro Klaten (sering disebut RS Soeradji / RS Soeradji) adalah Rumah Sakit Umum Pusat Kelas A milik Pemerintah Republik Indonesia di bawah Kementerian Kesehatan RI (RS vertikal), berbentuk Badan Layanan Umum (BLU). Alamat: Jalan KRT Dr. Soeradji Tirtonegoro No. 1, Kelurahan/Desa Tegalyoso, Kecamatan Klaten Selatan, Kabupaten Klaten, Jawa Tengah 57424.
 
 Sejarah singkat: didirikan tahun 1927 oleh perkebunan milik Pemerintah Hindia Belanda dengan nama Rumah Sakit Dr. Scheurer. Tahun 1946 ditunjuk sebagai pusat pendidikan kedokteran Fakultas Kedokteran Universitas Gadjah Mada (UGM). Pada tahun 1997 nama berubah menjadi RSUP Dr. Soeradji Tirtonegoro.
 
-RST merupakan rumah sakit rujukan utama di kawasan Jawa Tengah bagian selatan dengan penekanan pada pelayanan kardiologi dan pembuluh darah, hematologi-onkologi, bedah digestif, bedah saraf, dan orthopedi. RST terakreditasi dan bekerja sama dengan UGM dalam pendidikan, pelatihan, dan penelitian. Slogan resmi: "Bersih. Nyaman. Akurat". RST juga menyelenggarakan program SPELING (Spesialis Keliling) untuk mendekatkan layanan spesialistik ke kecamatan-kecamatan di Kabupaten Klaten.`,
+RS Soeradji merupakan rumah sakit rujukan utama di kawasan Jawa Tengah bagian selatan dengan penekanan pada pelayanan kardiologi dan pembuluh darah, hematologi-onkologi, bedah digestif, bedah saraf, dan orthopedi. RS Soeradji terakreditasi dan bekerja sama dengan UGM dalam pendidikan, pelatihan, dan penelitian. Slogan resmi: "Bersih. Nyaman. Akurat". RS Soeradji juga menyelenggarakan program SPELING (Spesialis Keliling) untuk mendekatkan layanan spesialistik ke kecamatan-kecamatan di Kabupaten Klaten.`,
   },
   {
     id: 'kontak',
@@ -66,7 +66,7 @@ Catatan: jadwal poli dapat berubah sewaktu-waktu. Konfirmasi ke Contact Center (
     tags: ['daftar online', 'pendaftaran online', 'wa', 'whatsapp', 'antrian', 'registrasi online', 'h-7', 'h-1', 'booking', 'daftar'],
     updated: '2026-11',
     source: 'rsupsoeradji.id / jadwalpraktek.com',
-    body: `Pendaftaran online rawat jalan RST dapat dilakukan melalui WhatsApp ke 0816-9170-00.
+    body: `Pendaftaran online rawat jalan RS Soeradji dapat dilakukan melalui WhatsApp ke 0816-9170-00.
 
 Format pesan (sesuai ketentuan): ketik Daftar (spasi) Nomor Rekam Medik (spasi) Nama Pasien (spasi) Klinik/Poli Tujuan (spasi) Tanggal Pemeriksaan. Contoh: Daftar 1234567 Budi Santoso Poli Penyakit Dalam 20-11-2026
 
@@ -94,21 +94,21 @@ Petunjuk pertolongan pertama sambil menuju IGD:
 - Stroke: catat jam muncul gejala, jangan beri makan/minum.
 - Kecelakaan: hentikan perdarahan dengan penekanan kain bersih, jangan pindahkan korban dengan leher/punggung cedera kecuali terancam bahaya langsung.
 
-SPGDT (Sistem Penanggulangan Gawat Darurat Terpadu) RST dapat dihubungi di ext 200 untuk koordinasi tanggap darurat.`,
+SPGDT (Sistem Penanggulangan Gawat Darurat Terpadu) RS Soeradji dapat dihubungi di ext 200 untuk koordinasi tanggap darurat.`,
   },
   {
     id: 'layanan-unggulan',
-    title: 'Layanan Unggulan RST',
+    title: 'Layanan Unggulan RS Soeradji',
     tags: ['layanan unggulan', 'unggulan', 'pci', 'kardiologi', 'jantung', 'bedah digestif', 'laparoskopi', 'evla', 'vaskuler', 'orthopedi', 'hip', 'knee', 'spine', 'tulang belakang', 'neurointervensi', 'radiologi intervensi', 'onkologi', 'kanker', 'darah', 'hematologi'],
     updated: '2026-11',
     source: 'rssoeradji.go.id/layanan-unggulan + rsupsoeradji.id',
-    body: `Website resmi RST menampilkan empat layanan unggulan utama:
+    body: `Website resmi RS Soeradji menampilkan empat layanan unggulan utama:
 1. Kardiologi Intervensi — PCI (Percutaneous Coronary Intervention) Rotablator, Ablasi SA Node, Ablasi AV Node (kateterisasi jantung).
 2. Bedah Digestif — Digestive Laparoscopic Surgery dan Digestive Bariatric Surgery (bedah minimal invasif saluran cerna / obesitas).
 3. Bedah Vaskuler & Endovaskuler — EVLA (Endovenous Laser Ablation) untuk varises dan EVAR/FEVAR untuk aneurisma aorta.
 4. Orthopedi — Hip & Knee, BESS (biportal endoscopic spine surgery) untuk saraf terjepit, arthroscopy, sport injury/pain intervention.
 
-Portal resmi RST juga memuat halaman layanan spesialistik lain (bukan hanya empat di atas): Layanan Tulang Belakang/Spine, Layanan Hip & Knee, Layanan Gangguan Pendengaran Terpadu (THT), Klinik Kebidanan & Penyakit Kandungan, Pelayanan Endoscopy Saluran Cerna/ERCP, Layanan Unggulan Neurointervensi, Layanan Unggulan Radiologi Intervensi, Layanan Unggulan Onkologi/Kanker, serta Layanan Eksekutif/MCU. Lihat dokumen KB terpisah di SOERA AI untuk tiap layanan.
+Portal resmi RS Soeradji juga memuat halaman layanan spesialistik lain (bukan hanya empat di atas): Layanan Tulang Belakang/Spine, Layanan Hip & Knee, Layanan Gangguan Pendengaran Terpadu (THT), Klinik Kebidanan & Penyakit Kandungan, Pelayanan Endoscopy Saluran Cerna/ERCP, Layanan Unggulan Neurointervensi, Layanan Unggulan Radiologi Intervensi, Layanan Unggulan Onkologi/Kanker, serta Layanan Eksekutif/MCU. Lihat dokumen KB terpisah di SOERA AI untuk tiap layanan.
 
 Fokus rumah sakit juga mencakup penatalaksanaan kelainan darah paripurna, hemodialisa, serta pelayanan darah (Unit Pengelola Darah). Layanan dilakukan dokter spesialis/subspesialis dengan fasilitas penunjang (laboratorium, radiologi/pencitraan, kateterisasi jantung, kamar bedah sentral, ICU/NICU/PICU/ICCU, rehabilitasi medik).`,
   },
@@ -118,7 +118,7 @@ Fokus rumah sakit juga mencakup penatalaksanaan kelainan darah paripurna, hemodi
     tags: ['orthopedi', 'ortopedi', 'hip', 'knee', 'pinggul', 'lutut', 'spine', 'tulang belakang', 'hnp', 'saraf terjepit', 'arthroscopy', 'artroskopi', 'sport injury', 'pain intervention', 'tkr', 'thr', 'bess'],
     updated: '2026-11',
     source: 'rsupsoeradji.id/pelayanan-hip-and-knee + /pelayanan-tulang-belakang + rssoeradji.go.id/node/5',
-    body: `Layanan Orthopedi RST dibagi menjadi layanan Hip & Knee dan Spine/Tulang Belakang.
+    body: `Layanan Orthopedi RS Soeradji dibagi menjadi layanan Hip & Knee dan Spine/Tulang Belakang.
 
 Hip & Knee:
 - Total Hip Replacement (THR) dan Total Knee Replacement (TKR) — penggantian sendi panggul/lutut yang rusak dengan sendi protesis untuk mengurangi nyeri dan mengembalikan mobilitas.
@@ -138,7 +138,7 @@ Dokter (sesuai halaman resmi): Sholahuddin Rhatomy, Sp.OT(K) Hip & Knee; I Dewa 
     tags: ['tht', 'tht-kl', 'pendengaran', 'tuli', 'audiometri', 'timpanometri', 'oae', 'bera', 'abr', 'assr', 'alat bantu dengar', 'hearing aid', 'telinga'],
     updated: '2026-11',
     source: 'rsupsoeradji.id/pelayanan-gangguan-pendengaran-terpadu',
-    body: `Layanan Gangguan Pendengaran Terpadu RST memiliki alat pemeriksaan pendengaran yang disebut sangat lengkap di Karesidenan Surakarta.
+    body: `Layanan Gangguan Pendengaran Terpadu RS Soeradji memiliki alat pemeriksaan pendengaran yang disebut sangat lengkap di Karesidenan Surakarta.
 
 Produk layanan pemeriksaan:
 1. Audiometri — mendeteksi kemampuan mendengar pasien dewasa.
@@ -156,7 +156,7 @@ Biaya dapat melalui BPJS, asuransi lain, atau umum. Pendaftaran rawat jalan/kons
     tags: ['obgyn', 'kandungan', 'kebidanan', 'fetomaternal', 'fertilitas', 'onkologi ginekologi', 'usg 4d', 'kolposkopi', 'leep', 'kb', 'mow', 'mop', 'hamil', 'program hamil'],
     updated: '2026-11',
     source: 'rsupsoeradji.id/klinik-obsgyn-dan-penyakit-kandungan/',
-    body: `Pelayanan Klinik Obstetri dan Ginekologi RST:
+    body: `Pelayanan Klinik Obstetri dan Ginekologi RS Soeradji:
 
 1. Layanan Fetomaternal — penanganan ibu hamil risiko tinggi dan kelainan kongenital; USG 4D.
 2. Layanan Fertilitas — program hamil bagi pasangan; USG.
@@ -172,7 +172,7 @@ Untuk pendaftaran: WhatsApp 0816-9170-00 (H-7 s/d H-1) atau loket/Contact Center
     tags: ['endoscopy', 'endoskopi', 'gastroskopi', 'kolonoskopi', 'colonoscopy', 'ercp', 'polipektomi', 'ligasi varises', 'peg', 'pej', 'saluran cerna', 'hati', 'pankreas'],
     updated: '2026-11',
     source: 'rsupsoeradji.id/pelayanan-endoscopy-saluran-cerna/',
-    body: `RST memulai layanan endoscopy saluran cerna pada 2011; saat itu tersedia satu set gastroscopy dan colonoscopy (rata-rata sekitar 20 EGD dan 8 colonoscopy per bulan). Pada 2015 ditambah set ERCP side-view dan pelatihan advance sehingga endoskopi bisa terapeutik, bukan hanya diagnostik.
+    body: `RS Soeradji memulai layanan endoscopy saluran cerna pada 2011; saat itu tersedia satu set gastroscopy dan colonoscopy (rata-rata sekitar 20 EGD dan 8 colonoscopy per bulan). Pada 2015 ditambah set ERCP side-view dan pelatihan advance sehingga endoskopi bisa terapeutik, bukan hanya diagnostik.
 
 Layanan diagnostik:
 - Esophago Gastro Duodenoscopy (EGD) / gastroskopi — saluran cerna atas.
@@ -192,7 +192,7 @@ Indikasi & jenis tindakan diputuskan dokter spesialis; informasi dan pendaftaran
     tags: ['kardiologi', 'intervensi', 'pci', 'rotablator', 'ablasi', 'sa node', 'av node', 'jantung koroner', 'kateterisasi', 'aritmia', 'stent'],
     updated: '2026-11',
     source: 'rssoeradji.go.id/node/26 + rsupsoeradji.id/unggulan/layanan-unggulan-kardiologi-intervensi/',
-    body: `Layanan Kardiologi Intervensi RST:
+    body: `Layanan Kardiologi Intervensi RS Soeradji:
 
 1. PCI (Percutaneous Coronary Intervention) Rotablator — prosedur membuka sumbatan pembuluh darah koroner dengan perangkat Rotablator untuk menghancurkan plak keras. Manfaat: membuka sumbatan, mengurangi angina/sesak, menurunkan risiko serangan jantung, alternatif kurang invasif dari bypass. Diagnosis meliputi EKG, ekokardiogram, treadmill/stres tes, angiografi koroner, CT/MRI sesuai indikasi.
 2. Ablasi SA Node — prosedur menghancurkan simpul SA abnormal pada takikardia/fibrilasi atrium yang tidak respons obat.
@@ -206,7 +206,7 @@ Dokter spesialis (halaman resmi): Hari Yusti Laksono, Sp.JP(K); Rendi Asmara, Sp
     tags: ['neurointervensi', 'neuro', 'strok', 'stroke', 'cas', 'carotid', 'dsa', 'coiling', 'flow diverter', 'avm', 'aneurisma', 'otak'],
     updated: '2026-11',
     source: 'rsupsoeradji.id/unggulan/layanan-unggulan-neurointervensi/',
-    body: `Layanan Neurointervensi RST — tindakan minimal invasif untuk pembuluh darah otak dan pembuluh leher:
+    body: `Layanan Neurointervensi RS Soeradji — tindakan minimal invasif untuk pembuluh darah otak dan pembuluh leher:
 
 1. Carotid Artery Stenting (CAS) — pemasangan stent untuk stenosis arteri karotis (penyempitan pembuluh darah leher ke otak), terutama stenosis bermakna/gejala neurologis, untuk mengurangi risiko stroke.
 2. Neurointervensi DSA (Digital Subtraction Angiography) — pencitraan digital pembuluh darah otak/leher untuk diagnosis dan terapi (stroke/TIA, stenosis/oklusi, AVM, tumor otak/leher).
@@ -222,7 +222,7 @@ Ini tindakan spesialistik risiko tinggi — keputusan tindakan hanya oleh tim do
     tags: ['radiologi', 'intervensi', 'tace', 'taci', 'dsa', 'rekanalisasi tuba', 'kanker', 'kemoembolisasi', 'angiografi'],
     updated: '2026-11',
     source: 'rsupsoeradji.id/unggulan/layanan-unggulan-radiologi-intervensi/',
-    body: `Layanan Radiologi Intervensi RST:
+    body: `Layanan Radiologi Intervensi RS Soeradji:
 
 1. Rekanalisasi Tuba — memperbaiki/mengganti saluran tuba fallopi yang rusak/tersumbat; pilihan tindakan: terbuka (abdominal), laparoskopi, mikroskopik. Tujuan: menangani infertilitas, nyeri panggul, mencegah kehamilan ektopik.
 2. TACI (Trans Arterial Chemo Infusion) — penyuntikan obat anti-kanker langsung ke tumor melalui arteri menuju tumor untuk mengecilkan tumor/menghentikan pertumbuhan.
@@ -237,7 +237,7 @@ Dokter spesialis (halaman resmi): Bramadi Nugroho, Sp.Rad(K). Informasi dan pend
     tags: ['onkologi', 'kanker', 'bedah onkologi', 'kemoterapi', 'kanker payudara', 'kanker usus', 'kanker serviks', 'tumor', 'terapi kanker', 'paliatif'],
     updated: '2026-11',
     source: 'rsupsoeradji.id/unggulan/ + /rawat-jalan/klinik-bedah-onkologi/',
-    body: `Layanan Onkologi RST meliputi penegakan diagnosis dan pemberian terapi kanker, terutama kanker padat (mis. kanker payudara, kanker usus/kolorektal, kanker leher rahim/serviks).
+    body: `Layanan Onkologi RS Soeradji meliputi penegakan diagnosis dan pemberian terapi kanker, terutama kanker padat (mis. kanker payudara, kanker usus/kolorektal, kanker leher rahim/serviks).
 
 Klinik Bedah Onkologi menangani:
 1. Kasus tumor/kanker kepala-leher, payudara, jaringan lunak, dan kulit.
@@ -245,17 +245,17 @@ Klinik Bedah Onkologi menangani:
 3. Terapi nyeri kanker.
 4. Terapi paliatif pasien kanker.
 
-Penanganan kanker idealnya melibatkan tim multidisiplin: bedah onkologi, hematologi-onkologi medik, patologi anatomi, radiologi diagnostik/intervensi, dan spesialisasi lain sesuai lokasi tumor. RST juga mengembangkan pelayanan kanker terpadu (termasuk penguatan fasilitas/onkologi). 
+Penanganan kanker idealnya melibatkan tim multidisiplin: bedah onkologi, hematologi-onkologi medik, patologi anatomi, radiologi diagnostik/intervensi, dan spesialisasi lain sesuai lokasi tumor. RS Soeradji juga mengembangkan pelayanan kanker terpadu (termasuk penguatan fasilitas/onkologi). 
 
 Untuk konsultasi awal: Contact Center (0272) 321020 atau WhatsApp 0816-9170-00; bawa hasil pemeriksaan (PA/radiologi/lab) dan ringkasan medis sebelumnya.`,
   },
   {
     id: 'tarif-pelayanan-rst',
-    title: 'SK Tarif Pelayanan RST 2023 (Ringkasan Terverifikasi)',
+    title: 'SK Tarif Pelayanan RS Soeradji 2023 (Ringkasan Terverifikasi)',
     tags: ['tarif', 'biaya', 'harga', 'registrasi', 'igd', 'dokter spesialis', 'akomodasi', 'rawat inap', 'vip', 'kelas 3', 'icu', 'nicu', 'picu', 'iccu', 'stroke'],
     updated: '2026-11',
     source: 'rsupsoeradji.id/fasilitas-dan-layanan/tarif-pelayanan (SK Dirut HK.02.03/III.3.1/12637/2023)',
-    body: `Dasar tarif pelayanan RST: Keputusan Direktur Utama Nomor HK.02.03/III.3.1/12637/2023 tentang Tarif Pelayanan RSUP Dr. Soeradji Tirtonegoro. Catatan resmi: tarif akomodasi berlaku untuk pasien masuk/dirawat mulai 1 Juli 2023; pasien masuk sebelumnya memakai tarif 2019 (SK HK.02.03/II.1/13604/2019).
+    body: `Dasar tarif pelayanan RS Soeradji: Keputusan Direktur Utama Nomor HK.02.03/III.3.1/12637/2023 tentang Tarif Pelayanan RSUP Dr. Soeradji Tirtonegoro. Catatan resmi: tarif akomodasi berlaku untuk pasien masuk/dirawat mulai 1 Juli 2023; pasien masuk sebelumnya memakai tarif 2019 (SK HK.02.03/II.1/13604/2019).
 
 Ringkasan item yang jelas terbaca dari halaman resmi:
 - Registrasi/pendaftaran poli reguler (dengan/tanpa rujukan): Rp5.000
@@ -280,13 +280,13 @@ PENTING: daftar Kelas I–II dan beberapa item lain pada halaman sumber tidak te
     tags: ['mcu', 'medical check up', 'check up', 'executive', 'eksekutif', 'paket', 'screening', 'skrining', 'kesehatan berkala'],
     updated: '2026-11',
     source: 'rssoeradji.go.id/node/31-34 (Layanan Eksekutif)',
-    body: `Layanan Eksekutif RST terdiri dari empat layanan resmi:
+    body: `Layanan Eksekutif RS Soeradji terdiri dari empat layanan resmi:
 1. Poliklinik Eksekutif — fasilitas eksklusif, waktu fleksibel, pendampingan medis profesional.
 2. Medical Check Up Eksekutif — konsultasi dokter spesialis, laboratorium lengkap, laporan hasil sesuai jadwal; sistem layanan prioritas dengan waktu tunggu lebih singkat.
 3. Konsultasi Jantung Eksekutif — konsultasi jantung fokus, nyaman, dan profesional.
 4. Paket Tindak Lanjut Perawatan Jantung — ideal untuk pemeriksaan rutin dan tindak lanjut perawatan jantung.
 
-Halaman MCU umum di situs resmi saat ini menampilkan "Data Belum Tersedia", jadi jangan mengandalkan daftar paket/tarif yang tidak resmi. Untuk paket, jadwal, dan biaya terkini, hubungi Contact Center (0272) 321020 atau WhatsApp 0816-9170-00, atau datang ke loket Informasi/IRM. Harga tindakan mengacu pada tarif BLU RST / SK Direktur yang berlaku.`,
+Halaman MCU umum di situs resmi saat ini menampilkan "Data Belum Tersedia", jadi jangan mengandalkan daftar paket/tarif yang tidak resmi. Untuk paket, jadwal, dan biaya terkini, hubungi Contact Center (0272) 321020 atau WhatsApp 0816-9170-00, atau datang ke loket Informasi/IRM. Harga tindakan mengacu pada tarif BLU RS Soeradji / SK Direktur yang berlaku.`,
   },
   {
     id: 'home-care',
@@ -309,7 +309,7 @@ Rincian tarif lengkap dapat ditanyakan ke SOERA AI (misal: "berapa tarif pasang 
     title: 'SK Tarif Tindakan Home Care 2024 (Ringkasan)',
     tags: ['tarif', 'biaya', 'harga', 'sk', 'keputusan direktur', 'tarif home care', 'jasa sarana', 'jasa pelayanan', 'bayar', 'pembayaran home care'],
     updated: '2024-03-18',
-    source: 'SK Dirut RST No. HK.02.03/D.XXVI/5441/2024 (18 Maret 2024)',
+    source: 'SK Dirut RS Soeradji No. HK.02.03/D.XXVI/5441/2024 (18 Maret 2024)',
     body: `Dasar tarif Home Care: Keputusan Direktur Utama RSUP Dr. Soeradji Tirtonegoro Klaten Nomor HK.02.03/D.XXVI/5441/2024 tanggal 18 Maret 2024 tentang Tarif Tindakan Pelayanan Home Care (mencabut SK No. HK.02.03/D.XXVI/24514/2023). Ditandatangani Plt. Direktur Utama Sholahuddin Rhatomy.
 
 Struktur tarif = Jasa Sarana + Jasa Pelayanan. Contoh: Perawatan luka kecil Rp120.000; Pasang infus Rp125.000; Injeksi Rp120.000; Nebuliser Rp110.000; Perawatan luka sedang Rp130.000; luka besar Rp180.000; Pijat bayi Rp110.000 (30 menit); Kunjungan dokter umum Rp150.000; dokter spesialis Rp225.000; sub spesialis Rp275.000; konsultasi psikologi Rp125.000; visite = belum termasuk obat/BMHP di luar paket tindakan.
@@ -342,14 +342,14 @@ Setiap pengaduan akan ditindaklanjuti bagian terkait; sertakan nama, nomor rekam
     tags: ['bpjs', 'kis', 'asuransi', 'jaminan', 'rujukan', 'surat rujukan', 'umum', 'perusahaan', 'jaminan kesehatan', 'ina-cbg', 'klaim'],
     updated: '2026-11',
     source: 'rsupsoeradji.id / sippn.menpan.go.id',
-    body: `RST menerima pasien dengan berbagai skema pembiayaan:
-- BPJS Kesehatan/KIS: wajib membawa kartu BPJS (fisik/digital) dan surat rujukan dari FKTP (puskesmas/klinik) atau perintah kontrol dari RST; tanpa rujukan, pasien BPJS pada kondisi tertentu dapat dikenakan biaya umum.
+    body: `RS Soeradji menerima pasien dengan berbagai skema pembiayaan:
+- BPJS Kesehatan/KIS: wajib membawa kartu BPJS (fisik/digital) dan surat rujukan dari FKTP (puskesmas/klinik) atau perintah kontrol dari RS Soeradji; tanpa rujukan, pasien BPJS pada kondisi tertentu dapat dikenakan biaya umum.
 - Perusahaan/asuransi swasta: verifikasi berkas (kartu, surat jaminan/guarantee letter) di bagian pendaftaran/IRM.
 - Pasien umum (mandiri): pembayaran di kasir setelah pendaftaran/pelayanan.
 
 Alur pasien BPJS rawat jalan: daftar di FKTP → dapat rujukan → daftar online (H-7..H-1) atau loket → check-in IRM + fingerprint → poli. Untuk layanan IGD: langsung ke IGD, berkas menyusul.
 
-Tarif untuk pasien umum mengacu pada tarif BLU RST yang ditetapkan dengan Peraturan/Keputusan Direksi; tarif BPJS mengikuti INA-CBGs.`,
+Tarif untuk pasien umum mengacu pada tarif BLU RS Soeradji yang ditetapkan dengan Peraturan/Keputusan Direksi; tarif BPJS mengikuti INA-CBGs.`,
   },
   {
     id: 'fasilitas',
@@ -367,9 +367,9 @@ Jam berkunjung: 17.00–19.00 WIB. Anak di bawah usia tertentu tidak dianjurkan 
     tags: ['maklumat', 'gratifikasi', 'stop gratifikasi', 'korupsi', 'pungli', 'layanan gratis', 'anti pungli', 'pengaduan pungli', 'suap'],
     updated: '2026-11',
     source: 'rsupsoeradji.id',
-    body: `MAKLUMAT PELAYANAN RST: komitmen memberikan pelayanan yang berkualitas, profesional, transparan, dan berorientasi pada kepuasan serta keselamatan masyarakat sesuai standar yang ditetapkan.
+    body: `MAKLUMAT PELAYANAN RS Soeradji: komitmen memberikan pelayanan yang berkualitas, profesional, transparan, dan berorientasi pada kepuasan serta keselamatan masyarakat sesuai standar yang ditetapkan.
 
-STOP GRATIFIKASI: RST berkomitmen mewujudkan zona integritas menuju WBK/WBBM. Pegawai RST DILARANG menerima gratifikasi dalam bentuk apapun (uang, barang, fasilitas) yang berhubungan dengan jabatan dan berlawanan dengan kewajiban. Masyarakat diminta TIDAK memberi uang/imbalan apapun kepada petugas. Laporkan indikasi gratifikasi/pungli ke Unit Pengendalian Gratifikasi (UPG) RST melalui hotline (0272) 321020 atau email resmi rumah sakit.
+STOP GRATIFIKASI: RS Soeradji berkomitmen mewujudkan zona integritas menuju WBK/WBBM. Pegawai RS Soeradji DILARANG menerima gratifikasi dalam bentuk apapun (uang, barang, fasilitas) yang berhubungan dengan jabatan dan berlawanan dengan kewajiban. Masyarakat diminta TIDAK memberi uang/imbalan apapun kepada petugas. Laporkan indikasi gratifikasi/pungli ke Unit Pengendalian Gratifikasi (UPG) RS Soeradji melalui hotline (0272) 321020 atau email resmi rumah sakit.
 
 Layanan tidak dipungut biaya di luar tarif resmi; minta bukti pembayaran (kuitansi) setiap transaksi di kasir.`,
   },
@@ -379,15 +379,15 @@ Layanan tidak dipungut biaya di luar tarif resmi; minta bukti pembayaran (kuitan
     tags: ['kampanye', 'promosi kesehatan', 'penyuluhan', 'imunisasi', 'skrining', 'germas', 'cerdik', 'cuci tangan', 'gizi', 'stunting', 'hiv', 'tb', 'rokok', 'hipertensi', 'diabetes', 'kegiatan'],
     updated: '2026-11',
     source: 'rsupsoeradji.id / Kemenkes RI',
-    body: `Kampanye kesehatan RST & Kemenkes RI yang relevan untuk masyarakat Klaten dan sekitarnya:
+    body: `Kampanye kesehatan RS Soeradji & Kemenkes RI yang relevan untuk masyarakat Klaten dan sekitarnya:
 - GERMAS — Gerakan Masyarakat Hidup Sehat: aktivitas fisik 30 menit/hari, perbanyak sayur & buah, cek kesehatan berkala.
 - CERDIK — Cek kesehatan berkala, Enyahkan asap rokok, Rajin aktivitas fisik, Diet seimbang, Istirahat cukup, Kelola stres — pencegahan PTM (penyakit tidak menular: hipertensi, diabetes, stroke, jantung).
-- SPELING — Spesialis Keliling RST: dokter spesialis turun langsung ke kecamatan (mis. Gantiwarno) melayani 110+ pasien per kegiatan.
-- Bakti Sosial & Khitanan Massal RST (Nov 2026): 99 anak turut serta.
-- Imunisasi Dasar Lengkap & Bulan Imunisasi Anak Sekolah (BIAS) — tanyakan jadwal ke puskesmas/poli anak RST.
+- SPELING — Spesialis Keliling RS Soeradji: dokter spesialis turun langsung ke kecamatan (mis. Gantiwarno) melayani 110+ pasien per kegiatan.
+- Bakti Sosial & Khitanan Massal RS Soeradji (Nov 2026): 99 anak turut serta.
+- Imunisasi Dasar Lengkap & Bulan Imunisasi Anak Sekolah (BIAS) — tanyakan jadwal ke puskesmas/poli anak RS Soeradji.
 - Skrining PTM gratis pada kegiatan tertentu (tekanan darah, gula darah, kolesterol, BMI).
-- Hari Kesehatan Nasional, Hari Jantung Sedunia, Pekan ASI, dll — diikuti RST dengan penyuluhan & layanan konsultasi.
-- Berhenti merokok — Klinik berhenti merokok tersedia di RST (konsultasi dokter).
+- Hari Kesehatan Nasional, Hari Jantung Sedunia, Pekan ASI, dll — diikuti RS Soeradji dengan penyuluhan & layanan konsultasi.
+- Berhenti merokok — Klinik berhenti merokok tersedia di RS Soeradji (konsultasi dokter).
 - Deteksi dini TB (DOTS) dan HIV (VCT) — layanan tersedia di poli terkait.
 
 Ikuti akun resmi @rssoeradjitirtonegoro (Instagram) dan rsupsoeradji.id untuk jadwal kampanye terkini, atau aktifkan notifikasi kampanye di aplikasi SOERA AI ([menu Kampanye](/kampanye)).`,
@@ -398,7 +398,7 @@ Ikuti akun resmi @rssoeradjitirtonegoro (Instagram) dan rsupsoeradji.id untuk ja
     tags: ['speling', 'spesialis keliling', 'keliling', 'kecamatan', 'gantiwarno', 'jemput bola', 'posyandu'],
     updated: '2026-11',
     source: 'rsupsoeradji.id',
-    body: `SPELING (Spesialis Keliling) adalah program RSUP Dr. Soeradji Tirtonegoro untuk mendekatkan layanan dokter spesialis kepada masyarakat di kecamatan-kecamatan Kabupaten Klaten dan sekitarnya. Pada salah satu kegiatan di Kecamatan Gantiwarno, tercatat 110 pasien terlayani. Kegiatan umumnya meliputi pemeriksaan dokter spesialis, konsultasi, dan edukasi kesehatan, bekerja sama dengan puskesmas setempat. Jadwal SPELING diumumkan melalui kanal resmi RST dan pemerintah daerah; tanyakan ke puskesmas terdekat atau Contact Center (0272) 321020.`,
+    body: `SPELING (Spesialis Keliling) adalah program RSUP Dr. Soeradji Tirtonegoro untuk mendekatkan layanan dokter spesialis kepada masyarakat di kecamatan-kecamatan Kabupaten Klaten dan sekitarnya. Pada salah satu kegiatan di Kecamatan Gantiwarno, tercatat 110 pasien terlayani. Kegiatan umumnya meliputi pemeriksaan dokter spesialis, konsultasi, dan edukasi kesehatan, bekerja sama dengan puskesmas setempat. Jadwal SPELING diumumkan melalui kanal resmi RS Soeradji dan pemerintah daerah; tanyakan ke puskesmas terdekat atau Contact Center (0272) 321020.`,
   },
   {
     id: 'tiket-antrian',
@@ -406,7 +406,7 @@ Ikuti akun resmi @rssoeradjitirtonegoro (Instagram) dan rsupsoeradji.id untuk ja
     tags: ['antrian', 'nomor antrian', 'check in', 'daftar ulang', 'fingerprint', 'sidik jari', 'loket', 'irm', 'verifikasi', 'tunggu'],
     updated: '2026-11',
     source: 'sippn.menpan.go.id / rsupsoeradji.id',
-    body: `Alur kunjungan rawat jalan RST:
+    body: `Alur kunjungan rawat jalan RS Soeradji:
 1. Buat janji (WhatsApp 0816-9170-00 H-7..H-1) atau datang langsung.
 2. Tiba 30 menit sebelum jadwal; tunjukkan nomor/bukti pendaftaran ke petugas IRM.
 3. Check-in + sidik jari (fingerprint) di meja Administrasi IRM.
@@ -421,24 +421,24 @@ Waktu penyelesaian pendaftaran umumnya < 5 menit. Jam pendaftaran Senin–Kamis 
     tags: ['pendidikan', 'penelitian', 'diklat', 'ugm', 'universitas', 'koas', 'residen', 'pelatihan', 'pkm', 'magang'],
     updated: '2026-11',
     source: 'rsupsoeradji.id',
-    body: `RST adalah rumah sakit pendidikan bekerja sama dengan Fakultas Kedokteran UGM (sejak 1946) dan berbagai universitas. RST menjadi lokasi pendidikan dokter (koas), program residensi, PPDS, penelitian biomedis, serta pelatihan/diklat tenaga kesehatan. RST juga aktif studi banding dari rumah sakit lain (mis. studi banding pengelolaan darah / SIM Unit Pengelola Darah). Informasi kerjasama pendidikan: bagian Diklat/Penelitian RST melalui (0272) 321020 atau email rsupsoeradji_klaten@yahoo.com.`,
+    body: `RS Soeradji adalah rumah sakit pendidikan bekerja sama dengan Fakultas Kedokteran UGM (sejak 1946) dan berbagai universitas. RS Soeradji menjadi lokasi pendidikan dokter (koas), program residensi, PPDS, penelitian biomedis, serta pelatihan/diklat tenaga kesehatan. RS Soeradji juga aktif studi banding dari rumah sakit lain (mis. studi banding pengelolaan darah / SIM Unit Pengelola Darah). Informasi kerjasama pendidikan: bagian Diklat/Penelitian RS Soeradji melalui (0272) 321020 atau email rsupsoeradji_klaten@yahoo.com.`,
   },
   {
     id: 'faq',
     title: 'FAQ — Pertanyaan yang Sering Diajukan',
     tags: ['faq', 'tanya jawab', 'pertanyaan', 'bawa apa', 'parkir', 'atm', 'wali', 'rekam medis', 'surat keterangan', 'sehat walafiat', 'antar jemput', 'jenazah'],
     updated: '2026-11',
-    source: 'himpunan FAQ RST',
+    source: 'himpunan FAQ RS Soeradji',
     body: `T: Bawa apa saat berobat? J: KTP, kartu BPJS/asuransi, surat rujukan/perintah kontrol, hasil pemeriksaan sebelumnya, obat rutin.
 T: Apakah bisa antar-jemput pasien? J: Tersedia layanan ambulans; hubungi (0272) 321020 ext 200 untuk informasi biaya/ketersediaan.
 T: Bagaimana urus rekam medis/surat keterangan? J: Ajukan ke IRM (Informasi Rekam Medik) dengan identitas dan surat pengantar; pengambilan sesuai ketentuan.
 T: Jam besuk? J: 17.00–19.00 WIB.
-T: Apakah RST menerima pasien rujukan dari luar Klaten? J: Ya, RST RS rujukan nasional — rujukan dari RS/klinik seluruh Indonesia diterima.
+T: Apakah RS Soeradji menerima pasien rujukan dari luar Klaten? J: Ya, RS Soeradji RS rujukan nasional — rujukan dari RS/klinik seluruh Indonesia diterima.
 T: Nomor darurat? J: IGD 24 jam (0272) 321020 ext 200 atau 119.
 T: Pendaftaran online? J: WhatsApp 0816-9170-00, H-7 s/d H-1 07.30–14.00 WIB.
 T: Bagaimana menyampaikan keluhan? J: Menu Keluhan di SOERA AI, atau hotline 0851-7957-7302.
 T: Apakah ada layanan home care? J: Ada — Soeradji Go Care; tarif sesuai SK HK.02.03/D.XXVI/5441/2024.
-T: Apakah RST melayani hari Sabtu? J: Poliklinik tutup Sabtu–Ahad/libur; IGD & rawat inap 24 jam tetap buka. (Poli penyakit dalam tertentu praktik Sabtu pagi 07.30–13.00 — konfirmasi ke Contact Center.)`,
+T: Apakah RS Soeradji melayani hari Sabtu? J: Poliklinik tutup Sabtu–Ahad/libur; IGD & rawat inap 24 jam tetap buka. (Poli penyakit dalam tertentu praktik Sabtu pagi 07.30–13.00 — konfirmasi ke Contact Center.)`,
   },
   {
     id: 'keselamatan-pasien',
@@ -446,7 +446,7 @@ T: Apakah RST melayani hari Sabtu? J: Poliklinik tutup Sabtu–Ahad/libur; IGD &
     tags: ['keselamatan', 'pasien', 'hak', 'kewajiban', 'sasaran keselamatan', 'identifikasi', 'informed consent', 'privasi', 'kerahasiaan'],
     updated: '2026-11',
     source: 'rsupsoeradji.id / standar akreditasi KARS',
-    body: `RST menerapkan standar keselamatan pasien (akreditasi KARS penuh): identifikasi pasien dengan minimal dua identitas (nama & tanggal lahir), komunikasi efektif (SBAR), keamanan obat, kepastian sisi/lokasi operasi, pencegahan infeksi, dan pencegahan pasien jatuh. Pasien berhak atas informasi lengkap diagnosis & rencana tindakan, menolak/menyetujui tindakan (informed consent), privasi dan kerahasiaan data medis, serta menyampaikan keluhan tanpa takut diperlakukan buruk. Kewajiban pasien: memberikan informasi yang jujur dan lengkap, mematuhi tata tertib & instruksi medis, serta menghormati hak pasien lain dan petugas.`,
+    body: `RS Soeradji menerapkan standar keselamatan pasien (akreditasi KARS penuh): identifikasi pasien dengan minimal dua identitas (nama & tanggal lahir), komunikasi efektif (SBAR), keamanan obat, kepastian sisi/lokasi operasi, pencegahan infeksi, dan pencegahan pasien jatuh. Pasien berhak atas informasi lengkap diagnosis & rencana tindakan, menolak/menyetujui tindakan (informed consent), privasi dan kerahasiaan data medis, serta menyampaikan keluhan tanpa takut diperlakukan buruk. Kewajiban pasien: memberikan informasi yang jujur dan lengkap, mematuhi tata tertib & instruksi medis, serta menghormati hak pasien lain dan petugas.`,
   },
   {
     id: 'e-yang',
@@ -454,70 +454,70 @@ T: Apakah RST melayani hari Sabtu? J: Poliklinik tutup Sabtu–Ahad/libur; IGD &
     tags: ['e-yang', 'eyang', 'aplikasi', 'mobile', 'android', 'playstore', 'app store', 'antrian online'],
     updated: '2026-11',
     source: 'X/Twitter resmi @RSSoeradji',
-    body: `RST memiliki aplikasi mobile resmi "E-Yang Soeradji" untuk mempermudah akses layanan (informasi & pendaftaran) bagi pengguna Android/iOS. Cari "E-Yang Soeradji" di Play Store/App Store, atau tanyakan tautan unduhan ke Contact Center (0272) 321020. Aplikasi SOERA AI ini melengkapi E-Yang Soeradji sebagai kanal tanya-jawab cerdas (chatbot), keluhan, dan kampanye kesehatan.`,
+    body: `RS Soeradji memiliki aplikasi mobile resmi "E-Yang Soeradji" untuk mempermudah akses layanan (informasi & pendaftaran) bagi pengguna Android/iOS. Cari "E-Yang Soeradji" di Play Store/App Store, atau tanyakan tautan unduhan ke Contact Center (0272) 321020. Aplikasi SOERA AI ini melengkapi E-Yang Soeradji sebagai kanal tanya-jawab cerdas (chatbot), keluhan, dan kampanye kesehatan.`,
   },
   {
     id: 'edukasi-batuk',
     title: 'Batuk Berdahak — Edukasi Umum (Bukan Diagnosis)',
     tags: ['batuk', 'berdahak', 'pilek', 'flu', 'ispa', 'tenggorokan', 'dahak', 'batuk kronis', 'tb'],
     updated: '2026-11',
-    source: 'Edukasi kesehatan Kemenkes RI / RST (bukan pengganti konsultasi dokter)',
+    source: 'Edukasi kesehatan Kemenkes RI / RS Soeradji (bukan pengganti konsultasi dokter)',
     body: `Batuk berdahak adalah refleks alami tubuh untuk membersihkan saluran napas dari mukus/dahak. Pada umumnya tidak berbahaya dan sering menyertai ISPA (infeksi saluran napas akut, mis. pilek/flu) dan sembuh 1–3 minggu.
 
-Waspada & SEGERA periksa ke dokter bila: batuk lebih dari 2 minggu; dahak bercampur darah; batuk disertai sesak napas berat, nyeri dada, atau napas berbunyi; demam tinggi lebih dari 3 hari; berat badan turun tanpa sebab; keringat malam; pembengkakan kelenjar leher. Batuk > 2 minggu + keringat malam + BB turun wajib disaring TB — poli TB DOTS RST (dr. Zakiah Novianti, Sp.P — Selasa & Jumat 09.00–13.00). Dahak hijau/kuning pekat disertai sesak → curiga infeksi bakteri (pneumonia/bronkitis) → perlu pemeriksaan dokter & kemungkinan rontgen.
+Waspada & SEGERA periksa ke dokter bila: batuk lebih dari 2 minggu; dahak bercampur darah; batuk disertai sesak napas berat, nyeri dada, atau napas berbunyi; demam tinggi lebih dari 3 hari; berat badan turun tanpa sebab; keringat malam; pembengkakan kelenjar leher. Batuk > 2 minggu + keringat malam + BB turun wajib disaring TB — poli TB DOTS RS Soeradji (dr. Zakiah Novianti, Sp.P — Selasa & Jumat 09.00–13.00). Dahak hijau/kuning pekat disertai sesak → curiga infeksi bakteri (pneumonia/bronkitis) → perlu pemeriksaan dokter & kemungkinan rontgen.
 
 Pertolongan awal di rumah: perbanyak minum air hangat, istirahat, hindari asap rokok & polusi, jangan sembarangan minum antibiotik tanpa resep (antibiotik hanya untuk infeksi bakteri atas anjuran dokter). Anak di bawah 5 tahun, lansia, dan penderita penyakit jantung/paru kronik sebaiknya langsung diperiksa.
 
-Ini edukasi umum, BUKAN diagnosis. Untuk kepastian dan penanganan yang tepat, konsultasikan ke dokter RST: poli Paru/TB DOTS, poli Penyakit Dalam, atau IGD bila sesak. SOERA AI tidak dapat mendiagnosis penyakit.`,
+Ini edukasi umum, BUKAN diagnosis. Untuk kepastian dan penanganan yang tepat, konsultasikan ke dokter RS Soeradji: poli Paru/TB DOTS, poli Penyakit Dalam, atau IGD bila sesak. SOERA AI tidak dapat mendiagnosis penyakit.`,
   },
   {
     id: 'edukasi-demam',
     title: 'Demam — Edukasi Umum (Bukan Diagnosis)',
     tags: ['demam', 'panas', 'meriang', 'suhu', 'demam tinggi', 'penurun panas'],
     updated: '2026-11',
-    source: 'Edukasi kesehatan Kemenkes RI / RST (bukan pengganti konsultasi dokter)',
+    source: 'Edukasi kesehatan Kemenkes RI / RS Soeradji (bukan pengganti konsultasi dokter)',
     body: `Demam adalah respons tubuh melawan infeksi — umumnya tidak berbahaya bila di bawah 38,5°C dan singkat. Pertolongan awal: istirahat cukup, minum air putih/air hangat yang banyak, kompres hangat, pakaian tipis, ukur suhu berkala.
 
 SEGERA ke IGD bila: demam disertai sesak napas, kaku kuduk, kejang, penurunan kesadaran/bingung, ruam ungu yang tidak hilang saat ditekan, atau nyeri dada hebat. Periksa ke dokter bila: demam > 38,5°C lebih dari 3 hari, demam naik-turun > 7 hari, disertai ruam, muntah terus-menerus, atau diare berat; anak dengan demam disertai rewel berat/tidak mau minum/mata cekung. Demam berdarah perlu diwaspadai saat musim hujan: demam tinggi mendadak + bintik merah + nyeri ulu hati + mimisan → periksa darah segera (poli Anak/Penyakit Dalam).
 
 Obat penurun panas (parasetamol) hanya pereda gejala — bukan penyembuh. Jangan berikan aspirin pada anak tanpa anjuran dokter.
 
-Ini edukasi umum, BUKAN diagnosis. Konsultasikan ke dokter RST untuk penanganan tepat (poli Penyakit Dalam/Anak, atau IGD 24 jam: (0272) 321020 ext 200).`,
+Ini edukasi umum, BUKAN diagnosis. Konsultasikan ke dokter RS Soeradji untuk penanganan tepat (poli Penyakit Dalam/Anak, atau IGD 24 jam: (0272) 321020 ext 200).`,
   },
   {
     id: 'edukasi-hipertensi',
     title: 'Hipertensi (Tekanan Darah Tinggi) — Edukasi Umum',
     tags: ['hipertensi', 'darah tinggi', 'tensi', 'tekanan darah', 'sistole', 'diastole', 'amlodipin'],
     updated: '2026-11',
-    source: 'Edukasi kesehatan Kemenkes RI / RST (bukan pengganti konsultasi dokter)',
+    source: 'Edukasi kesehatan Kemenkes RI / RS Soeradji (bukan pengganti konsultasi dokter)',
     body: `Hipertensi = tekanan darah ≥ 140/90 mmHg pada pengukuran berulang. Sering TANPA gejala ("pembunuh diam-diam") dan dapat menimbulkan stroke, serangan jantung, dan gagal ginjal. Faktor risiko: garam berlebih, obesitas, kurang olahraga, merokok, stres, riwayat keluarga.
 
 Pencegahan & pengendalian: kurangi garam (< 5 g/hari), diet DASH (banyak sayur-buah-serat, kurangi lemak jenuh), olahraga 30 menit/hari, berat badan ideal, berhenti merokok, kelola stres, patuh minum obat dari dokter (jangan berhenti sendiri meski merasa baik-baik saja), cek tensi rutin (minimal 1×/bulan bila berisiko).
 
 SEGERA ke IGD bila: tensi sangat tinggi (≥ 180/120) disertai nyeri dada, sesak, sakit kepala hebat, gangguan penglihatan, lemas sebelah/wajah mencong (gejala stroke), atau penurunan kesadaran.
 
-Skrining gratis tekanan darah tersedia di MCU RST & kegiatan SPELING/bakti sosial. Ini edukasi umum, BUKAN diagnosis — konsultasikan ke dokter (poli Penyakit Dalam, dr. Tri Widodo, Sp.PD-KGH / poli Jantung).`,
+Skrining gratis tekanan darah tersedia di MCU RS Soeradji & kegiatan SPELING/bakti sosial. Ini edukasi umum, BUKAN diagnosis — konsultasikan ke dokter (poli Penyakit Dalam, dr. Tri Widodo, Sp.PD-KGH / poli Jantung).`,
   },
   {
     id: 'edukasi-diabetes',
     title: 'Diabetes / Kencing Manis — Edukasi Umum',
     tags: ['diabetes', 'gula darah', 'kencing manis', 'dm', 'gula', 'insulin', 'metformin'],
     updated: '2026-11',
-    source: 'Edukasi kesehatan Kemenkes RI / RST (bukan pengganti konsultasi dokter)',
+    source: 'Edukasi kesehatan Kemenkes RI / RS Soeradji (bukan pengganti konsultasi dokter)',
     body: `Diabetes melitus ditandai gula darah puasa ≥ 126 mg/dL atau sewaktu ≥ 200 mg/dL (pemeriksaan laboratorium). Gejala khas: sering haus & sering berkemih (terutama malam), lapar terus, berat badan turun, luka sulit sembuh, kesemutan.
 
 Pengendalian: diet rendah gula & karbohidrat sederhana (hindari minuman manis, gorengan, nasi berlebih), makan teratur dengan porsi kecil & sering, olahraga rutin (jalan kaki 30 menit), jaga berat badan, cek gula darah & HbA1c berkala, patuh obat/insulin sesuai anjuran dokter, periksa kaki & mata rutin.
 
 SEGERA ke IGD bila: gula darah sangat tinggi disertai muntah hebat, nyeri perut, napas cepat/dalam (curiga ketoasidosis), atau gula darah sangat rendah (gemetar, keringat dingin, bingung, kejang) — segera minum manis & hubungi IGD (0272) 321020 ext 200.
 
-Ini edukasi umum, BUKAN diagnosis. Konsultasi ke dokter (poli Penyakit Dalam) & cek GDS/GDP di laboratorium RST atau Home Care RST (GDS stik Rp120.000).`,
+Ini edukasi umum, BUKAN diagnosis. Konsultasi ke dokter (poli Penyakit Dalam) & cek GDS/GDP di laboratorium RS Soeradji atau Home Care RS Soeradji (GDS stik Rp120.000).`,
   },
   {
     id: 'edukasi-maag',
     title: 'Maag / Nyeri Ulu Hati / GERD — Edukasi Umum',
     tags: ['maag', 'asam lambung', 'gerd', 'ulu hati', 'perut perih', 'mual', 'muntah', 'kembung'],
     updated: '2026-11',
-    source: 'Edukasi kesehatan Kemenkes RI / RST (bukan pengganti konsultasi dokter)',
+    source: 'Edukasi kesehatan Kemenkes RI / RS Soeradji (bukan pengganti konsultasi dokter)',
     body: `Nyeri ulu hati & perih lambung umumnya akibat gastritis/dispepsia fungsional atau GERD (asam lambung naik). Pemicu: makan tidak teratur, pedas/asam/kopi/alkohol/soda, stres, obat anti-nyeri (NSAID) tanpa pelindung lambung.
 
 Pertolongan awal: makan kecil tapi sering (jangan kosong > 3–4 jam), hindari pemicu (pedas, asam, kopi, soda, alkohol), jangan langsung berbaring setelah makan (tunggu 2 jam), tidur dengan kepala lebih tinggi, kurangi stres, berhenti merokok. Antasida bisa membantu gejala ringan sesekali — bukan solusi jangka panjang.
@@ -531,12 +531,12 @@ Ini edukasi umum, BUKAN diagnosis. Konsultasikan ke dokter (poli Penyakit Dalam)
     title: 'Nyeri Dada — Edukasi Umum & Tanda BAHAYA',
     tags: ['nyeri dada', 'dada sakit', 'dada terasa', 'dada sesak', 'jantung', 'serangan jantung'],
     updated: '2026-11',
-    source: 'Edukasi kesehatan Kemenkes RI / RST (bukan pengganti konsultasi dokter)',
+    source: 'Edukasi kesehatan Kemenkes RI / RS Soeradji (bukan pengganti konsultasi dokter)',
     body: `Nyeri dada bisa dari otot/tulang, lambung (GERD), cemas, atau JANTUNG (angina/serangan jantung). Nyeri dada akibat jantung biasanya: terasa berat/tertindih/terbakar di tengah dada, menjalar ke lengan kiri, rahang, leher, atau punggung, disertai keringat dingin, sesak, mual — muncul saat aktivitas/stres dan membaik saat istirahat (angina), atau menetap > 15 menit (curiga serangan jantung).
 
-Bila ragu antara lambung vs jantung: ANGGAP GAWAT DARURAT. Segera ke IGD RST — (0272) 321020 ext 200 — atau hubungi 119. Jangan menyetir sendiri. Duduk tegak & istirahat sambil menunggu pertolongan; bila ada aspirin dan tidak alergi serta sadar penuh, kunyah 1 tablet atas petunjuk petugas 119 — jangan memberi makan/minum pada orang yang menurun kesadarannya.
+Bila ragu antara lambung vs jantung: ANGGAP GAWAT DARURAT. Segera ke IGD RS Soeradji — (0272) 321020 ext 200 — atau hubungi 119. Jangan menyetir sendiri. Duduk tegak & istirahat sambil menunggu pertolongan; bila ada aspirin dan tidak alergi serta sadar penuh, kunyah 1 tablet atas petunjuk petugas 119 — jangan memberi makan/minum pada orang yang menurun kesadarannya.
 
-Nyeri dada berulang saat aktivitas adalah TANDA PERINGATAN penyakit jantung koroner → periksa ke poli Jantung (dr. Muhammad Yulianto SA, Sp.JP / dr. Donna Paramita, Sp.JP) atau poli Penyakit Dalam; RST memiliki fasilitas kateterisasi jantung (PCI) bila diperlukan.
+Nyeri dada berulang saat aktivitas adalah TANDA PERINGATAN penyakit jantung koroner → periksa ke poli Jantung (dr. Muhammad Yulianto SA, Sp.JP / dr. Donna Paramita, Sp.JP) atau poli Penyakit Dalam; RS Soeradji memiliki fasilitas kateterisasi jantung (PCI) bila diperlukan.
 
 Ini edukasi umum, BUKAN diagnosis. Nyeri dada hebat = kondisi gawat darurat, bukan untuk tanya-jawab chatbot.`,
   },
@@ -545,7 +545,7 @@ Ini edukasi umum, BUKAN diagnosis. Nyeri dada hebat = kondisi gawat darurat, buk
     title: 'Diare — Edukasi Umum (Bukan Diagnosis)',
     tags: ['diare', 'mencret', 'perut mules', 'muntaber', 'bab encer', 'dehidrasi'],
     updated: '2026-11',
-    source: 'Edukasi kesehatan Kemenkes RI / RST (bukan pengganti konsultasi dokter)',
+    source: 'Edukasi kesehatan Kemenkes RI / RS Soeradji (bukan pengganti konsultasi dokter)',
     body: `Diare = BAB encer ≥ 3× sehari. Penyebab tersering: infeksi virus/bakteri (makanan/minuman tercemar), intoleransi laktosa, efek obat. Bahaya utama adalah DEHIDRASI, terutama pada anak & lansia.
 
 Pertolongan utama: minum oralit (larutan gula-garam) sering sedikit-sedikit — jangan hanya air putih; makan lunak (bubur, pisang, nasi); jaga kebersihan makanan & cuci tangan; hindari susu & santan sementara.
@@ -559,7 +559,7 @@ Ini edukasi umum, BUKAN diagnosis. Konsultasikan ke dokter (poli Anak/Penyakit D
     title: 'Pusing / Sakit Kepala — Edukasi Umum (Bukan Diagnosis)',
     tags: ['pusing', 'sakit kepala', 'migrain', 'vertigo', 'pening', 'kepala nyeri', 'berputar'],
     updated: '2026-11',
-    source: 'Edukasi kesehatan Kemenkes RI / RST (bukan pengganti konsultasi dokter)',
+    source: 'Edukasi kesehatan Kemenkes RI / RS Soeradji (bukan pengganti konsultasi dokter)',
     body: `Pusing/sakit kepala paling sering: tegang (otot leher & kepala), migrain (berdenyut sebelah, mual, sensitif cahaya), kurang tidur, dehidrasi, telat makan, mata lelah, atau tekanan darah tidak terkontrol. Vertigo = rasa berputar, sering karena gangguan keseimbangan telinga dalam.
 
 Pertolongan awal: istirahat di ruangan gelap & tenang, minum air, makan teratur, kompres dingin (migrain) atau hangat (tegang), kurangi layar & stres, tidur cukup.
@@ -571,7 +571,7 @@ Ini edukasi umum, BUKAN diagnosis. Konsultasi ke dokter (poli Saraf/Bedah Saraf,
 
   {
     id: 'titik-lokasi',
-    title: 'Lokasi dan Rute Menuju RST',
+    title: 'Lokasi dan Rute Menuju RS Soeradji',
     tags: ['rute', 'lokasi', 'peta', 'google maps', 'jalan', 'tegalyoso', 'klaten selatan', 'transportasi', 'angkot', 'kereta', 'stasiun', 'terminal'],
     updated: '2026-11',
     source: 'rsupsoeradji.id',

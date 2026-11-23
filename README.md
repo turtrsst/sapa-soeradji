@@ -6,7 +6,7 @@
 
 SOERA AI menjawab pertanyaan dan keluhan masyarakat secara cepat — **keluhan pelayanan, pertanyaan jadwal dokter, pendaftaran online, tanya tarif, hingga kampanye kesehatan daring** — dan tetap berfungsi **tanpa internet** (mode offline) dengan dua lapis:
 
-1. **Basis pengetahuan lokal (selalu aktif, tanpa model)** — jawaban deterministik dari data resmi RST (jadwal, tarif SK, kontak, FAQ, alur layanan).
+1. **Basis pengetahuan lokal (selalu aktif, tanpa model)** — jawaban deterministik dari data resmi RS Soeradji (jadwal, tarif SK, kontak, FAQ, alur layanan).
 2. **AI generatif offline via [Jan (janhq/jan)](https://github.com/janhq/jan)** — ChatGPT open-source yang berjalan 100% offline di komputer (Windows/macOS/Linux); model GGUF (Llama, Qwen, GPT-oss, …) berjalan lokal lewat **Local API Server OpenAI-compatible bawaan Jan** (port 1337). SOERA AI otomatis menempel ke endpoint itu dan men-*stream* jawabannya. Alternatif: Ollama, llama.cpp, LM Studio, atau API cloud (OpenAI/Kimi/OpenRouter).
 
 ---
@@ -19,7 +19,7 @@ SOERA AI menjawab pertanyaan dan keluhan masyarakat secara cepat — **keluhan p
 | **Jadwal Dokter** (`/jadwal`) | ±55 baris jadwal poliklinik regular, cari per dokter/poli/spesialisasi, filter hari, cetak (print-friendly). Update 12 Mei 2026 — dapat berubah, konfirmasi (0272) 321020. |
 | **Soeradji Go Care** (`/home-care`) | Semua ±80 item **Tarif Tindakan Pelayanan Home Care** hasil digitalisasi SK Dirut No. HK.02.03/D.XXVI/5441/2024 (dokumen SK dipindai, tarif terverifikasi per halaman), bisa dicari & dicetak, tersedia **unduhan PDF SK asli**, **formulir pengajuan kunjungan home care** ke petugas, dan tautan langsung ke pemesanan resmi online **Soeradji GOCARE** ([sias.rsupsoeradji.id/homecare](https://sias.rsupsoeradji.id/homecare/) — asisten Sora, 80+ layanan, minimal H-1). |
 | **Keluhan / Pengaduan** (`/keluhan`) | Buat tiket → nomor tiket `SKT-YYYYMMDD-XXXXXX`, lacak status (baru → diproses → selesai) + tanggapan petugas, kategori & prioritas. |
-| **Kampanye Kesehatan** (`/kampanye`) | Kampanye daring RST (SPELING, Bakti Sosial, CERDIK, Stop Gratifikasi, dll) + berbagi ke WhatsApp. Dikelola admin. |
+| **Kampanye Kesehatan** (`/kampanye`) | Kampanye daring RS Soeradji (SPELING, Bakti Sosial, CERDIK, Stop Gratifikasi, dll) + berbagi ke WhatsApp. Dikelola admin. |
 | **Panel Admin** (`/admin`) | Login ber-cookie HMAC: statistik (grafik volume chat 14 hari, topik terbanyak), manajemen tiket keluhan (tanggapi + WA balasan), manajemen permintaan Home Care, kelola kampanye, **Pengaturan AI** (preset Jan/Ollama/llama.cpp/LM Studio/OpenAI/Kimi/OpenRouter, uji koneksi, mode offline). |
 | **API publik** | `/api/health`, `/api/jadwal`, `/api/tarif`, `/api/kampanye`, `/api/keluhan`, `/api/homecare`, SSE `/api/chat`, `/api/conversations*`. |
 
@@ -98,7 +98,7 @@ Arsitektur tanya-jawab:
 
 ```
 Pertanyaan pasien
-  → intent detection + retrieval basis pengetahuan RST (offline)
+  → intent detection + retrieval basis pengetahuan RS Soeradji (offline)
   → AI diaktifkan & endpoint respons? → jawaban generatif RAG (streaming)
   → AI nonaktif / endpoint gagal / key salah? → jawaban basis pengetahuan (fallback otomatis + catatan)
 ```
@@ -131,7 +131,7 @@ src/
   app/                 # App Router: pages + API routes (chat SSE, admin, …)
   components/          # ChatClient, Header, Footer, Markdown, AdminDashboard, Icon
   lib/
-    kb.ts              # Basis pengetahuan RST (38 dokumen, bersumber)
+    kb.ts              # Basis pengetahuan RS Soeradji (38 dokumen, bersumber)
     tarif.ts           # Digitalisasi SK HK.02.03/D.XXVI/5441/2024 (semua item tarif)
     jadwal.ts          # ±55 baris jadwal poliklinik (update 12 Mei 2026)
     rag.ts             # Retrieval + intent detection
@@ -148,10 +148,10 @@ test/rag-test.mjs      # 32 pengujian basis pengetahuan & retrieval
 
 ## Sumber Data & Akurasi
 
-- **Kontak & profil RST**: situs resmi [rsupsoeradji.id](https://rsupsoeradji.id), [rssoeradji.go.id](https://www.rssoeradji.go.id), [Instagram @rssoeradjitirtonegoro](https://www.instagram.com/rssoeradjitirtonegoro) (Contact Center (0272) 321020, IGD ext 200, pendaftaran WA 0816-9170-00, hotline pengaduan 0851-7957-7302, email rsupsoeradji_klaten@yahoo.com).
-- **Tarif Home Care**: Keputusan Direktur Utama RST No. **HK.02.03/D.XXVI/5441/2024** (18 Maret 2024), melampirkan 5 kelompok tarif — digitalisasi dilakukan dari pindaian SK (scan) dan diverifikasi halaman demi halaman; salinan PDF tersedia di aplikasi (`/home-care` → Unduh SK).
+- **Kontak & profil RS Soeradji**: situs resmi [rsupsoeradji.id](https://rsupsoeradji.id), [rssoeradji.go.id](https://www.rssoeradji.go.id), [Instagram @rssoeradjitirtonegoro](https://www.instagram.com/rssoeradjitirtonegoro) (Contact Center (0272) 321020, IGD ext 200, pendaftaran WA 0816-9170-00, hotline pengaduan 0851-7957-7302, email rsupsoeradji_klaten@yahoo.com).
+- **Tarif Home Care**: Keputusan Direktur Utama RS Soeradji No. **HK.02.03/D.XXVI/5441/2024** (18 Maret 2024), melampirkan 5 kelompok tarif — digitalisasi dilakukan dari pindaian SK (scan) dan diverifikasi halaman demi halaman; salinan PDF tersedia di aplikasi (`/home-care` → Unduh SK).
 - **Jadwal dokter**: diolah dari situs resmi & direktori jadwal publik (update **12 Mei 2026**); **jadwal dapat berubah sewaktu-waktu** — selalu konfirmasi ke (0272) 321020.
-- Kampanye: berita/kegiatan resmi RST (bakti sosial & khitanan massal Nov 2026, SPELING Gantiwarno) serta program Kemenkes (CERDIK, GERMAS, DOTS).
+- Kampanye: berita/kegiatan resmi RS Soeradji (bakti sosial & khitanan massal Nov 2026, SPELING Gantiwarno) serta program Kemenkes (CERDIK, GERMAS, DOTS).
 
 ## Mode Online: Provider Cloud, Multi-Key Fallback & Thinking
 
@@ -159,7 +159,7 @@ Selain mode offline (Jan/Ollama), SOERA AI bisa menempel ke endpoint **OpenAI-co
 
 - **Pool API key (fallback otomatis)**: di Pengaturan AI Anda bisa menyimpan **beberapa key** (maks 8). Key dicoba berurutan #1 → #N; bila key gagal dengan alasan yang bisa dipindah (401/402/403/429/5xx/timeout/jaringan), key berikutnya dicoba otomatis dengan cooldown 5 menit. Key disimpan server-side (SQLite lokal RS), tidak pernah ditampilkan penuh (hanya hint 4 digit terakhir), tidak pernah dikirim ke browser setelah tersimpan.
 - **Thinking (reasoning)**: model yang memancarkan token berpikir (Gemini 3.x via `reasoning_effort`; default `low`, bisa diatur low/medium/high) ditampilkan di /chat sebagai panel **"Sedang berpikir…"** yang bisa dibuka/tutup. Panel otomatis tertutup setelah jawaban selesai.
-- **Kartu Generative UI**: saat agen memanggil tool data RS, aliran chat menyisipkan kartu interaktif: **Jadwal Dokter**, **Tarif Layanan** (SK resmi), **Kampanye RST**, **Dokumen Basis Pengetahuan** — selalu dari data KB/SQLite lokal (tidak mengarang).
+- **Kartu Generative UI**: saat agen memanggil tool data RS, aliran chat menyisipkan kartu interaktif: **Jadwal Dokter**, **Tarif Layanan** (SK resmi), **Kampanye RS Soeradji**, **Dokumen Basis Pengetahuan** — selalu dari data KB/SQLite lokal (tidak mengarang).
 - **Uji Koneksi jujur**: tombol di Admin mengirim 1 token nyata ke `chat/completions` (bukan sekadar `GET /models`); bila pool berisi >1 key, uji melewati key-key bermasalah dan melaporkan key mana yang berhasil.
 - **Privasi (UU PDP 27/2022)**: provider cloud terutama free tier **tidak boleh dipakai untuk data pasien riil** (konten bisa dipakai Google/penyedia untuk peningkatan produk). Cloud hanya untuk pilot/dummy, atau paket paid + DPA. Produksi yang disarankan tetap **Ollama lokal di server RS**. Penentuan ini tampil sebagai peringatan otomatis di Pengaturan AI begitu Base URL cloud diisi.
 
@@ -188,9 +188,9 @@ Selain mode offline (Jan/Ollama), SOERA AI bisa menempel ke endpoint **OpenAI-co
 
 ## Catatan Penting
 
-- SOERA AI **bukan pengganti konsultasi medis**; tidak memberikan diagnosis atau resep. Untuk kondisi darurat: IGD RST (0272) 321020 ext 200 / **119**.
+- SOERA AI **bukan pengganti konsultasi medis**; tidak memberikan diagnosis atau resep. Untuk kondisi darurat: IGD RS Soeradji (0272) 321020 ext 200 / **119**.
 - Data percakapan & tiket tersimpan lokal di server aplikasi (SQLite); tidak ada data yang dikirim ke pihak ketiga kecuali jika admin mengaktifkan API cloud.
-- Kampanye & jadwal bersifat informasional; rujukan terakhir adalah pengumuman resmi RST.
+- Kampanye & jadwal bersifat informasional; rujukan terakhir adalah pengumuman resmi RS Soeradji.
 
 ## Lisensi & Kredit
 

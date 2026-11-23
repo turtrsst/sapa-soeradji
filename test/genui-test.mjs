@@ -19,7 +19,7 @@ const tf = buildTarifCard(Array.from({ length: 12 }, (_, i) => ({ nama: 'Item ' 
 ok('tarif: maks 8 item', tf.kind === 'tarif' && tf.items.length === 8);
 ok('tarif: membawa nomor SK', typeof tf.nomorSK === 'string' && tf.nomorSK.length > 0);
 
-const kp = buildKampanyeCard([{ title: 'CERDIK', summary: 'Edukasi cerdik', location: 'RST', start_date: '2026-11-01', end_date: '2026-11-30' }]);
+const kp = buildKampanyeCard([{ title: 'CERDIK', summary: 'Edukasi cerdik', location: 'RS Soeradji', start_date: '2026-11-01', end_date: '2026-11-30' }]);
 ok('kampanye: item terisi', kp.items[0].title === 'CERDIK' && kp.items[0].start === '2026-11-01');
 
 const inf = buildInfoCard([

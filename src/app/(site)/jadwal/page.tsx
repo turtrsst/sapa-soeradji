@@ -86,7 +86,7 @@ export default function JadwalPage() {
         <div className="rounded-2xl border border-rst-100 bg-white p-4"><p className="font-extrabold text-rst-900 flex items-center gap-1.5"><Icon name="phone" size={14} /> Konfirmasi Jadwal</p>Jadwal dapat berubah sewaktu-waktu karena libur nasional, tugas dinas, atau cuti dokter. Selalu konfirmasi ke Contact Center <a className="underline font-bold" href="tel:0272321020">(0272) 321020</a>.</div>
         <div className="rounded-2xl border border-rst-100 bg-white p-4"><p className="font-extrabold text-rst-900 flex items-center gap-1.5"><Icon name="clipboard" size={14} /> Jam Layanan Poli</p>Senin–Kamis 07.30–16.00 WIB · Jumat 07.30–16.30 WIB · Pendaftaran sampai 14.00/14.30 WIB. Sabtu/Minggu &amp; libur: poliklinik tutup, IGD tetap buka.</div>
       </div>
-      <p className="mt-4 text-[10.5px] text-rst-400">Sumber data: situs resmi RST &amp; direktori jadwal publik (update {JADWAL_UPDATE}). RST tidak bertanggung jawab atas perubahan jadwal tanpa pemberitahuan — verifikasi sebelum berangkat.</p>
+      <p className="mt-4 text-[10.5px] text-rst-400">Sumber data: situs resmi RS Soeradji &amp; direktori jadwal publik (update {JADWAL_UPDATE}). RS Soeradji tidak bertanggung jawab atas perubahan jadwal tanpa pemberitahuan — verifikasi sebelum berangkat.</p>
     </div>
   );
 }

@@ -14,7 +14,7 @@ const QUICK = [
 
 const SUGGESTIONS = [
   'Jadwal dokter poli jantung hari Senin',
-  'Cara daftar online RST',
+  'Cara daftar online RS Soeradji',
   'Tarif pasang infus Home Care',
   'Nomor IGD 24 jam',
   'Cara membuat tiket keluhan',
@@ -49,7 +49,7 @@ export default function LandingPage() {
             </div>
             <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-rst-100/80">
               <span className="flex items-center gap-1.5"><Icon name="wifiOff" size={14} className="text-gold-400" /> Bisa offline (AI lokal via Jan)</span>
-              <span className="flex items-center gap-1.5"><Icon name="bolt" size={14} className="text-gold-400" /> Jawaban KB instan — tanya apa pun tentang RST</span>
+              <span className="flex items-center gap-1.5"><Icon name="bolt" size={14} className="text-gold-400" /> Jawaban KB instan — tanya apa pun tentang RS Soeradji</span>
               <span className="flex items-center gap-1.5"><Icon name="shield" size={14} className="text-gold-400" /> Data tersimpan di server RS, aman</span>
             </div>
           </div>
@@ -61,14 +61,14 @@ export default function LandingPage() {
                 <Image src={bp('/images/soera-ai-avatar.webp')} alt="SOERA AI" width={36} height={36} className="h-9 w-9 rounded-xl object-cover object-top bg-rst-900 border border-gold-400/50" />
                 <div className="leading-tight">
                   <p className="font-bold">SOERA AI</p>
-                  <p className="text-[10px] text-emerald-300 flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400 inline-block" /> Asisten digital RST — siap membantu 24/7</p>
+                  <p className="text-[10px] text-emerald-300 flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400 inline-block" /> Asisten digital RS Soeradji — siap membantu 24/7</p>
                 </div>
               </div>
               <div className="mt-4 space-y-3 text-[13px]">
                 <div className="max-w-[85%] rounded-2xl rounded-tl-md bg-white text-rst-900 px-4 py-2.5">Halo Kak, saya ingin tanya jadwal dokter poli jantung terdekat.</div>
                 <div className="ml-auto max-w-[90%] rounded-2xl rounded-tr-md bg-rst-600 text-white px-4 py-2.5">Siap! <strong>Poliklinik Jantung &amp; Pembuluh Darah</strong>: dr. Muhammad Yulianto SA, Sp.JP(K) dan dr. Donna Paramita, Sp.JP — <strong>Senin s.d. Jumat</strong>. Daftar online via WA 0816-9170-00 (H-7 s/d H-1). Mau saya buatkan janji? 😊</div>
                 <div className="max-w-[85%] rounded-2xl rounded-tl-md bg-white text-rst-900 px-4 py-2.5">Dan berapa biaya visite dokter spesialis home care?</div>
-                <div className="ml-auto max-w-[90%] rounded-2xl rounded-tr-md bg-rst-600 text-white px-4 py-2.5">Kunjungan dokter spesialis ke rumah: <strong>Rp225.000</strong> (Jasa Sarana Rp25.000 + Jasa Pelayanan Rp200.000) sesuai SK Dirut RST No. HK.02.03/D.XXVI/5441/2024.</div>
+                <div className="ml-auto max-w-[90%] rounded-2xl rounded-tr-md bg-rst-600 text-white px-4 py-2.5">Kunjungan dokter spesialis ke rumah: <strong>Rp225.000</strong> (Jasa Sarana Rp25.000 + Jasa Pelayanan Rp200.000) sesuai SK Dirut RS Soeradji No. HK.02.03/D.XXVI/5441/2024.</div>
               </div>
               <Link href="/chat" className="mt-4 flex items-center gap-2 rounded-xl bg-white/90 px-4 py-3 text-rst-400 text-sm hover:bg-white transition">Ketik pertanyaan Anda… <span className="ml-auto"><Icon name="send" size={16} /></span></Link>
             </div>
@@ -121,7 +121,7 @@ export default function LandingPage() {
 
       <section className="mx-auto max-w-7xl px-4 sm:px-6 py-12 grid lg:grid-cols-12 gap-8">
         <div className="lg:col-span-7">
-          <h2 className="text-2xl font-extrabold text-rst-900 tracking-tight">Layanan Unggulan RST</h2>
+          <h2 className="text-2xl font-extrabold text-rst-900 tracking-tight">Layanan Unggulan RS Soeradji</h2>
           <p className="mt-1 text-sm text-rst-600">Pusat rujukan dengan penekanan pada kardiologi &amp; pembuluh darah serta penatalaksanaan kelainan darah paripurna.</p>
           <div className="mt-5 grid sm:grid-cols-2 gap-3 text-sm">
             {[
@@ -147,7 +147,7 @@ export default function LandingPage() {
             </div>
             <ol className="mt-4 space-y-2.5 text-sm text-rst-800">
               <li className="flex gap-2"><span className="font-black text-rst-400">1.</span>Segera hubungi <a href="tel:0272321020" className="font-bold text-rst-900 underline">(0272) 321020 ext 200</a> atau <a href="tel:119" className="font-bold text-rst-900 underline">119</a>.</li>
-              <li className="flex gap-2"><span className="font-black text-rst-400">2.</span>Jangan menunggu antrean online — langsung ke IGD 24 jam RST.</li>
+              <li className="flex gap-2"><span className="font-black text-rst-400">2.</span>Jangan menunggu antrean online — langsung ke IGD 24 jam RS Soeradji.</li>
               <li className="flex gap-2"><span className="font-black text-rst-400">3.</span>Bawa KTP/BPJS &amp; berkas rujukan bila memungkinkan; untuk kondisi kritis tidak perlu berkas.</li>
             </ol>
             <div className="mt-5 rounded-2xl bg-rst-950 text-white p-4">

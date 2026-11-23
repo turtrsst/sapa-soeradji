@@ -18,7 +18,7 @@ export default function Footer() {
           <p className="mt-3 text-rst-200/90 leading-relaxed">Soeradji Assistant Intelligent — respons cepat terhadap keluhan, pertanyaan jadwal dokter, dan kampanye kesehatan daring RSUP Dr. Soeradji Tirtonegoro Klaten.</p>
         </div>
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-widest text-rst-300 mb-2">Kontak RST</p>
+          <p className="text-[11px] font-bold uppercase tracking-widest text-rst-300 mb-2">Kontak RS Soeradji</p>
           <ul className="space-y-1.5">
             <li>Contact Center: <a className="text-white font-semibold hover:underline" href="tel:0272321020">(0272) 321020</a></li>
             <li>IGD / SPGDT 24 Jam: <a className="text-white font-semibold hover:underline" href="tel:0272321020">(0272) 321020 ext 200</a></li>

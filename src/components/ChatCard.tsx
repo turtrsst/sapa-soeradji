@@ -1,5 +1,5 @@
 'use client';
-// Kartu generatif yang dikirim tool agen RST di aliran chat (jadwal/tarif/kampanye/info).
+// Kartu generatif yang dikirim tool agen RS Soeradji di aliran chat (jadwal/tarif/kampanye/info).
 // Data selalu dari basis pengetahuan/SQLite lokal — bukan karangan model.
 import Icon from './Icon';
 import { bp } from '@/lib/basePath';
@@ -15,7 +15,7 @@ export default function ChatCard({ card }: { card: CardPayload }) {
       <div className="genui-card my-2 overflow-hidden rounded-2xl border border-rst-100 bg-white shadow-sm">
         <div className="flex items-center gap-2 border-b border-rst-100 bg-rst-50/60 px-3.5 py-2">
           <Icon name="calendar" size={15} className="text-rst-600" />
-          <p className="text-[11px] font-extrabold uppercase tracking-wide text-rst-800">Jadwal Dokter RST</p>
+          <p className="text-[11px] font-extrabold uppercase tracking-wide text-rst-800">Jadwal Dokter RS Soeradji</p>
           <a href={bp('/jadwal')} className="ml-auto text-[10px] font-bold text-rst-500 hover:text-rst-800 hover:underline">Lihat semua →</a>
         </div>
         <div className="overflow-x-auto">
@@ -61,7 +61,7 @@ export default function ChatCard({ card }: { card: CardPayload }) {
             </li>
           ))}
         </ul>
-        <p className="border-t border-rst-100 px-3.5 py-1.5 text-[9.5px] text-rst-400">Tarif resmi RST/Home Care — dapat berubah. Info & pemesanan: (0272) 321020.</p>
+        <p className="border-t border-rst-100 px-3.5 py-1.5 text-[9.5px] text-rst-400">Tarif resmi RS Soeradji/Home Care — dapat berubah. Info & pemesanan: (0272) 321020.</p>
       </div>
     );
   }
@@ -71,7 +71,7 @@ export default function ChatCard({ card }: { card: CardPayload }) {
       <div className="genui-card my-2 overflow-hidden rounded-2xl border border-rst-100 bg-white shadow-sm">
         <div className="flex items-center gap-2 border-b border-rst-100 bg-rst-50/60 px-3.5 py-2">
           <Icon name="megaphone" size={15} className="text-rst-600" />
-          <p className="text-[11px] font-extrabold uppercase tracking-wide text-rst-800">Kampanye Kesehatan RST</p>
+          <p className="text-[11px] font-extrabold uppercase tracking-wide text-rst-800">Kampanye Kesehatan RS Soeradji</p>
           <a href={bp('/kampanye')} className="ml-auto text-[10px] font-bold text-rst-500 hover:text-rst-800 hover:underline">Semua kampanye →</a>
         </div>
         <ul className="divide-y divide-rst-50">
@@ -95,7 +95,7 @@ export default function ChatCard({ card }: { card: CardPayload }) {
       <div className="genui-card my-2 overflow-hidden rounded-2xl border border-rst-100 bg-white shadow-sm">
         <div className="flex items-center gap-2 border-b border-rst-100 bg-rst-50/60 px-3.5 py-2">
           <Icon name="doc" size={15} className="text-rst-600" />
-          <p className="text-[11px] font-extrabold uppercase tracking-wide text-rst-800">Dokumen Basis Pengetahuan RST</p>
+          <p className="text-[11px] font-extrabold uppercase tracking-wide text-rst-800">Dokumen Basis Pengetahuan RS Soeradji</p>
         </div>
         <ul className="divide-y divide-rst-50">
           {card.items.map((d, i) => (

@@ -26,7 +26,7 @@ export default function KampanyePage() {
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8">
       <p className="chip bg-rst-100 text-rst-700 mb-2"><Icon name="megaphone" size={12} /> Promosi &amp; Kampanye Kesehatan Daring</p>
-      <h1 className="text-3xl font-black text-rst-900 tracking-tight">Kampanye Kesehatan RST</h1>
+      <h1 className="text-3xl font-black text-rst-900 tracking-tight">Kampanye Kesehatan RS Soeradji</h1>
       <p className="mt-1 text-sm text-rst-600 max-w-3xl">Program promotif-preventif RSUP Dr. Soeradji Tirtonegoro &amp; Kementerian Kesehatan RI. Bagikan ke keluarga — deteksi dini menyelamatkan nyawa.</p>
 
       {loading && <div className="mt-8 text-center text-rst-400 text-sm">Memuat kampanye…</div>}
@@ -55,11 +55,11 @@ export default function KampanyePage() {
       {/* Ikuti kami */}
       <div className="mt-8 rounded-2xl bg-rst-950 text-white p-6 grid sm:grid-cols-3 gap-5 text-center sm:text-left items-center">
         <div className="sm:col-span-2">
-          <p className="text-[10px] uppercase tracking-[0.2em] text-gold-400 font-bold">Ikuti Kanal Resmi RST</p>
+          <p className="text-[10px] uppercase tracking-[0.2em] text-gold-400 font-bold">Ikuti Kanal Resmi RS Soeradji</p>
           <p className="mt-1 text-lg font-extrabold">Jangan lewatkan jadwal skrining gratis &amp; edukasi kesehatan</p>
           <p className="mt-1 text-xs text-rst-200">Instagram @rssoeradjitirtonegoro · rsupsoeradji.id · Aplikasi E-Yang Soeradji · WhatsApp 0816-9170-00</p>
         </div>
-        <a href="https://www.instagram.com/rssoeradjitirtonegoro" target="_blank" rel="noreferrer" className="btn btn-gold justify-center sm:justify-self-end"><Icon name="external" size={17} /> Ke Instagram RST</a>
+        <a href="https://www.instagram.com/rssoeradjitirtonegoro" target="_blank" rel="noreferrer" className="btn btn-gold justify-center sm:justify-self-end"><Icon name="external" size={17} /> Ke Instagram RS Soeradji</a>
       </div>
     </div>
   );

@@ -382,7 +382,7 @@ export default function AdminDashboard() {
 
             {isCloudUrl(llm.baseUrl) && (
               <div role="alert" className="rounded-xl border border-amber-300 bg-amber-50 px-3.5 py-2.5 text-[10.5px] leading-snug text-amber-900">
-                <strong>⚠️ Provider cloud terdeteksi.</strong> Pertanyaan bebas pasien akan dikirim ke server pihak ketiga. Sesuai kebijakan RST &amp; UU PDP 27/2022: gunakan hanya untuk <strong>pilot/dummy</strong> atau paket <strong>paid + DPA</strong> — bukan data pasien riil di free tier. Untuk produksi, gunakan <strong>Ollama lokal di server RS</strong>.
+                <strong>⚠️ Provider cloud terdeteksi.</strong> Pertanyaan bebas pasien akan dikirim ke server pihak ketiga. Sesuai kebijakan RS Soeradji &amp; UU PDP 27/2022: gunakan hanya untuk <strong>pilot/dummy</strong> atau paket <strong>paid + DPA</strong> — bukan data pasien riil di free tier. Untuk produksi, gunakan <strong>Ollama lokal di server RS</strong>.
               </div>
             )}
             <div>
@@ -431,7 +431,7 @@ export default function AdminDashboard() {
             <div className="card p-5">
               <p className="font-extrabold text-rst-900 flex items-center gap-2"><Icon name="info" size={15} className="text-rst-500" /> Perilaku jawaban</p>
               <ul className="mt-2 text-[11.5px] text-rst-700 space-y-1.5">
-                <li>1. AI aktif &amp; endpoint merespons → jawaban generatif ber-konteks RST (RAG).</li>
+                <li>1. AI aktif &amp; endpoint merespons → jawaban generatif ber-konteks RS Soeradji (RAG).</li>
                 <li>2. AI aktif tetapi endpoint gagal/timeout → otomatis <strong>fallback offline</strong> + catatan kecil di jawaban.</li>
                 <li>3. AI nonaktif → 100% basis pengetahuan lokal (tanpa internet &amp; tanpa model).</li>
               </ul>

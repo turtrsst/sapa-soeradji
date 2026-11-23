@@ -27,7 +27,7 @@ export default function Header() {
             <span className="inline-block h-2 w-2 rounded-full bg-red-400 animate-pulse" />
             <span className="hidden xs:inline">Darurat 24 Jam:</span> <a href="tel:0272321020" className="font-bold hover:underline">(0272) 321020 ext 200</a>
           </span>
-          <span className="hidden lg:inline-flex items-center gap-1 rounded-full border border-gold-400/60 bg-gold-400/10 px-2.5 py-0.5 text-[9px] font-black uppercase tracking-[0.18em] text-gold-400">Bot Resmi RST</span>
+          <span className="hidden lg:inline-flex items-center gap-1 rounded-full border border-gold-400/60 bg-gold-400/10 px-2.5 py-0.5 text-[9px] font-black uppercase tracking-[0.18em] text-gold-400">Bot Resmi RS Soeradji</span>
           <div className="flex items-center gap-3">
             <a href="https://rsupsoeradji.id" target="_blank" rel="noreferrer" className="hidden sm:flex items-center gap-1 hover:underline">rsupsoeradji.id <Icon name="external" size={10} /></a>
             <a href="mailto:rsupsoeradji_klaten@yahoo.com" className="hidden md:flex items-center gap-1 hover:underline">rsupsoeradji_klaten@yahoo.com</a>

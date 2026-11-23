@@ -82,7 +82,7 @@ Pasien kirim → tiket SKT-YYYYMMDD-XXXXXX / pengajuan Go Care masuk Panel Admin
 ## 8. Perubahan Konten & Rilis
 
 1. Semua perubahan konten/kode lewat **GitHub (pull request)** — reviewer minimal 1 orang (SI).
-2. Tarif hanya valid sesuai **SK Dirut RST No. HK.02.03/D.XXVI/5441/2024**; jadwal dokter mengikuti pembaruan Kemenkes RI/RS — Humas wajib memberi stempel "sesuai SK" sebelum rilis.
+2. Tarif hanya valid sesuai **SK Dirut RS Soeradji No. HK.02.03/D.XXVI/5441/2024**; jadwal dokter mengikuti pembaruan Kemenkes RI/RS — Humas wajib memberi stempel "sesuai SK" sebelum rilis.
 3. Prosedur rilis: PC staging → `git pull && npm ci && npm run build && npm test` → RDP ke server → `scripts\Update-SoeraAI.ps1` (backup otomatis → pull `origin/main` → build → restart → verifikasi → **rollback otomatis** bila gagal) → `scripts\Verify-SoeraAI.ps1` → umumkan ke Humas.
 4. Tag rilis di Git (`v1.x.y`) + catat di Changelog (buat `CHANGELOG.md` saat rilis pertama publik).
 

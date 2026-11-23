@@ -41,7 +41,7 @@ export default function KeluhanPage() {
     <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8">
       <p className="chip bg-rst-100 text-rst-700 mb-2"><Icon name="inbox" size={12} /> Layanan Pengaduan Terintegrasi</p>
       <h1 className="text-3xl font-black text-rst-900 tracking-tight">Keluhan, Kritik &amp; Saran</h1>
-      <p className="mt-1 text-sm text-rst-600 max-w-3xl">Suara Anda adalah bahan perbaikan layanan kami. Setiap laporan mendapat <strong>nomor tiket</strong> dan ditindaklanjuti petugas RST. Respon awal ≤ 1×24 jam kerja.</p>
+      <p className="mt-1 text-sm text-rst-600 max-w-3xl">Suara Anda adalah bahan perbaikan layanan kami. Setiap laporan mendapat <strong>nomor tiket</strong> dan ditindaklanjuti petugas RS Soeradji. Respon awal ≤ 1×24 jam kerja.</p>
 
       <div className="mt-6 grid lg:grid-cols-12 gap-6">
         {/* FORM */}
@@ -118,7 +118,7 @@ export default function KeluhanPage() {
               <li>Kotak saran di area rumah sakit</li>
             </ul>
             <div className="mt-3 rounded-xl bg-gold-400/15 border border-gold-400/40 p-3 text-[11px] text-rst-800 leading-relaxed">
-              <strong>Anti-pungli:</strong> layanan RST tidak dipungut biaya di luar tarif resmi — jangan beri uang/imbalan kepada petugas. Laporkan indikasi gratifikasi ke <a href="tel:085179577302" className="underline font-bold">0851-7957-7302</a>.
+              <strong>Anti-pungli:</strong> layanan RS Soeradji tidak dipungut biaya di luar tarif resmi — jangan beri uang/imbalan kepada petugas. Laporkan indikasi gratifikasi ke <a href="tel:085179577302" className="underline font-bold">0851-7957-7302</a>.
             </div>
           </div>
         </div>
