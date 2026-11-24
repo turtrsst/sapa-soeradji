@@ -358,11 +358,11 @@ function ChatPageInner() {
             ) : (
               <div className="max-w-3xl mx-auto space-y-5">
                 {messages.map((m, i) => (
-                  <div key={i} className={`msg-in flex gap-3 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                  <div key={i} className={`msg-in msg-row flex gap-3 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
                     {m.role === 'assistant'
                       ? <Image src={MUSE} alt="SOERA AI" width={36} height={36} className={`h-9 w-9 mt-1 rounded-2xl object-cover object-top bg-rst-900 border border-gold-400/50 shrink-0 ${m.streaming ? 'muse-live' : ''}`} />
                       : <span className="h-9 w-9 mt-1 rounded-2xl bg-rst-700 text-[9px] font-black tracking-wide text-white flex items-center justify-center shrink-0 border border-rst-600">ANDA</span>}
-                    <div className={`max-w-[85%] sm:max-w-[78%] rounded-3xl px-4 py-3 text-[14px] leading-relaxed shadow-sm ${m.role === 'user' ? 'bg-gradient-to-br from-rst-700 to-rst-800 text-white rounded-tr-md' : 'bg-white border border-rst-100 text-rst-900 rounded-tl-md'}`}>
+                    <div className={`min-w-0 max-w-[85%] sm:max-w-[78%] overflow-hidden rounded-3xl px-4 py-3 text-[14px] leading-relaxed shadow-sm ${m.role === 'user' ? 'bg-gradient-to-br from-rst-700 to-rst-800 text-white rounded-tr-md' : 'bg-white border border-rst-100 text-rst-900 rounded-tl-md'}`}>
                       {/* chip eksekusi tool */}
                       {m.role === 'assistant' && !!m.toolSteps?.length && (
                         <div className="mb-2 flex flex-wrap gap-1.5">
