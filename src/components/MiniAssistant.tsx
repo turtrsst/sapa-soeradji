@@ -261,8 +261,8 @@ export default function MiniAssistant() {
                 <div
                   className={
                     m.role === 'user'
-                      ? 'max-w-[80%] rounded-2xl rounded-br-md bg-rst-700 px-3 py-2 text-[12.5px] leading-snug text-white whitespace-pre-wrap'
-                      : 'max-w-[92%] rounded-2xl rounded-bl-md border border-rst-100 bg-white px-3 py-2 text-[12.5px] leading-snug text-rst-900 shadow-sm'
+                      ? 'min-w-0 max-w-[80%] overflow-hidden rounded-2xl rounded-br-md bg-rst-700 px-3 py-2 text-[12.5px] leading-snug text-white whitespace-pre-wrap'
+                      : 'min-w-0 max-w-[92%] overflow-hidden rounded-2xl rounded-bl-md border border-rst-100 bg-white px-3 py-2 text-[12.5px] leading-snug text-rst-900 shadow-sm'
                   }
                 >
                   {m.streaming && !m.content.trim() ? (
